@@ -15,7 +15,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "env:check": "node scripts/check-env.mjs",
-    "check": "npm run env:check && npm run format:check && npm run lint && npm run typecheck"
+    "test": "tsx --test tests/models.test.ts",
+    "db:indexes": "tsx scripts/create-indexes.ts",
+    "check": "npm run env:check && npm run format:check && npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
@@ -35,6 +37,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

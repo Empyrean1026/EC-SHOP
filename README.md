@@ -4,17 +4,20 @@
 
 ## 当前阶段
 
-第一阶段“项目初始化”已完成，当前包含：
+第二阶段“数据库设计”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
 - MongoDB / Mongoose 连接复用与数据库健康检查接口
+- User、Category、Product、Order、Cart 模型及嵌入式子文档
+- 字段验证、JSON 安全序列化、关系索引与显式生产索引脚本
+- 无需数据库连接的模型单元测试与数据库关系设计文档
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-注册、商品、购物车、订单、Stripe、用户中心和管理后台等业务功能将在后续阶段实现。
+CRUD 接口、注册登录、商品页面、购物车操作、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整数据库约定见 [`docs/database-design.md`](docs/database-design.md)。
 
 ## 技术要求
 
@@ -52,9 +55,11 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
+npm test              # 运行模型单元测试
+npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run format        # 自动格式化项目
 npm run format:check  # 检查格式
-npm run check         # 执行阶段一的完整静态检查
+npm run check         # 执行环境、格式、Lint、类型和测试检查
 ```
 
 ## Docker
@@ -86,10 +91,11 @@ ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
 ├── components/          # 可复用 React 组件
+├── docs/                # 架构与数据库设计文档
 ├── hooks/               # 客户端 React Hooks
 ├── lib/                 # 基础设施与通用工具
 ├── middleware/          # 可复用请求中间件辅助代码
-├── models/              # Mongoose 模型
+├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
 ├── scripts/             # 开发与运维脚本
 ├── services/            # 领域服务与第三方集成
