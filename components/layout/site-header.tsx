@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const navigation = [
-  { href: "#foundation", label: "工程基线" },
-  { href: "#architecture", label: "架构" },
-  { href: "#next", label: "后续模块" },
+  { href: "/#foundation", label: "工程基线" },
+  { href: "/#architecture", label: "架构" },
+  { href: "/#next", label: "后续模块" },
 ];
 
 export function SiteHeader() {
@@ -23,19 +23,30 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="主导航">
           {navigation.map((item) => (
-            <a
+            <Link
               className="text-xs font-medium text-stone-600 transition hover:text-stone-950 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-950"
               href={item.href}
               key={item.href}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <span className="rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase">
-          Phase 01
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            className="hidden rounded-full px-3 py-2 text-xs font-semibold text-stone-600 transition hover:text-stone-950 sm:block"
+            href="/login"
+          >
+            登录
+          </Link>
+          <Link
+            className="rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase transition hover:border-stone-950 hover:text-stone-950"
+            href="/account"
+          >
+            Phase 03
+          </Link>
+        </div>
       </div>
     </header>
   );
