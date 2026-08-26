@@ -1,4 +1,4 @@
-const MAX_JSON_BODY_BYTES = 10 * 1024;
+const DEFAULT_MAX_JSON_BODY_BYTES = 10 * 1024;
 
 export type JsonBodyResult =
   | { success: true; data: unknown }
@@ -9,7 +9,10 @@ export type JsonBodyResult =
       status: 400 | 413 | 415;
     };
 
-export async function readJsonBody(request: Request): Promise<JsonBodyResult> {
+export async function readJsonBody(
+  request: Request,
+  maxBytes = DEFAULT_MAX_JSON_BODY_BYTES,
+): Promise<JsonBodyResult> {
   const contentType = request.headers.get("content-type")?.split(";", 1)[0]?.trim();
 
   if (contentType !== "application/json") {
@@ -23,7 +26,7 @@ export async function readJsonBody(request: Request): Promise<JsonBodyResult> {
 
   const contentLength = Number(request.headers.get("content-length"));
 
-  if (Number.isFinite(contentLength) && contentLength > MAX_JSON_BODY_BYTES) {
+  if (Number.isFinite(contentLength) && contentLength > maxBytes) {
     return {
       success: false,
       code: "PAYLOAD_TOO_LARGE",
@@ -35,7 +38,7 @@ export async function readJsonBody(request: Request): Promise<JsonBodyResult> {
   try {
     const rawBody = await request.text();
 
-    if (new TextEncoder().encode(rawBody).byteLength > MAX_JSON_BODY_BYTES) {
+    if (new TextEncoder().encode(rawBody).byteLength > maxBytes) {
       return {
         success: false,
         code: "PAYLOAD_TOO_LARGE",

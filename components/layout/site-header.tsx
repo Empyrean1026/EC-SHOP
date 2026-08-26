@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 const navigation = [
+  { href: "/products", label: "商品" },
   { href: "/#foundation", label: "工程基线" },
-  { href: "/#architecture", label: "架构" },
   { href: "/#next", label: "后续模块" },
 ];
 
@@ -44,7 +44,7 @@ export function SiteHeader() {
             className="rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase transition hover:border-stone-950 hover:text-stone-950"
             href="/account"
           >
-            Phase 03
+            Phase 04
           </Link>
         </div>
       </div>

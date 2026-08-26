@@ -25,24 +25,28 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-try {
+const roleOptions = parsed.data;
+
+async function setUserRole(): Promise<void> {
   await connectToDatabase();
 
   const user = await UserModel.findOneAndUpdate(
-    { email: parsed.data.email },
-    { $set: { role: parsed.data.role } },
-    { new: true, runValidators: true },
+    { email: roleOptions.email },
+    { $set: { role: roleOptions.role } },
+    { returnDocument: "after", runValidators: true },
   ).select("email role");
 
   if (!user) {
-    console.error(`User not found: ${parsed.data.email}`);
+    console.error(`User not found: ${roleOptions.email}`);
     process.exitCode = 1;
   } else {
     console.log(`Updated ${user.email} to role ${user.role}. The user must sign in again.`);
   }
-} catch (error) {
-  console.error("Unable to update the user role.", error);
-  process.exitCode = 1;
-} finally {
-  await mongoose.disconnect();
 }
+
+void setUserRole()
+  .catch((error: unknown) => {
+    console.error("Unable to update the user role.", error);
+    process.exitCode = 1;
+  })
+  .finally(() => mongoose.disconnect());

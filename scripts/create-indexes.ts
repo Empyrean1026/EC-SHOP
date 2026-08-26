@@ -7,7 +7,7 @@ config({ path: ".env.local", quiet: true });
 
 const databaseModels = [UserModel, CategoryModel, ProductModel, OrderModel, CartModel];
 
-try {
+async function createIndexes(): Promise<void> {
   await connectToDatabase();
 
   for (const databaseModel of databaseModels) {
@@ -16,9 +16,11 @@ try {
   }
 
   console.log("Database indexes created successfully.");
-} catch (error) {
-  console.error("Database index creation failed.", error);
-  process.exitCode = 1;
-} finally {
-  await mongoose.disconnect();
 }
+
+void createIndexes()
+  .catch((error: unknown) => {
+    console.error("Database index creation failed.", error);
+    process.exitCode = 1;
+  })
+  .finally(() => mongoose.disconnect());

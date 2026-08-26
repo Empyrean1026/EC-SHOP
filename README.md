@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第三阶段“用户认证”已完成，当前包含：
+第四阶段“商品系统”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -16,13 +16,17 @@
 - Zod 严格输入验证、签名 CSRF 令牌、Origin 校验与请求体限制
 - 用户中心、管理员后台、Next.js Proxy 和数据库级 RBAC
 - 基础认证限流、统一安全错误响应与管理员角色维护脚本
-- 无需数据库连接的模型及认证单元测试
+- 商品列表、详情、分类导航、关键词搜索、组合过滤和稳定分页
+- 价格、销量、评分排序与实时库存状态显示
+- 公开商品/分类 REST API 和受管理员 RBAC + CSRF 保护的商品 CRUD
+- 商品软删除、只读销量聚合字段与幂等目录种子脚本
+- 无需数据库连接的模型、认证及商品单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-商品 CRUD、商品页面、购物车操作、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md) 和 [`docs/authentication.md`](docs/authentication.md)。
+购物车操作、收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md) 和 [`docs/product-system.md`](docs/product-system.md)。
 
 ## 技术要求
 
@@ -63,8 +67,9 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型与认证单元测试
+npm test              # 运行模型、认证与商品单元测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
+npm run db:seed       # 幂等写入本地演示分类和商品
 npm run user:role -- --email=user@example.com --role=admin
 npm run format        # 自动格式化项目
 npm run format:check  # 检查格式
@@ -99,15 +104,15 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用 React 与认证表单组件
-├── docs/                # 数据库与认证设计文档
+├── components/          # 可复用认证与商品 React 组件
+├── docs/                # 数据库、认证与商品系统文档
 ├── hooks/               # 客户端 React Hooks
 ├── lib/                 # 数据库、认证、校验与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
 ├── scripts/             # 开发与运维脚本
-├── services/            # 浏览器认证客户端及领域服务
+├── services/            # 认证客户端与服务端商品领域服务
 ├── store/               # 全局客户端状态
 ├── tests/               # 自动化测试
 ├── types/               # 跨层 TypeScript 类型
@@ -127,6 +132,14 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - RBAC 示例 API：`/api/admin/ping`
 
 公开注册永远创建 `customer`。如需本地管理员，注册后使用 `npm run user:role` 在可信终端提升角色，再重新登录。
+
+## 商品入口
+
+- 页面：`/products`、`/products/[id-or-slug]`
+- 公开 API：`GET /api/products`、`GET /api/products/:id`、`GET /api/categories`
+- 管理员 API：`POST /api/products`、`PUT /api/products/:id`、`DELETE /api/products/:id`
+
+商品写操作需要管理员会话与 CSRF Token。删除采用下架软删除；详细查询参数和字段规则见 `docs/product-system.md`。
 
 ## GitHub
 

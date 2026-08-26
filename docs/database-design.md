@@ -74,6 +74,7 @@ The service layer must prevent circular parent relationships. Categories referen
 | `stock`                  | integer  | Zero or greater                                   |
 | `rating`                 | number   | Between 0 and 5                                   |
 | `reviewCount`            | integer  | Zero or greater                                   |
+| `salesCount`             | integer  | Paid-unit aggregate, zero or greater              |
 | `isActive`               | boolean  | Defaults to `true`                                |
 | `createdAt`, `updatedAt` | Date     | Managed by Mongoose                               |
 
@@ -118,10 +119,12 @@ Each cart item stores `productId`, integer `quantity` from 1 to 99, and `addedAt
 | categories | `slug` unique                         | Category routes                   |
 | categories | `parentCategory, isActive, name`      | Category navigation               |
 | products   | `slug` unique                         | Product detail routes             |
-| products   | text `name, description`              | Product search                    |
+| products   | text `name, description`              | Future indexed full-text search   |
 | products   | `category, isActive, createdAt`       | New products by category          |
 | products   | `category, isActive, price`           | Price sorting/filtering           |
 | products   | `isActive, createdAt`                 | Catalog browse                    |
+| products   | `isActive, salesCount, createdAt`     | Best-selling catalog sort         |
+| products   | `isActive, rating, createdAt`         | Top-rated catalog sort            |
 | orders     | `stripePaymentIntentId` sparse unique | Stripe webhook lookup/idempotency |
 | orders     | `userId, createdAt`                   | User order history                |
 | orders     | `orderStatus, createdAt`              | Fulfillment queue                 |

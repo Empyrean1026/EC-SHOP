@@ -2,13 +2,13 @@
 
 Mongoose schemas, embedded subdocuments, shared enums, validators, and serialization rules live here.
 
-| Model           | Collection   | Responsibility                                           |
-| --------------- | ------------ | -------------------------------------------------------- |
-| `UserModel`     | `users`      | Identity, role, avatar, and default address              |
-| `CategoryModel` | `categories` | Hierarchical product taxonomy                            |
-| `ProductModel`  | `products`   | Catalog content, price, stock, and rating aggregates     |
-| `OrderModel`    | `orders`     | Purchase snapshots, payment state, and fulfillment state |
-| `CartModel`     | `carts`      | One active cart per user with unique product lines       |
+| Model           | Collection   | Responsibility                                              |
+| --------------- | ------------ | ----------------------------------------------------------- |
+| `UserModel`     | `users`      | Identity, role, avatar, and default address                 |
+| `CategoryModel` | `categories` | Hierarchical product taxonomy                               |
+| `ProductModel`  | `products`   | Catalog content, price, stock, sales, and rating aggregates |
+| `OrderModel`    | `orders`     | Purchase snapshots, payment state, and fulfillment state    |
+| `CartModel`     | `carts`      | One active cart per user with unique product lines          |
 
 Import models through the barrel module:
 

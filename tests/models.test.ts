@@ -63,12 +63,14 @@ test("Category and Product models enforce slugs, money, inventory, and ratings",
     stock: 8,
     rating: 4.8,
     reviewCount: 24,
+    salesCount: 158,
   });
 
   await product.validate();
 
   assert.equal(product.currency, "jpy");
   assert.equal(product.isActive, true);
+  assert.equal(product.salesCount, 158);
 
   product.price = 21.5;
   await assert.rejects(product.validate(), /non-negative safe integer/);

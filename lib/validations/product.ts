@@ -1,0 +1,107 @@
+import { z } from "zod";
+import { CURRENCY_CODES } from "@/models";
+import {
+  PRODUCT_MAX_PAGE_SIZE,
+  PRODUCT_PAGE_SIZE,
+  PRODUCT_SORT_VALUES,
+} from "@/lib/products/constants";
+
+const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "分类 ID 格式无效");
+const emptyToUndefined = (value: unknown) =>
+  typeof value === "string" && value.trim() === "" ? undefined : value;
+const optionalText = (maximum: number) =>
+  z.preprocess(emptyToUndefined, z.string().trim().min(1).max(maximum).optional());
+const optionalInteger = (minimum: number, maximum: number) =>
+  z.preprocess(emptyToUndefined, z.coerce.number().int().min(minimum).max(maximum).optional());
+const httpUrlSchema = z
+  .string()
+  .trim()
+  .max(2048)
+  .url("图片地址格式无效")
+  .refine((value) => ["http:", "https:"].includes(new URL(value).protocol), {
+    message: "图片地址必须使用 HTTP 或 HTTPS",
+  });
+
+export const productListQuerySchema = z
+  .object({
+    q: optionalText(100),
+    category: optionalText(120),
+    page: z.preprocess(emptyToUndefined, z.coerce.number().int().min(1).max(100_000).default(1)),
+    limit: z.preprocess(
+      emptyToUndefined,
+      z.coerce.number().int().min(1).max(PRODUCT_MAX_PAGE_SIZE).default(PRODUCT_PAGE_SIZE),
+    ),
+    minPrice: optionalInteger(0, Number.MAX_SAFE_INTEGER),
+    maxPrice: optionalInteger(0, Number.MAX_SAFE_INTEGER),
+    currency: z.preprocess(emptyToUndefined, z.enum(CURRENCY_CODES).optional()),
+    inStock: z.preprocess(
+      emptyToUndefined,
+      z
+        .enum(["true", "false"])
+        .transform((value) => value === "true")
+        .optional(),
+    ),
+    sort: z.preprocess(emptyToUndefined, z.enum(PRODUCT_SORT_VALUES).default("newest")),
+  })
+  .strict()
+  .refine(
+    (value) =>
+      value.minPrice === undefined ||
+      value.maxPrice === undefined ||
+      value.minPrice <= value.maxPrice,
+    {
+      message: "最低价格不能高于最高价格",
+      path: ["minPrice"],
+    },
+  );
+
+const productFields = {
+  name: z.string().trim().min(2, "商品名称至少需要 2 个字符").max(200),
+  slug: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(2, "Slug 至少需要 2 个字符")
+    .max(220)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能包含小写字母、数字和连字符"),
+  description: z.string().trim().min(10, "商品描述至少需要 10 个字符").max(10_000),
+  price: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
+  currency: z.enum(CURRENCY_CODES).default("jpy"),
+  categoryId: objectIdSchema,
+  images: z.array(httpUrlSchema).max(12).default([]),
+  stock: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).default(0),
+  isActive: z.boolean().default(true),
+};
+
+export const createProductSchema = z.object(productFields).strict();
+
+export const updateProductSchema = z
+  .object({
+    name: productFields.name.optional(),
+    slug: productFields.slug.optional(),
+    description: productFields.description.optional(),
+    price: productFields.price.optional(),
+    currency: z.enum(CURRENCY_CODES).optional(),
+    categoryId: productFields.categoryId.optional(),
+    images: z.array(httpUrlSchema).max(12).optional(),
+    stock: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).optional(),
+    isActive: z.boolean().optional(),
+  })
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "至少需要提供一个待更新字段",
+  });
+
+export const productIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "商品 ID 格式无效");
+export const productIdentifierSchema = z.union([
+  productIdSchema,
+  z
+    .string()
+    .min(2)
+    .max(220)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "商品标识格式无效"),
+]);
+
+export type ProductListQuery = z.infer<typeof productListQuerySchema>;
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;

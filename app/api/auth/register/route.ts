@@ -10,7 +10,8 @@ import { consumeAuthAttempt } from "@/lib/auth/rate-limit";
 import { connectToDatabase } from "@/lib/mongodb";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
 import { UserModel } from "@/models";
-import { getValidationErrors, registerSchema } from "@/lib/validations/auth";
+import { registerSchema } from "@/lib/validations/auth";
+import { getValidationErrors } from "@/lib/validations/errors";
 
 export async function POST(request: NextRequest) {
   if (!(await validateCsrfRequest(request))) {

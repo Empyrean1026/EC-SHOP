@@ -9,7 +9,8 @@ import { DUMMY_PASSWORD_HASH, verifyPassword } from "@/lib/auth/password";
 import { clearAuthAttempts, consumeAuthAttempt } from "@/lib/auth/rate-limit";
 import { connectToDatabase } from "@/lib/mongodb";
 import { UserModel } from "@/models";
-import { getValidationErrors, loginSchema } from "@/lib/validations/auth";
+import { loginSchema } from "@/lib/validations/auth";
+import { getValidationErrors } from "@/lib/validations/errors";
 
 export async function POST(request: NextRequest) {
   if (!(await validateCsrfRequest(request))) {

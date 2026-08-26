@@ -31,7 +31,7 @@ const foundations = [
   },
 ];
 
-const upcomingModules = ["商品目录", "搜索与分类", "购物车", "订单流程", "Stripe 支付", "库存管理"];
+const upcomingModules = ["购物车", "收藏夹", "订单流程", "Stripe 支付", "用户中心", "库存管理"];
 
 export default function Home() {
   return (
@@ -41,7 +41,7 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 03 / Authentication
+              Phase 04 / Product system
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
