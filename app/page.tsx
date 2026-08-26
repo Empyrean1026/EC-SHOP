@@ -41,15 +41,15 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 04 / Product system
+              Phase 05 / Product search
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
               <span className="text-orange-600">搭好可靠地基。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              Next.js App Router、TypeScript 与 MongoDB
-              已完成工程化集成。现在从一套清晰、可测试、可容器化的基础架构开始构建。
+              商品目录、认证与 MongoDB
+              搜索链路已经打通；全文索引、中文回退和实时建议共同提供稳定的发现体验。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -63,9 +63,9 @@ export default function Home() {
               </a>
               <a
                 className="inline-flex h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-900 transition hover:border-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-                href="#next"
+                href="/search"
               >
-                后续能力预览
+                体验商品搜索
               </a>
             </div>
           </div>

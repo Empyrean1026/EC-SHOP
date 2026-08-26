@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第四阶段“商品系统”已完成，当前包含：
+第五阶段“商品搜索”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -20,13 +20,16 @@
 - 价格、销量、评分排序与实时库存状态显示
 - 公开商品/分类 REST API 和受管理员 RBAC + CSRF 保护的商品 CRUD
 - 商品软删除、只读销量聚合字段与幂等目录种子脚本
-- 无需数据库连接的模型、认证及商品单元测试
+- 独立搜索页、加权 MongoDB 全文索引、中文安全子串回退与相关度排序
+- 250ms 防抖自动补全、过期请求取消、键盘操作与无结果状态
+- 有候选上限的中英文模糊匹配与浏览器本地搜索历史
+- 无需数据库连接的模型、认证、商品及搜索单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-购物车操作、收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md) 和 [`docs/product-system.md`](docs/product-system.md)。
+购物车操作、收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md) 和 [`docs/search-system.md`](docs/search-system.md)。
 
 ## 技术要求
 
@@ -104,15 +107,15 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证与商品 React 组件
-├── docs/                # 数据库、认证与商品系统文档
+├── components/          # 可复用认证、商品与搜索 React 组件
+├── docs/                # 数据库、认证、商品与搜索系统文档
 ├── hooks/               # 客户端 React Hooks
 ├── lib/                 # 数据库、认证、校验与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
 ├── scripts/             # 开发与运维脚本
-├── services/            # 认证客户端与服务端商品领域服务
+├── services/            # 认证客户端与服务端商品/搜索领域服务
 ├── store/               # 全局客户端状态
 ├── tests/               # 自动化测试
 ├── types/               # 跨层 TypeScript 类型
@@ -140,6 +143,13 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 管理员 API：`POST /api/products`、`PUT /api/products/:id`、`DELETE /api/products/:id`
 
 商品写操作需要管理员会话与 CSRF Token。删除采用下架软删除；详细查询参数和字段规则见 `docs/product-system.md`。
+
+## 搜索入口
+
+- 页面：`/search`
+- 公开 API：`GET /api/search`、`GET /api/search/suggestions`
+
+结果 API 支持全文、中文子串和有限模糊回退，并返回实际检索模式；搜索框提供防抖建议、请求取消、键盘导航和浏览器本地历史。部署前必须运行 `npm run db:indexes` 创建 `product_search` 索引，完整参数与扩展边界见 `docs/search-system.md`。
 
 ## GitHub
 

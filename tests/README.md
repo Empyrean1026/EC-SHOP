@@ -6,4 +6,6 @@
 
 `products.test.ts` validates catalog query coercion, strict CRUD input, protected aggregate fields, DTO serialization, filter-preserving URLs, currency formatting, and inventory labels.
 
+`search.test.ts` validates strict search inputs, filter-preserving URLs, text normalization, CJK detection, edit-distance typo matching, and the weighted MongoDB text-index declaration.
+
 Run the suite with `npm test`.
