@@ -1,4 +1,4 @@
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import {
   CheckoutAmountError,
   CheckoutCartChangedError,
@@ -27,6 +27,5 @@ export function checkoutServiceErrorResponse(error: unknown, context: string) {
     return apiError("INVALID_ORDER_AMOUNT", "订单金额超出支持范围。", 409);
   }
 
-  console.error(`[api/checkout] ${context}`, error);
-  return apiError("INTERNAL_ERROR", "暂时无法创建订单，请稍后重试。", 500);
+  return apiInternalError(error, `api.checkout.${context}`, "暂时无法创建订单，请稍后重试。");
 }

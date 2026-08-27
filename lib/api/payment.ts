@@ -1,4 +1,4 @@
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import { StripeConfigurationError } from "@/lib/stripe/server";
 import {
   PaymentIntentIntegrityError,
@@ -24,6 +24,5 @@ export function paymentServiceErrorResponse(error: unknown, context: string) {
     return apiError("PAYMENT_NOT_CONFIGURED", "在线支付暂未配置。", 503);
   }
 
-  console.error(`[api/payment] ${context}`, error);
-  return apiError("INTERNAL_ERROR", "支付服务暂时不可用，请稍后重试。", 500);
+  return apiInternalError(error, `api.payment.${context}`, "支付服务暂时不可用，请稍后重试。");
 }

@@ -24,4 +24,6 @@
 
 `ui.test.ts` validates explicit theme choices and operating-system fallback behavior.
 
+`api-errors.test.ts` validates the flat API error contract, safe correlated 5xx responses, the global Route Handler wrapper, and resilient client parsing.
+
 Run the suite with `npm test`.

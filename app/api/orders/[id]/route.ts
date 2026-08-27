@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { authenticateRequest } from "@/lib/auth/dal";
 import { getUserOrder } from "@/services/order-service";
 
@@ -18,7 +18,6 @@ export async function GET(request: NextRequest, context: OrderRouteContext) {
     if (!order) return apiError("ORDER_NOT_FOUND", "订单不存在。", 404);
     return apiSuccess(order);
   } catch (error) {
-    console.error("[api/orders] Unable to read order", error);
-    return apiError("INTERNAL_ERROR", "暂时无法读取订单。", 500);
+    return apiInternalError(error, "api.orders.detail", "暂时无法读取订单。");
   }
 }

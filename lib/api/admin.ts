@@ -1,5 +1,5 @@
 import type { NextRequest, NextResponse } from "next/server";
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import { authenticateRequest } from "@/lib/auth/dal";
 import { validateCsrfRequest } from "@/lib/auth/csrf";
 import {
@@ -22,8 +22,7 @@ export async function authorizeAdminMutation(request: NextRequest): Promise<Next
 
     return null;
   } catch (error) {
-    console.error("[api/admin] Authorization failed", error);
-    return apiError("INTERNAL_ERROR", "暂时无法验证管理员权限。", 500);
+    return apiInternalError(error, "api.admin.authorize", "暂时无法验证管理员权限。");
   }
 }
 
@@ -38,6 +37,5 @@ export function adminServiceErrorResponse(error: unknown, context: string): Next
     return apiError("ORDER_CHANGED", "订单已被其他操作更新，请刷新后重试。", 409);
   }
 
-  console.error(`[api/admin] ${context}`, error);
-  return apiError("INTERNAL_ERROR", "管理员服务暂时不可用。", 500);
+  return apiInternalError(error, `api.admin.${context}`, "管理员服务暂时不可用。");
 }

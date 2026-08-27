@@ -3,6 +3,7 @@ import "server-only";
 import { Types } from "mongoose";
 import { cartMatchesCheckoutConfirmation } from "@/lib/checkout/cart";
 import { toCheckoutOrder } from "@/lib/checkout/dto";
+import { createRequestId, logServerError } from "@/lib/api/logger";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
 import { connectToDatabase } from "@/lib/mongodb";
 import type { CreateCheckoutOrderInput, ShippingAddressInput } from "@/lib/validations/checkout";
@@ -72,7 +73,11 @@ async function saveDefaultAddress(userId: string, address: ShippingAddressInput)
       { runValidators: true },
     );
   } catch (error) {
-    console.error("[checkout] Unable to save default address", error);
+    logServerError({
+      requestId: createRequestId(),
+      context: "checkout.save-default-address",
+      error,
+    });
   }
 }
 

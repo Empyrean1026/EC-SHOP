@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { readJsonBody } from "@/lib/api/request";
 import { setSessionCookie } from "@/lib/auth/cookies";
 import { validateCsrfRequest } from "@/lib/auth/csrf";
@@ -70,7 +70,6 @@ export async function POST(request: NextRequest) {
       return apiError("EMAIL_ALREADY_EXISTS", "该邮箱已注册。", 409);
     }
 
-    console.error("[api/auth/register] Registration failed", error);
-    return apiError("INTERNAL_ERROR", "暂时无法创建账户，请稍后重试。", 500);
+    return apiInternalError(error, "api.auth.register", "暂时无法创建账户，请稍后重试。");
   }
 }

@@ -1,4 +1,4 @@
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import {
   CartCapacityError,
   CartItemNotFoundError,
@@ -25,6 +25,5 @@ export function cartServiceErrorResponse(error: unknown, context: string) {
     return apiError("CART_CAPACITY_REACHED", "购物车最多可包含 100 种商品。", 409);
   }
 
-  console.error(`[api/cart] ${context}`, error);
-  return apiError("INTERNAL_ERROR", "暂时无法更新购物车。", 500);
+  return apiInternalError(error, `api.cart.${context}`, "暂时无法更新购物车。");
 }

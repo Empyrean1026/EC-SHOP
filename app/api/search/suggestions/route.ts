@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { getValidationErrors } from "@/lib/validations/errors";
 import { suggestionQuerySchema } from "@/lib/validations/search";
 import { suggestProducts } from "@/services/search-service";
@@ -23,7 +23,6 @@ export async function GET(request: NextRequest) {
   try {
     return apiSuccess(await suggestProducts(parsed.data));
   } catch (error) {
-    console.error("[api/search/suggestions] Unable to load suggestions", error);
-    return apiError("INTERNAL_ERROR", "暂时无法加载搜索建议。", 500);
+    return apiInternalError(error, "api.search.suggestions", "暂时无法加载搜索建议。");
   }
 }

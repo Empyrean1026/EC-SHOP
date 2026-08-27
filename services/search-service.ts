@@ -1,5 +1,7 @@
 import "server-only";
 
+import { logServerEvent } from "@/lib/api/logger";
+
 import { Types, type QueryFilter } from "mongoose";
 import { connectToDatabase } from "@/lib/mongodb";
 import { toCatalogProduct } from "@/lib/products/dto";
@@ -242,7 +244,11 @@ export async function searchProducts(query: SearchQuery): Promise<ProductSearchR
       if (textResult.pagination.total > 0) return textResult;
     } catch (error) {
       if (!isMissingTextIndex(error)) throw error;
-      console.warn("[search] Text index unavailable; falling back to substring search.");
+      logServerEvent(
+        "warn",
+        "search.text-index",
+        "Text index unavailable; falling back to substring search.",
+      );
     }
   }
 

@@ -1,5 +1,5 @@
 import type { NextRequest, NextResponse } from "next/server";
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import { authenticateRequest } from "@/lib/auth/dal";
 import { validateCsrfRequest } from "@/lib/auth/csrf";
 import type { AuthUser } from "@/types/auth";
@@ -29,10 +29,9 @@ export async function authorizeUserMutation(
 
     return { authorized: true, user: authentication.user };
   } catch (error) {
-    console.error("[api/user] Authorization failed", error);
     return {
       authorized: false,
-      response: apiError("INTERNAL_ERROR", "暂时无法验证用户身份。", 500),
+      response: apiInternalError(error, "api.user.authorize", "暂时无法验证用户身份。"),
     };
   }
 }

@@ -1,4 +1,5 @@
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
+import { logServerEvent } from "@/lib/api/logger";
 import { getStripeWebhookSecret, StripeConfigurationError } from "@/lib/stripe/server";
 import { constructStripeWebhookEvent } from "@/lib/stripe/webhook";
 import { processStripeWebhookEvent } from "@/services/payment-service";
@@ -28,21 +29,31 @@ export async function POST(request: Request) {
     event = constructStripeWebhookEvent(rawBody, signature, getStripeWebhookSecret());
   } catch (error) {
     if (error instanceof StripeConfigurationError) {
-      console.error("[stripe/webhook] Webhook secret is not configured.");
-      return apiError("WEBHOOK_NOT_CONFIGURED", "Webhook endpoint is not configured.", 500);
+      return apiInternalError(
+        error,
+        "api.stripe.webhook.configure",
+        "Webhook endpoint is not configured.",
+        "WEBHOOK_NOT_CONFIGURED",
+      );
     }
-    console.warn("[stripe/webhook] Signature verification failed.");
+    logServerEvent("warn", "api.stripe.webhook.signature", "Signature verification failed.");
     return apiError("INVALID_STRIPE_SIGNATURE", "Stripe signature is invalid.", 400);
   }
 
   try {
     const result = await processStripeWebhookEvent(event);
     if (result.handled && !result.updated) {
-      console.info(`[stripe/webhook] Event ${event.id} required no order update.`);
+      logServerEvent("info", "api.stripe.webhook.noop", "Event required no order update.", {
+        eventId: event.id,
+      });
     }
     return apiSuccess({ received: true });
   } catch (error) {
-    console.error(`[stripe/webhook] Unable to process event ${event.id}.`, error);
-    return apiError("WEBHOOK_PROCESSING_FAILED", "Webhook processing failed.", 500);
+    return apiInternalError(
+      error,
+      `api.stripe.webhook.process.${event.id}`,
+      "Webhook processing failed.",
+      "WEBHOOK_PROCESSING_FAILED",
+    );
   }
 }

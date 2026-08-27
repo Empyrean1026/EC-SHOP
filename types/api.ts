@@ -1,7 +1,9 @@
 export type ApiError = {
-  code: string;
+  success: false;
   message: string;
+  code: string;
   details?: Record<string, string[]>;
+  requestId?: string;
 };
 
 export type ApiResponse<T> =
@@ -11,5 +13,8 @@ export type ApiResponse<T> =
     }
   | {
       success: false;
-      error: ApiError;
+      message: string;
+      code: string;
+      details?: Record<string, string[]>;
+      requestId?: string;
     };

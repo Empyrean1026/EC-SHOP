@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { readJsonBody } from "@/lib/api/request";
 import { setSessionCookie } from "@/lib/auth/cookies";
 import { validateCsrfRequest } from "@/lib/auth/csrf";
@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
     clearAuthAttempts(request, "login");
     return response;
   } catch (error) {
-    console.error("[api/auth/login] Login failed", error);
-    return apiError("INTERNAL_ERROR", "暂时无法登录，请稍后重试。", 500);
+    return apiInternalError(error, "api.auth.login", "暂时无法登录，请稍后重试。");
   }
 }

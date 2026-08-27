@@ -1,11 +1,9 @@
-import type { ApiResponse } from "@/types/api";
 import type { AuthUser } from "@/types/auth";
+import { networkError, parseApiResponse } from "@/services/api-client";
 import { requestCsrfToken } from "@/services/csrf-client";
+import type { ApiError } from "@/types/api";
 
-export type AuthClientError = {
-  message: string;
-  details?: Record<string, string[]>;
-};
+export type AuthClientError = ApiError;
 
 export type AuthClientResult =
   { success: true; user: AuthUser } | { success: false; error: AuthClientError };
@@ -25,21 +23,13 @@ async function postAuth<T>(path: string, data?: T): Promise<Response> {
 }
 
 async function parseAuthResult(response: Response): Promise<AuthClientResult> {
-  const body = (await response.json()) as ApiResponse<{ user: AuthUser }>;
+  const result = await parseApiResponse<{ user: AuthUser }>(response);
 
-  if (response.ok && body.success) {
-    return { success: true, user: body.data.user };
+  if (result.success) {
+    return { success: true, user: result.data.user };
   }
 
-  return {
-    success: false,
-    error: body.success
-      ? { message: "请求失败，请稍后重试。" }
-      : {
-          message: body.error.message,
-          ...(body.error.details ? { details: body.error.details } : {}),
-        },
-  };
+  return result;
 }
 
 export async function registerUser(input: {
@@ -51,7 +41,7 @@ export async function registerUser(input: {
   try {
     return await parseAuthResult(await postAuth("/api/auth/register", input));
   } catch {
-    return { success: false, error: { message: "网络异常，请稍后重试。" } };
+    return { success: false, error: networkError("网络异常，请稍后重试。") };
   }
 }
 
@@ -62,7 +52,7 @@ export async function loginUser(input: {
   try {
     return await parseAuthResult(await postAuth("/api/auth/login", input));
   } catch {
-    return { success: false, error: { message: "网络异常，请稍后重试。" } };
+    return { success: false, error: networkError("网络异常，请稍后重试。") };
   }
 }
 

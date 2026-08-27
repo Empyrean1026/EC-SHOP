@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { getValidationErrors } from "@/lib/validations/errors";
 import { searchQuerySchema } from "@/lib/validations/search";
 import { searchProducts } from "@/services/search-service";
@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
     const result = await searchProducts(parsed.data);
     return apiSuccess({ ...result, filters: parsed.data });
   } catch (error) {
-    console.error("[api/search] Unable to search products", error);
-    return apiError("INTERNAL_ERROR", "暂时无法搜索商品。", 500);
+    return apiInternalError(error, "api.search.results", "暂时无法搜索商品。");
   }
 }

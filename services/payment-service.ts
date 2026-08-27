@@ -1,5 +1,7 @@
 import "server-only";
 
+import { logServerEvent } from "@/lib/api/logger";
+
 import { Types } from "mongoose";
 import type Stripe from "stripe";
 import { normalizeOrderStatus } from "@/lib/orders/status";
@@ -224,7 +226,9 @@ export async function processStripeWebhookEvent(
   const orderId = paymentIntent.metadata.orderId;
   const userId = paymentIntent.metadata.userId;
   if (!orderId || !userId || !Types.ObjectId.isValid(orderId) || !Types.ObjectId.isValid(userId)) {
-    console.warn(`[stripe/webhook] Event ${event.id} has invalid order metadata.`);
+    logServerEvent("warn", "stripe.webhook.metadata", "Event has invalid order metadata.", {
+      eventId: event.id,
+    });
     return { handled: true, updated: false };
   }
 
@@ -239,13 +243,17 @@ export async function processStripeWebhookEvent(
     .lean()) as PaymentOrderRecord | null;
 
   if (!order || !stripePaymentIntentMatchesOrder(paymentIntent, orderSnapshot(order))) {
-    console.warn(`[stripe/webhook] Event ${event.id} did not match a trusted order.`);
+    logServerEvent("warn", "stripe.webhook.order", "Event did not match a trusted order.", {
+      eventId: event.id,
+    });
     return { handled: true, updated: false };
   }
 
   const transition = stripePaymentTransition(event.type, paymentIntent, event.created);
   if (!transition) {
-    console.warn(`[stripe/webhook] Event ${event.id} failed amount or transition validation.`);
+    logServerEvent("warn", "stripe.webhook.transition", "Event failed payment validation.", {
+      eventId: event.id,
+    });
     return { handled: true, updated: false };
   }
 

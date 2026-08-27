@@ -1,14 +1,12 @@
 import { requestCsrfToken } from "@/services/csrf-client";
-import type { ApiResponse } from "@/types/api";
+import { networkError, parseApiResponse } from "@/services/api-client";
+import type { ApiError } from "@/types/api";
 import type { OrderPaymentStatus, PaymentIntentSession } from "@/types/payment";
 
-type PaymentClientResult<T> =
-  { success: true; data: T } | { success: false; error: { code: string; message: string } };
+type PaymentClientResult<T> = { success: true; data: T } | { success: false; error: ApiError };
 
 async function responseResult<T>(response: Response): Promise<PaymentClientResult<T>> {
-  const body = (await response.json()) as ApiResponse<T>;
-  if (body.success) return { success: true, data: body.data };
-  return { success: false, error: body.error };
+  return parseApiResponse<T>(response, "支付请求失败，请稍后重试。");
 }
 
 export async function createPaymentIntentSession(
@@ -25,7 +23,7 @@ export async function createPaymentIntentSession(
   } catch {
     return {
       success: false,
-      error: { code: "NETWORK_ERROR", message: "无法连接支付服务，请稍后重试。" },
+      error: networkError("无法连接支付服务，请稍后重试。"),
     };
   }
 }
@@ -42,7 +40,7 @@ export async function fetchOrderPaymentStatus(
   } catch {
     return {
       success: false,
-      error: { code: "NETWORK_ERROR", message: "暂时无法读取支付状态。" },
+      error: networkError("暂时无法读取支付状态。"),
     };
   }
 }

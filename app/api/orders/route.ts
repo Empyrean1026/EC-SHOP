@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { checkoutServiceErrorResponse } from "@/lib/api/checkout";
 import { readJsonBody } from "@/lib/api/request";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { authenticateRequest } from "@/lib/auth/dal";
 import { authorizeUserMutation } from "@/lib/api/user";
 import { createCheckoutOrderSchema } from "@/lib/validations/checkout";
@@ -31,8 +31,7 @@ export async function GET(request: NextRequest) {
 
     return apiSuccess(await listUserOrders(authentication.user.id, parsed.data));
   } catch (error) {
-    console.error("[api/orders] Unable to list orders", error);
-    return apiError("INTERNAL_ERROR", "暂时无法读取订单。", 500);
+    return apiInternalError(error, "api.orders.list", "暂时无法读取订单。");
   }
 }
 

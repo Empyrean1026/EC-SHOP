@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十三阶段“UI / UX”已完成，当前包含：
+第十四阶段“错误处理”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -61,13 +61,19 @@
 - App Router 流式 Skeleton Loading、共享 Empty State 与可重试 Error Boundary
 - 商品、购物车、收藏、账户和管理员写操作的成功、错误与进行中反馈
 - 减少动态效果偏好、触控目标、焦点样式和深色表单控件适配
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计及 UI 单元测试
+- 顶层 `success / message / code / details` 统一 API 错误协议
+- 全局 Route Handler 异常包装器与领域错误集中映射
+- 带 `requestId` 的安全 5xx 响应、响应头和单行 JSON 结构化日志
+- 客户端成功、业务错误、无效 JSON、代理错误及网络中断统一解析
+- 应用、账户、管理员及根布局四级可恢复 Error Boundary
+- 不向客户端泄露异常消息、堆栈、数据库地址或服务端实现细节
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI 及错误处理单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md) 和 [`docs/ui-ux.md`](docs/ui-ux.md)。
+退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md) 和 [`docs/error-handling.md`](docs/error-handling.md)。
 
 ## 技术要求
 
@@ -111,7 +117,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计与 UI 测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI 与错误处理测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品

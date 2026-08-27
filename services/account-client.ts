@@ -1,12 +1,9 @@
-import type { ApiResponse } from "@/types/api";
 import type { AccountAddress, AccountProfile } from "@/types/account";
+import { networkError, parseApiResponse } from "@/services/api-client";
 import { requestCsrfToken } from "@/services/csrf-client";
+import type { ApiError } from "@/types/api";
 
-export type AccountClientError = {
-  code: string;
-  message: string;
-  details?: Record<string, string[]>;
-};
+export type AccountClientError = ApiError;
 
 type MutationResult<T> = { success: true; data: T } | { success: false; error: AccountClientError };
 
@@ -26,24 +23,11 @@ async function mutateAccount<T>(
       },
       ...(data === undefined ? {} : { body: JSON.stringify(data) }),
     });
-    const body = (await response.json()) as ApiResponse<T>;
-
-    if (response.ok && body.success) return { success: true, data: body.data };
-
-    return {
-      success: false,
-      error: body.success
-        ? { code: "REQUEST_FAILED", message: "请求失败，请稍后重试。" }
-        : {
-            code: body.error.code,
-            message: body.error.message,
-            ...(body.error.details ? { details: body.error.details } : {}),
-          },
-    };
+    return parseApiResponse<T>(response);
   } catch {
     return {
       success: false,
-      error: { code: "NETWORK_ERROR", message: "网络异常，修改尚未保存。" },
+      error: networkError("网络异常，修改尚未保存。"),
     };
   }
 }

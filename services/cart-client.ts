@@ -1,12 +1,9 @@
-import type { ApiResponse } from "@/types/api";
 import type { ShoppingCart } from "@/types/cart";
+import { networkError, parseApiResponse } from "@/services/api-client";
 import { requestCsrfToken } from "@/services/csrf-client";
+import type { ApiError } from "@/types/api";
 
-export type CartClientError = {
-  code: string;
-  message: string;
-  details?: Record<string, string[]>;
-};
+export type CartClientError = ApiError;
 
 export type CartClientResult =
   { success: true; cart: ShoppingCart } | { success: false; error: CartClientError };
@@ -17,22 +14,13 @@ export type AccountCartResult =
   | { authenticated: null; error: CartClientError };
 
 async function parseCartResponse(response: Response): Promise<CartClientResult> {
-  const body = (await response.json()) as ApiResponse<{ cart: ShoppingCart }>;
+  const result = await parseApiResponse<{ cart: ShoppingCart }>(response, "购物车请求失败。");
 
-  if (response.ok && body.success) {
-    return { success: true, cart: body.data.cart };
+  if (result.success) {
+    return { success: true, cart: result.data.cart };
   }
 
-  return {
-    success: false,
-    error: body.success
-      ? { code: "REQUEST_FAILED", message: "购物车请求失败。" }
-      : {
-          code: body.error.code,
-          message: body.error.message,
-          ...(body.error.details ? { details: body.error.details } : {}),
-        },
-  };
+  return result;
 }
 
 async function mutateCart(
@@ -56,7 +44,7 @@ async function mutateCart(
   } catch {
     return {
       success: false,
-      error: { code: "NETWORK_ERROR", message: "网络异常，购物车尚未更新。" },
+      error: networkError("网络异常，购物车尚未更新。"),
     };
   }
 }
@@ -78,7 +66,7 @@ export async function fetchAccountCart(): Promise<AccountCartResult> {
   } catch {
     return {
       authenticated: null,
-      error: { code: "NETWORK_ERROR", message: "暂时无法同步购物车。" },
+      error: networkError("暂时无法同步购物车。"),
     };
   }
 }
@@ -101,7 +89,7 @@ export async function validateGuestCart(items: ShoppingCart["items"]): Promise<C
   } catch {
     return {
       success: false,
-      error: { code: "NETWORK_ERROR", message: "暂时无法刷新商品库存。" },
+      error: networkError("暂时无法刷新商品库存。"),
     };
   }
 }

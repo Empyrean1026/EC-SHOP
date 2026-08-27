@@ -1,4 +1,4 @@
-import { apiError } from "@/lib/api/response";
+import { apiError, apiInternalError } from "@/lib/api/response";
 import { WishlistCapacityError, WishlistProductNotFoundError } from "@/services/wishlist-service";
 
 export function accountServiceErrorResponse(error: unknown, context: string) {
@@ -10,6 +10,5 @@ export function accountServiceErrorResponse(error: unknown, context: string) {
     return apiError("WISHLIST_FULL", "收藏夹最多保存 100 件商品。", 409);
   }
 
-  console.error(`[api/account] ${context}`, error);
-  return apiError("INTERNAL_ERROR", "账户服务暂时不可用，请稍后重试。", 500);
+  return apiInternalError(error, `api.account.${context}`, "账户服务暂时不可用，请稍后重试。");
 }

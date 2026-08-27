@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { authorizeAdminMutation } from "@/lib/api/admin";
 import { readJsonBody } from "@/lib/api/request";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
 import { getValidationErrors } from "@/lib/validations/errors";
 import { createProductSchema, productListQuerySchema } from "@/lib/validations/product";
@@ -27,8 +27,7 @@ export async function GET(request: NextRequest) {
     const result = await listProducts(parsed.data);
     return apiSuccess({ ...result, filters: parsed.data });
   } catch (error) {
-    console.error("[api/products] Unable to list products", error);
-    return apiError("INTERNAL_ERROR", "暂时无法加载商品。", 500);
+    return apiInternalError(error, "api.products.list", "暂时无法加载商品。");
   }
 }
 
@@ -67,7 +66,6 @@ export async function POST(request: NextRequest) {
       return apiError("SLUG_ALREADY_EXISTS", "该商品 Slug 已被使用。", 409);
     }
 
-    console.error("[api/products] Unable to create product", error);
-    return apiError("INTERNAL_ERROR", "暂时无法创建商品。", 500);
+    return apiInternalError(error, "api.products.create", "暂时无法创建商品。");
   }
 }

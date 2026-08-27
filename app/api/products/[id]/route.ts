@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { authorizeAdminMutation } from "@/lib/api/admin";
 import { readJsonBody } from "@/lib/api/request";
-import { apiError, apiSuccess } from "@/lib/api/response";
+import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
 import { getValidationErrors } from "@/lib/validations/errors";
 import {
@@ -37,8 +37,7 @@ export async function GET(_request: NextRequest, { params }: ProductRouteContext
       ? apiSuccess({ product })
       : apiError("PRODUCT_NOT_FOUND", "商品不存在或已下架。", 404);
   } catch (error) {
-    console.error("[api/products/:id] Unable to load product", error);
-    return apiError("INTERNAL_ERROR", "暂时无法加载商品。", 500);
+    return apiInternalError(error, "api.products.detail", "暂时无法加载商品。");
   }
 }
 
@@ -85,8 +84,7 @@ export async function PUT(request: NextRequest, { params }: ProductRouteContext)
       return apiError("SLUG_ALREADY_EXISTS", "该商品 Slug 已被使用。", 409);
     }
 
-    console.error("[api/products/:id] Unable to update product", error);
-    return apiError("INTERNAL_ERROR", "暂时无法更新商品。", 500);
+    return apiInternalError(error, "api.products.update", "暂时无法更新商品。");
   }
 }
 
@@ -110,7 +108,6 @@ export async function DELETE(request: NextRequest, { params }: ProductRouteConte
       ? apiSuccess({ deleted: true, product })
       : apiError("PRODUCT_NOT_FOUND", "商品不存在或已下架。", 404);
   } catch (error) {
-    console.error("[api/products/:id] Unable to deactivate product", error);
-    return apiError("INTERNAL_ERROR", "暂时无法下架商品。", 500);
+    return apiInternalError(error, "api.products.deactivate", "暂时无法下架商品。");
   }
 }

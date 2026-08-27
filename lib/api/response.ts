@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createRequestId, logServerError } from "@/lib/api/logger";
 import type { ApiResponse } from "@/types/api";
 
 const noStoreHeaders = {
@@ -27,15 +28,43 @@ export function apiError(
   return NextResponse.json(
     {
       success: false,
-      error: {
-        code,
-        message,
-        ...(details ? { details } : {}),
-      },
+      message,
+      code,
+      ...(details ? { details } : {}),
     },
     {
       status,
       headers: noStoreHeaders,
     },
   );
+}
+
+export function apiInternalError(
+  error: unknown,
+  context: string,
+  message = "服务暂时不可用，请稍后重试。",
+  code = "INTERNAL_ERROR",
+  status = 500,
+) {
+  const requestId = createRequestId();
+  logServerError({ requestId, context, error });
+
+  return NextResponse.json(
+    { success: false as const, message, code, requestId },
+    { status, headers: { ...noStoreHeaders, "X-Request-Id": requestId } },
+  );
+}
+
+export function withApiErrorHandling<Args extends unknown[]>(
+  handler: (...args: Args) => Response | Promise<Response>,
+  context: string,
+  message?: string,
+) {
+  return async (...args: Args): Promise<Response> => {
+    try {
+      return await handler(...args);
+    } catch (error) {
+      return apiInternalError(error, context, message);
+    }
+  };
 }
