@@ -1,4 +1,5 @@
 import type { CheckoutAddress, CheckoutOrder, CheckoutOrderItem } from "@/types/checkout";
+import { normalizeOrderStatus } from "@/lib/orders/status";
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -50,7 +51,7 @@ export function toCheckoutOrder(value: unknown): CheckoutOrder {
     currency: order.currency as CheckoutOrder["currency"],
     paymentMethod: order.paymentMethod as CheckoutOrder["paymentMethod"],
     paymentStatus: order.paymentStatus as CheckoutOrder["paymentStatus"],
-    orderStatus: order.orderStatus as CheckoutOrder["orderStatus"],
+    orderStatus: normalizeOrderStatus(order.orderStatus),
     shippingAddress: toAddress(order.shippingAddress),
     stripePaymentIntentId: nullableString(order.stripePaymentIntentId),
     paidAt: order.paidAt ? new Date(order.paidAt as string | number | Date).toISOString() : null,

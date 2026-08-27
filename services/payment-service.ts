@@ -2,6 +2,7 @@ import "server-only";
 
 import { Types } from "mongoose";
 import type Stripe from "stripe";
+import { normalizeOrderStatus } from "@/lib/orders/status";
 import {
   STRIPE_MUTABLE_PAYMENT_STATUSES,
   stripePaymentIntentMatchesOrder,
@@ -197,7 +198,7 @@ export async function getOrderPaymentStatus(
   return {
     orderId: order._id.toString(),
     paymentStatus: order.paymentStatus,
-    orderStatus: order.orderStatus,
+    orderStatus: normalizeOrderStatus(order.orderStatus),
     paidAt: order.paidAt?.toISOString() ?? null,
   };
 }
@@ -279,7 +280,7 @@ export async function processStripeWebhookEvent(
   if (transition.confirmOrder && result.matchedCount === 1) {
     await OrderModel.updateOne(
       { _id: orderId, userId, paymentStatus: "paid", orderStatus: "pending" },
-      { $set: { orderStatus: "confirmed" } },
+      { $set: { orderStatus: "paid" } },
       { runValidators: true },
     );
   }

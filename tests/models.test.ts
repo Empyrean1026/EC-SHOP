@@ -114,6 +114,9 @@ test("Order model stores item and address snapshots and derives item subtotals",
   assert.equal(order.paymentMethod, "stripe");
   assert.equal(order.shippingAddress.country, "JP");
 
+  order.orderStatus = "completed";
+  await order.validate();
+
   const serialized = order.toJSON() as Record<string, unknown>;
   assert.equal(serialized.checkoutKey, undefined);
   assert.equal(serialized.cartVersion, undefined);

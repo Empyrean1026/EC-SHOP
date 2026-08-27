@@ -14,4 +14,6 @@
 
 `payment.test.ts` validates raw-body Stripe signature verification, PaymentIntent-to-order integrity binding, supported Webhook transitions, exact amount receipt, and failure handling.
 
+`orders.test.ts` validates history query controls, the public lifecycle, legacy status normalization, safe list/detail DTOs, and filter-preserving pagination URLs.
+
 Run the suite with `npm test`.

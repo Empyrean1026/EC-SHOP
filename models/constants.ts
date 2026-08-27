@@ -19,10 +19,10 @@ export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
 export const ORDER_STATUSES = [
   "pending",
-  "confirmed",
+  "paid",
   "processing",
   "shipped",
-  "delivered",
+  "completed",
   "cancelled",
 ] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];

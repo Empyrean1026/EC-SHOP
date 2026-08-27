@@ -27,7 +27,7 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
   const paymentMessage = !isStripe
     ? "已选择货到付款，订单正在等待商家确认。"
     : isPaid
-      ? "Stripe 签名 Webhook 已确认付款，订单已进入确认状态。"
+      ? "Stripe 签名 Webhook 已确认付款，订单已进入已付款状态。"
       : order.paymentStatus === "failed"
         ? "Stripe Webhook 已报告付款失败，你可以重新进入安全支付页。"
         : "支付尚未由 Stripe Webhook 最终确认，当前不会显示为已付款。";
@@ -149,15 +149,21 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
           ) : null}
           <Link
             className="inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white hover:bg-orange-600"
-            href="/products"
+            href={`/account/orders/${order.id}`}
           >
-            继续购物
+            查看订单详情
           </Link>
           <Link
             className="inline-flex h-11 items-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-800 hover:border-stone-950"
-            href="/account"
+            href="/account/orders"
           >
-            返回用户中心
+            查看全部订单
+          </Link>
+          <Link
+            className="inline-flex h-11 items-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-800 hover:border-stone-950"
+            href="/products"
+          >
+            继续购物
           </Link>
         </div>
       </div>

@@ -17,6 +17,7 @@
     "env:check": "node scripts/check-env.mjs",
     "test": "tsx --test tests/*.test.ts",
     "db:indexes": "tsx scripts/create-indexes.ts",
+    "db:migrate-order-statuses": "tsx scripts/migrate-order-statuses.ts",
     "db:seed": "tsx scripts/seed-catalog.ts",
     "user:role": "tsx scripts/set-user-role.ts",
     "check": "npm run env:check && npm run format:check && npm run lint && npm run typecheck && npm test"

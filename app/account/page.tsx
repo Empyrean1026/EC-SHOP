@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { requireUser } from "@/lib/auth/dal";
 
@@ -32,13 +33,27 @@ export default async function AccountPage() {
             </span>
           </div>
 
-          <div className="mt-10 border-t border-stone-200 pt-8">
-            <h2 className="text-sm font-semibold text-stone-950">会话安全</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
-              当前页面同时经过 Proxy 的 JWT 快速校验和数据访问层的数据库身份校验。
-            </p>
-            <div className="mt-6">
-              <LogoutButton />
+          <div className="mt-10 grid gap-4 border-t border-stone-200 pt-8 sm:grid-cols-2">
+            <Link
+              className="rounded-2xl bg-stone-950 p-6 text-white transition hover:bg-orange-600"
+              href="/account/orders"
+            >
+              <p className="text-xs font-semibold tracking-[0.14em] text-orange-300 uppercase">
+                Order management
+              </p>
+              <h2 className="mt-3 text-xl font-semibold">我的订单</h2>
+              <p className="mt-2 text-sm leading-6 text-stone-300">
+                查看订单历史、付款状态、商品明细与配送进度。
+              </p>
+            </Link>
+            <div className="rounded-2xl border border-stone-200 p-6">
+              <h2 className="text-sm font-semibold text-stone-950">会话安全</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+                当前页面同时经过 Proxy 的 JWT 快速校验和数据访问层的数据库身份校验。
+              </p>
+              <div className="mt-5">
+                <LogoutButton />
+              </div>
             </div>
           </div>
         </div>

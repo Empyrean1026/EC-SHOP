@@ -29,7 +29,7 @@
 该接口不使用用户 Cookie 或 CSRF Token；Stripe 签名是请求身份凭据。请求体上限为 1 MiB，必须保留原始字节。处理事件：
 
 - `payment_intent.processing` → `processing`
-- `payment_intent.succeeded` 且 `amount_received === amount` → `paid`，待确认订单转为 `confirmed`
+- `payment_intent.succeeded` 且 `amount_received === amount` → `paid`，待处理订单转为 `paid`
 - `payment_intent.payment_failed` → `failed`，允许使用同一 PaymentIntent 重试
 - `payment_intent.canceled` → `failed`
 

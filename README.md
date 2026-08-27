@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第八阶段“Stripe 支付”已完成，当前包含：
+第九阶段“订单系统”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -34,13 +34,17 @@
 - Stripe Payment Element、服务端 PaymentIntent 创建与订单级幂等复用
 - 原始请求体 Webhook 验签、金额/币种/归属校验及幂等支付状态转换
 - 支付失败重试、异步支付确认页面和所有者限定的支付状态查询
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算及支付单元测试
+- 用户订单历史、订单详情、状态筛选、稳定分页和新旧排序
+- Pending、Paid、Processing、Shipped、Completed、Cancelled 订单生命周期
+- 独立支付状态与配送状态、响应式进度展示及旧状态兼容迁移
+- 所有者限定的订单列表/详情 API 与安全订单 DTO
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付及订单单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-订单管理、收藏夹、退款和库存预留等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md) 和 [`docs/payment-system.md`](docs/payment-system.md)。
+收藏夹、管理员履约、退款和库存预留等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md) 和 [`docs/order-system.md`](docs/order-system.md)。
 
 ## 技术要求
 
@@ -84,8 +88,9 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算与支付测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付与订单测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
+npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
 npm run user:role -- --email=user@example.com --role=admin
 npm run format        # 自动格式化项目
@@ -121,10 +126,10 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证、商品、购物车、结算与支付组件
+├── components/          # 可复用认证、商品、购物车、结算、支付与订单组件
 ├── docs/                # 数据库及各阶段业务系统文档
 ├── hooks/               # 购物车操作等客户端 React Hooks
-├── lib/                 # 数据库、认证、购物车、结算、Stripe 与 API 工具
+├── lib/                 # 数据库、认证、购物车、结算、Stripe、订单与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
@@ -190,6 +195,15 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - Stripe Webhook：`POST /api/webhooks/stripe`
 
 浏览器的 `confirmPayment` 结果不会直接更新订单。只有使用 `STRIPE_WEBHOOK_SECRET` 验签成功，且 PaymentIntent 的 ID、订单 metadata、用户、金额和币种全部匹配时，Webhook 才能推进 `paymentStatus`。本地转发、测试事件和状态规则见 `docs/payment-system.md`。
+
+## 订单入口
+
+- 用户订单历史：`/account/orders`
+- 用户订单详情：`/account/orders/:orderId`
+- 订单列表 API：`GET /api/orders`
+- 订单详情 API：`GET /api/orders/:orderId`
+
+历史页面支持订单状态、支付状态、新旧排序和分页。列表与详情均通过当前数据库用户 ID 限定归属；响应不暴露 PaymentIntent、Webhook、结算幂等键或购物车版本等内部字段。第九阶段只提供用户只读视图，履约状态写操作保留给后续管理员订单阶段。完整规则见 `docs/order-system.md`。
 
 ## GitHub
 

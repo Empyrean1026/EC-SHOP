@@ -21,3 +21,5 @@ Domain services and external integrations live here. Keep transport details out 
 `payment-service.ts` owns server-side PaymentIntent creation/reuse, order binding, Webhook integrity checks, stale-event guards, and payment/order status transitions. It never accepts client-calculated amounts.
 
 `payment-client.ts` requests a CSRF-protected payment session and polls the owner-scoped database status after Stripe confirmation; it has no API that can mark an order paid.
+
+`order-service.ts` owns user-scoped order history and detail queries, filtering, deterministic pagination, safe DTO conversion, and legacy lifecycle compatibility. It exposes no user-controlled fulfillment mutation.

@@ -104,7 +104,7 @@ Products should be deactivated instead of deleted when referenced by existing or
 
 Each order item stores `productId`, `name`, `image`, `unitPrice`, `quantity`, and a derived `subtotal`. Product names, images, prices, and addresses are snapshots so later catalog or profile edits cannot rewrite order history.
 
-Payment statuses are `pending`, `processing`, `paid`, `failed`, `partially_refunded`, and `refunded`. Order statuses are `pending`, `confirmed`, `processing`, `shipped`, `delivered`, and `cancelled`. Allowed transitions will be enforced in the order service rather than in the persistence schema.
+Payment statuses are `pending`, `processing`, `paid`, `failed`, `partially_refunded`, and `refunded`. Order statuses are `pending`, `paid`, `processing`, `shipped`, `completed`, and `cancelled`. Legacy `confirmed` and `delivered` documents are normalized on reads and can be migrated idempotently with `npm run db:migrate-order-statuses`. Allowed write transitions are enforced by trusted payment and future fulfillment services rather than by browser input.
 
 ### carts
 
