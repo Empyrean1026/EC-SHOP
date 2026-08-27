@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/auth/dal";
 
 const links = [
   { href: "/admin", label: "概览" },
+  { href: "/admin/analytics", label: "数据统计" },
   { href: "/admin/products", label: "商品与库存" },
   { href: "/admin/orders", label: "订单" },
   { href: "/admin/users", label: "用户" },

@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十一阶段“管理员后台”已完成，当前包含：
+第十二阶段“数据统计”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -50,13 +50,18 @@
 - Stripe 未付款履约拦截、货到付款完成收款与并发更新保护
 - 用户安全只读列表、角色/地址状态/订单数量查询
 - 管理员专用读取 API 与 RBAC、Origin、CSRF 保护的写接口
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户及管理员单元测试
+- 管理员销售分析页、按币种分离的已确认销售额与数据更新时间
+- 最近 30 天每日销售、最近 12 个月销售趋势与连续零值时间桶
+- 基于已付款订单快照的热销商品销量排行、订单数和币种收入明细
+- Recharts 响应式折线图与横向条形图、币种切换及无数据状态
+- 管理员限定的数据统计 API 与明确的统计口径、时区和退款边界
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员及统计单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-退款、库存预留、角色审计和运营分析等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md) 和 [`docs/admin-panel.md`](docs/admin-panel.md)。
+退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md) 和 [`docs/analytics.md`](docs/analytics.md)。
 
 ## 技术要求
 
@@ -100,7 +105,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户与管理员测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员与统计测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
@@ -228,11 +233,11 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 
 ## 管理员后台入口
 
-- 页面：`/admin`、`/admin/products`、`/admin/products/new`、`/admin/products/:id/edit`、`/admin/orders`、`/admin/orders/:id`、`/admin/users`
-- 读取 API：`GET /api/admin/dashboard`、`GET /api/admin/products`、`GET /api/admin/orders`、`GET /api/admin/users`
+- 页面：`/admin`、`/admin/analytics`、`/admin/products`、`/admin/products/new`、`/admin/products/:id/edit`、`/admin/orders`、`/admin/orders/:id`、`/admin/users`
+- 读取 API：`GET /api/admin/dashboard`、`GET /api/admin/analytics`、`GET /api/admin/products`、`GET /api/admin/orders`、`GET /api/admin/users`
 - 写入 API：`PATCH /api/admin/products/:id/stock`、`PATCH /api/admin/orders/:id`，以及原有商品 CRUD API
 
-管理员页面和 API 都会重新查询数据库角色；商品删除采用软下架，订单履约禁止跳级、回退和未付款 Stripe 订单发货，用户列表不返回密码哈希或完整地址。完整规则见 `docs/admin-panel.md`。
+管理员页面和 API 都会重新查询数据库角色；销售数据只使用已确认付款订单并按币种独立汇总，商品删除采用软下架，订单履约禁止跳级、回退和未付款 Stripe 订单发货，用户列表不返回密码哈希或完整地址。完整规则见 `docs/admin-panel.md` 和 `docs/analytics.md`。
 
 ## GitHub
 

@@ -6,7 +6,7 @@ import { getAdminDashboardSummary } from "@/services/admin-service";
 
 export const metadata: Metadata = {
   title: "管理员后台",
-  description: "管理商品、库存、订单和用户。",
+  description: "查看销售数据，管理商品、库存、订单和用户。",
 };
 export const dynamic = "force-dynamic";
 
@@ -71,7 +71,14 @@ export default async function AdminPage() {
           ))}
         </div>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <Link className="rounded-3xl bg-stone-950 p-7 text-white" href="/admin/analytics">
+            <p className="text-xs font-semibold tracking-wider text-orange-400 uppercase">
+              Sales analytics
+            </p>
+            <h2 className="mt-4 text-2xl font-semibold">查看销售数据</h2>
+            <p className="mt-3 text-sm text-stone-400">销售额、趋势、订单规模与热销商品。</p>
+          </Link>
           <Link className="rounded-3xl bg-orange-600 p-7 text-white" href="/admin/products/new">
             <p className="text-xs font-semibold tracking-wider text-orange-100 uppercase">
               Product management

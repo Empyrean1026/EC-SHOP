@@ -7,6 +7,7 @@ Phase eleven turns the RBAC foundation into an operations console for catalog, i
 | Route                      | Capability                                  |
 | -------------------------- | ------------------------------------------- |
 | `/admin`                   | Product, inventory, order, and user summary |
+| `/admin/analytics`         | Sales KPIs, trends, and top products        |
 | `/admin/products`          | Search/filter every active or inactive item |
 | `/admin/products/new`      | Add a catalog product                       |
 | `/admin/products/:id/edit` | Edit or reactivate a product                |
@@ -21,6 +22,7 @@ The shared layout and every page call `requireUser("admin")`. The root Proxy per
 | Method  | Route                           | Purpose                          |
 | ------- | ------------------------------- | -------------------------------- |
 | `GET`   | `/api/admin/dashboard`          | Dashboard summary                |
+| `GET`   | `/api/admin/analytics`          | Sales analytics snapshot         |
 | `GET`   | `/api/admin/products`           | Include active/inactive products |
 | `GET`   | `/api/admin/products/:id`       | Admin product detail             |
 | `PATCH` | `/api/admin/products/:id/stock` | Focused inventory update         |

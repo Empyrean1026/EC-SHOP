@@ -20,4 +20,6 @@
 
 `admin.test.ts` validates strict dashboard queries, inventory and fulfillment mutations, the forward-only order state machine, and filter-preserving admin pagination.
 
+`analytics.test.ts` validates timezone-aware daily/monthly periods, continuous zero-filled timelines, and strict currency separation.
+
 Run the suite with `npm test`.
