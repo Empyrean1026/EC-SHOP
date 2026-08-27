@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="zh-CN" className="h-full scroll-smooth">
+    <html lang="zh-CN" className="h-full scroll-smooth" data-scroll-behavior="smooth">
       <body className="flex min-h-full flex-col antialiased">
         <CartProvider>
           <SiteHeader />

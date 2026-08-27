@@ -1,5 +1,6 @@
 import type { ApiResponse } from "@/types/api";
 import type { AuthUser } from "@/types/auth";
+import { requestCsrfToken } from "@/services/csrf-client";
 
 export type AuthClientError = {
   message: string;
@@ -8,21 +9,6 @@ export type AuthClientError = {
 
 export type AuthClientResult =
   { success: true; user: AuthUser } | { success: false; error: AuthClientError };
-
-async function requestCsrfToken(): Promise<string> {
-  const response = await fetch("/api/auth/csrf", {
-    method: "GET",
-    credentials: "same-origin",
-    cache: "no-store",
-  });
-  const body = (await response.json()) as ApiResponse<{ csrfToken: string }>;
-
-  if (!response.ok || !body.success) {
-    throw new Error("无法初始化安全会话，请刷新页面后重试。");
-  }
-
-  return body.data.csrfToken;
-}
 
 async function postAuth<T>(path: string, data?: T): Promise<Response> {
   const csrfToken = await requestCsrfToken();

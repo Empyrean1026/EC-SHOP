@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第六阶段“购物车”已完成，当前包含：
+第七阶段“结算页面”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -28,13 +28,17 @@
 - 登录用户 MongoDB 购物车、登录后安全合并与退出后的状态隔离
 - 服务端实时价格和库存校验、单项 99 件及 100 种商品容量限制
 - 受用户校验、Origin 与签名 CSRF Token 保护的账户购物车写接口
-- 无需数据库连接的模型、认证、商品、搜索及购物车单元测试
+- React Hook Form + Zod 地址表单、商品/金额确认和支付方式选择
+- 服务端可信价格生成订单快照、单币种限制与购物车版本并发校验
+- UUID 请求幂等、同购物车防重复下单和条件清空购物车
+- Stripe 待支付及货到付款订单、所有者限定的订单确认页面
+- 无需数据库连接的模型、认证、商品、搜索、购物车及结算单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md) 和 [`docs/cart-system.md`](docs/cart-system.md)。
+订单管理、收藏夹和 Stripe 实际支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md) 和 [`docs/checkout-system.md`](docs/checkout-system.md)。
 
 ## 技术要求
 
@@ -75,7 +79,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索与购物车单元测试
+npm test              # 运行模型、认证、商品、搜索、购物车与结算测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:seed       # 幂等写入本地演示分类和商品
 npm run user:role -- --email=user@example.com --role=admin
@@ -112,10 +116,10 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证、商品、搜索与购物车组件
+├── components/          # 可复用认证、商品、购物车与结算组件
 ├── docs/                # 数据库及各阶段业务系统文档
 ├── hooks/               # 购物车操作等客户端 React Hooks
-├── lib/                 # 数据库、认证、购物车、校验与 API 工具
+├── lib/                 # 数据库、认证、购物车、结算与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
@@ -163,6 +167,14 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 游客校验 API：`POST /api/cart/validate`
 
 游客购物车保存在当前浏览器，登录或注册后会自动合并到 MongoDB 账户购物车。客户端快照不作为价格或库存依据，服务端每次响应都使用实时商品数据重新计算；完整规则见 `docs/cart-system.md`。
+
+## 结算入口
+
+- 页面：`/checkout`
+- 创建订单 API：`POST /api/orders`
+- 成功页面：`/checkout/success/:orderId`
+
+结算仅对登录用户开放，支持地址填写与保存、商品和金额确认、Stripe/货到付款选择及幂等订单创建。Stripe 订单在本阶段保持待支付状态，不会发生实际扣款；完整安全与并发规则见 `docs/checkout-system.md`。
 
 ## GitHub
 

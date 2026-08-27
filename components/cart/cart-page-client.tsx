@@ -278,13 +278,18 @@ export function CartPageClient() {
           ))}
         </div>
 
-        <button
-          className="mt-8 h-12 w-full cursor-not-allowed rounded-full bg-white/15 text-sm font-semibold text-stone-400"
-          disabled
-          type="button"
-        >
-          结算将在后续阶段开放
-        </button>
+        {source === "account" && totals.length === 1 ? (
+          <Link
+            className="mt-8 flex h-12 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-stone-950 transition hover:bg-orange-500 hover:text-white"
+            href="/checkout"
+          >
+            前往结算
+          </Link>
+        ) : (
+          <span className="mt-8 flex h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-stone-400">
+            {source === "guest" ? "登录后结算" : "请先拆分不同币种"}
+          </span>
+        )}
 
         {source === "guest" ? (
           <p className="mt-5 text-xs leading-5 text-stone-400">

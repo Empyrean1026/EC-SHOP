@@ -7,7 +7,7 @@ Mongoose schemas, embedded subdocuments, shared enums, validators, and serializa
 | `UserModel`     | `users`      | Identity, role, avatar, and default address                 |
 | `CategoryModel` | `categories` | Hierarchical product taxonomy                               |
 | `ProductModel`  | `products`   | Catalog content, price, stock, sales, and rating aggregates |
-| `OrderModel`    | `orders`     | Purchase snapshots, payment state, and fulfillment state    |
+| `OrderModel`    | `orders`     | Checkout snapshots, idempotency, payment and fulfillment    |
 | `CartModel`     | `carts`      | One active cart per user with unique product lines          |
 
 Import models through the barrel module:

@@ -1,5 +1,6 @@
 import type { ApiResponse } from "@/types/api";
 import type { ShoppingCart } from "@/types/cart";
+import { requestCsrfToken } from "@/services/csrf-client";
 
 export type CartClientError = {
   code: string;
@@ -14,20 +15,6 @@ export type AccountCartResult =
   | { authenticated: true; cart: ShoppingCart }
   | { authenticated: false }
   | { authenticated: null; error: CartClientError };
-
-async function requestCsrfToken(): Promise<string> {
-  const response = await fetch("/api/auth/csrf", {
-    credentials: "same-origin",
-    cache: "no-store",
-  });
-  const body = (await response.json()) as ApiResponse<{ csrfToken: string }>;
-
-  if (!response.ok || !body.success) {
-    throw new Error("无法初始化安全会话，请刷新页面后重试。");
-  }
-
-  return body.data.csrfToken;
-}
 
 async function parseCartResponse(response: Response): Promise<CartClientResult> {
   const body = (await response.json()) as ApiResponse<{ cart: ShoppingCart }>;

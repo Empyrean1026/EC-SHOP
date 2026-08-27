@@ -97,7 +97,10 @@ test("Order model stores item and address snapshots and derives item subtotals",
       },
     ],
     totalAmount: 43000,
+    paymentMethod: "stripe",
     shippingAddress: address,
+    checkoutKey: "83dd6fe4-6f5d-48a4-8e15-5d3ff0bccfd4",
+    cartVersion: new Date("2026-08-27T00:00:00.000Z"),
   });
 
   await order.validate();
@@ -105,7 +108,12 @@ test("Order model stores item and address snapshots and derives item subtotals",
   assert.equal(order.items[0]?.subtotal, 43000);
   assert.equal(order.paymentStatus, "pending");
   assert.equal(order.orderStatus, "pending");
+  assert.equal(order.paymentMethod, "stripe");
   assert.equal(order.shippingAddress.country, "JP");
+
+  const serialized = order.toJSON() as Record<string, unknown>;
+  assert.equal(serialized.checkoutKey, undefined);
+  assert.equal(serialized.cartVersion, undefined);
 });
 
 test("Cart model allows one cart per user and rejects duplicate products", async () => {
@@ -122,7 +130,15 @@ test("Cart model allows one cart per user and rejects duplicate products", async
 
   const userIndex = UserModel.schema.indexes().find(([fields]) => Object.hasOwn(fields, "email"));
   const cartIndex = CartModel.schema.indexes().find(([fields]) => Object.hasOwn(fields, "userId"));
+  const checkoutKeyIndex = OrderModel.schema
+    .indexes()
+    .find(([fields]) => Object.hasOwn(fields, "checkoutKey"));
+  const cartVersionIndex = OrderModel.schema
+    .indexes()
+    .find(([fields]) => Object.hasOwn(fields, "cartVersion"));
 
   assert.equal(userIndex?.[1].unique, true);
   assert.equal(cartIndex?.[1].unique, true);
+  assert.equal(checkoutKeyIndex?.[1].unique, true);
+  assert.equal(cartVersionIndex?.[1].unique, true);
 });

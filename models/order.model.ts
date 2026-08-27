@@ -1,5 +1,10 @@
 import { type InferSchemaType, type Model, Schema, model, models } from "mongoose";
-import { CURRENCY_CODES, ORDER_STATUSES, PAYMENT_STATUSES } from "@/models/constants";
+import {
+  CURRENCY_CODES,
+  ORDER_STATUSES,
+  PAYMENT_METHODS,
+  PAYMENT_STATUSES,
+} from "@/models/constants";
 import { configureJsonSerialization } from "@/models/schema-utils";
 import { addressSchema } from "@/models/schemas/address.schema";
 import { orderItemSchema } from "@/models/schemas/order-item.schema";
@@ -44,6 +49,14 @@ const orderSchema = new Schema(
       lowercase: true,
       default: "jpy",
     },
+    paymentMethod: {
+      type: String,
+      enum: {
+        values: PAYMENT_METHODS,
+        message: "Payment method is invalid",
+      },
+      required: [true, "Payment method is required"],
+    },
     paymentStatus: {
       type: String,
       enum: {
@@ -71,6 +84,16 @@ const orderSchema = new Schema(
       unique: true,
       sparse: true,
     },
+    checkoutKey: {
+      type: String,
+      required: [true, "Checkout idempotency key is required"],
+      trim: true,
+      maxlength: [64, "Checkout idempotency key cannot exceed 64 characters"],
+    },
+    cartVersion: {
+      type: Date,
+      required: [true, "Checkout cart version is required"],
+    },
   },
   {
     timestamps: true,
@@ -80,7 +103,15 @@ const orderSchema = new Schema(
 orderSchema.index({ userId: 1, createdAt: -1 });
 orderSchema.index({ orderStatus: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, createdAt: -1 });
-configureJsonSerialization(orderSchema);
+orderSchema.index(
+  { userId: 1, checkoutKey: 1 },
+  { unique: true, partialFilterExpression: { checkoutKey: { $type: "string" } } },
+);
+orderSchema.index(
+  { userId: 1, cartVersion: 1 },
+  { unique: true, partialFilterExpression: { cartVersion: { $type: "date" } } },
+);
+configureJsonSerialization(orderSchema, ["checkoutKey", "cartVersion"]);
 
 export type Order = InferSchemaType<typeof orderSchema>;
 

@@ -11,3 +11,9 @@ Domain services and external integrations live here. Keep transport details out 
 `cart-service.ts` is server-only and owns live product resolution, inventory limits, account persistence, guest validation, login merging, adjustments, and currency-separated totals.
 
 `cart-client.ts` is the browser transport for cart synchronization. It requests signed CSRF tokens before account mutations and uses the public validation endpoint to refresh untrusted guest snapshots.
+
+`csrf-client.ts` centralizes acquisition of signed CSRF tokens for browser-side mutation transports.
+
+`checkout-service.ts` is server-only and owns checkout page data, authoritative order snapshots, cart confirmation checks, idempotent creation, conditional cart clearing, and owner-scoped order reads.
+
+`checkout-client.ts` submits the validated checkout form and the user's expected cart snapshot to the protected order endpoint.

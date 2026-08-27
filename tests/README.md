@@ -10,4 +10,6 @@
 
 `cart.test.ts` validates strict cart inputs, hostile persistence cleanup, stock and quantity limits, derived totals, currency separation, and product snapshot conversion.
 
+`checkout.test.ts` validates nested address inputs, explicit confirmation, tamper rejection, cart snapshot comparison, order DTO boundaries, and nested API error paths.
+
 Run the suite with `npm test`.

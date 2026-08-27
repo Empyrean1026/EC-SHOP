@@ -89,10 +89,13 @@ Products should be deactivated instead of deleted when referenced by existing or
 | `items`                  | OrderItem[] | Required, 1–100 embedded snapshots         |
 | `totalAmount`            | integer     | Required, smallest currency unit           |
 | `currency`               | string      | Supported currency code; defaults to `jpy` |
+| `paymentMethod`          | string      | `stripe` or `cash_on_delivery`             |
 | `paymentStatus`          | string      | Payment lifecycle enum                     |
 | `orderStatus`            | string      | Fulfillment lifecycle enum                 |
 | `shippingAddress`        | Address     | Required checkout-time snapshot            |
 | `stripePaymentIntentId`  | string      | Optional, sparse unique index              |
+| `checkoutKey`            | string      | Hidden request idempotency key             |
+| `cartVersion`            | Date        | Hidden cart concurrency version            |
 | `createdAt`, `updatedAt` | Date        | Managed by Mongoose                        |
 
 Each order item stores `productId`, `name`, `image`, `unitPrice`, `quantity`, and a derived `subtotal`. Product names, images, prices, and addresses are snapshots so later catalog or profile edits cannot rewrite order history.
@@ -126,6 +129,8 @@ Each cart item stores `productId`, integer `quantity` from 1 to 99, and `addedAt
 | products   | `isActive, salesCount, createdAt`     | Best-selling catalog sort         |
 | products   | `isActive, rating, createdAt`         | Top-rated catalog sort            |
 | orders     | `stripePaymentIntentId` sparse unique | Stripe webhook lookup/idempotency |
+| orders     | `userId, checkoutKey` partial unique  | Checkout request idempotency      |
+| orders     | `userId, cartVersion` partial unique  | One order per cart version        |
 | orders     | `userId, createdAt`                   | User order history                |
 | orders     | `orderStatus, createdAt`              | Fulfillment queue                 |
 | orders     | `paymentStatus, createdAt`            | Payment operations queue          |
@@ -142,5 +147,5 @@ The following require transactional or cross-document checks and intentionally a
 - cart quantities cannot exceed current stock;
 - all checkout items must use the order currency;
 - `totalAmount` must be calculated from trusted prices, discounts, tax, and shipping;
-- inventory decrement and order creation must be atomic;
+- payment confirmation, inventory decrement, and order state transition must be atomic;
 - payment and order status transitions must be authorized and idempotent.

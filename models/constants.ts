@@ -14,6 +14,9 @@ export const PAYMENT_STATUSES = [
 ] as const;
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
+export const PAYMENT_METHODS = ["stripe", "cash_on_delivery"] as const;
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
+
 export const ORDER_STATUSES = [
   "pending",
   "confirmed",

@@ -39,7 +39,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   }
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+    <form className="space-y-5" method="post" onSubmit={handleSubmit} noValidate>
       <FormField
         id="email"
         name="email"

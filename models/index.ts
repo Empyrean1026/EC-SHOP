@@ -3,10 +3,12 @@ export { CategoryModel, type Category } from "@/models/category.model";
 export {
   CURRENCY_CODES,
   ORDER_STATUSES,
+  PAYMENT_METHODS,
   PAYMENT_STATUSES,
   USER_ROLES,
   type CurrencyCode,
   type OrderStatus,
+  type PaymentMethod,
   type PaymentStatus,
   type UserRole,
 } from "@/models/constants";
