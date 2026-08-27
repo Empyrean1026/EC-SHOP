@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 import {
   createAdminProduct,
   updateAdminProduct,
@@ -21,6 +22,7 @@ export function ProductForm({
   product?: CatalogProduct;
 }) {
   const router = useRouter();
+  const toast = useToast();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AdminClientError | null>(null);
 
@@ -53,9 +55,11 @@ export function ProductForm({
 
     if (!result.success) {
       setError(result.error);
+      toast.error("商品保存失败", result.error.message);
       setPending(false);
       return;
     }
+    toast.success(product ? "商品已更新" : "商品已创建", "正在返回商品管理列表。");
     router.push("/admin/products");
     router.refresh();
   }

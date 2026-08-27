@@ -133,7 +133,7 @@ export default async function AccountPage() {
 
         {profile.role === "admin" ? (
           <Link
-            className="mt-5 block rounded-3xl bg-[#dfe5ce] p-6 text-stone-950 sm:p-8"
+            className="mt-5 block rounded-3xl bg-[#dfe5ce] p-6 text-stone-950 sm:p-8 dark:bg-[#20271d]"
             href="/admin"
           >
             <p className="text-xs font-semibold tracking-[0.15em] uppercase">Administrator</p>

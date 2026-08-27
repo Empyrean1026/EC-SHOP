@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 import { addWishlistItem, removeWishlistItem } from "@/services/account-client";
 
 type WishlistButtonProps = {
@@ -17,6 +18,7 @@ export function WishlistButton({
 }: WishlistButtonProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const toast = useToast();
   const [wishlisted, setWishlisted] = useState(initialWishlisted);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +36,13 @@ export function WishlistButton({
         return;
       }
       setError(result.error.message);
+      toast.error("收藏更新失败", result.error.message);
       setPending(false);
       return;
     }
 
     setWishlisted(result.data.wishlisted);
+    toast.success(result.data.wishlisted ? "已加入收藏" : "已从收藏中移除");
     setPending(false);
     router.refresh();
   }

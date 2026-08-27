@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CategoryNavigation, ProductFilters } from "@/components/products/product-filters";
 import { ProductCard } from "@/components/products/product-card";
 import { ProductPagination } from "@/components/products/product-pagination";
+import { EmptyState } from "@/components/ui/empty-state";
 import { productListQuerySchema } from "@/lib/validations/product";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { listCategories, listProducts } from "@/services/product-service";
@@ -86,19 +87,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 ))}
               </div>
             ) : (
-              <div className="grid min-h-96 place-items-center rounded-3xl border border-dashed border-stone-300 bg-white p-8 text-center">
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.16em] text-orange-600 uppercase">
-                    No results
-                  </p>
-                  <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-                    没有找到符合条件的商品
-                  </h2>
-                  <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-                    请尝试更换关键词或清除筛选；新项目也可以运行目录种子脚本生成演示商品。
-                  </p>
-                </div>
-              </div>
+              <EmptyState
+                description="请尝试更换关键词或清除筛选；新项目也可以运行目录种子脚本生成演示商品。"
+                eyebrow="No results"
+                icon="⌕"
+                title="没有找到符合条件的商品"
+              />
             )}
 
             <ProductPagination pagination={result.pagination} query={query} />

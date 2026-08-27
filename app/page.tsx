@@ -19,7 +19,7 @@ const foundations = [
   {
     index: "04",
     name: "Tailwind CSS",
-    detail: "响应式设计系统与基础主题",
+    detail: "移动优先布局、深浅主题与状态组件",
   },
   {
     index: "05",
@@ -33,7 +33,7 @@ const foundations = [
   },
 ];
 
-const upcomingModules = ["促销系统", "评价系统", "库存管理", "退款流程", "权限审计", "运营分析"];
+const upcomingModules = ["促销系统", "评价系统", "库存预留", "退款流程", "权限审计", "部署优化"];
 
 export default function Home() {
   return (
@@ -43,15 +43,15 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 11 / Admin Panel
+              Phase 13 / UI &amp; UX
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
-              <span className="text-orange-600">搭好可靠地基。</span>
+              <span className="block text-orange-600">搭好可靠地基。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              管理员后台统一处理商品、库存、订单履约和用户数据，并通过 RBAC、CSRF
-              与状态机守住运营边界。
+              从移动端到桌面端保持一致的购物体验，以深浅主题、即时状态反馈和可访问交互，
+              让完整业务链路更清晰、更从容。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -65,9 +65,9 @@ export default function Home() {
               </a>
               <Link
                 className="inline-flex h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-900 transition hover:border-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-                href="/admin"
+                href="/products"
               >
-                进入管理员后台
+                浏览商品体验
               </Link>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function Home() {
                 <p className="mt-3 text-xs font-semibold text-stone-900">Form Chair</p>
                 <p className="mt-1 text-xs text-stone-500">¥ 48,000</p>
               </div>
-              <div className="rounded-3xl bg-[#d8dfc4] p-4">
+              <div className="rounded-3xl bg-[#d8dfc4] p-4 dark:bg-[#566041]">
                 <div className="h-24 rounded-2xl bg-[radial-gradient(circle_at_35%_25%,#eef3df_0%,#a3ad82_50%,#566041_100%)]" />
                 <p className="mt-3 text-xs font-semibold text-stone-900">Stone Lamp</p>
                 <p className="mt-1 text-xs text-stone-600">¥ 21,500</p>
@@ -139,7 +139,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="architecture" className="scroll-mt-24 bg-[#dfe5ce]">
+      <section id="architecture" className="scroll-mt-24 bg-[#dfe5ce] dark:bg-[#20271d]">
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
             <div>
@@ -157,7 +157,7 @@ export default function Home() {
           </div>
           <div className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-stone-950/15 sm:grid-cols-4">
             {["Browser", "App Router", "Route Handlers", "MongoDB"].map((step, index) => (
-              <div className="relative bg-[#eef1e4] p-6 sm:min-h-36" key={step}>
+              <div className="relative bg-[#eef1e4] p-6 sm:min-h-36 dark:bg-stone-900" key={step}>
                 <span className="text-[10px] font-semibold tracking-widest text-stone-500">
                   0{index + 1}
                 </span>

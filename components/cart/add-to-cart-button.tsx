@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCartStore } from "@/components/cart/cart-provider";
+import { useToast } from "@/components/ui/toast";
 import { CART_MAX_QUANTITY } from "@/lib/cart/constants";
 import { useCartOperations } from "@/hooks/use-cart-operations";
 import type { CartProductSnapshot } from "@/types/cart";
@@ -13,6 +14,7 @@ type AddToCartButtonProps = {
 
 export function AddToCartButton({ product, compact = false }: AddToCartButtonProps) {
   const { addItem } = useCartOperations();
+  const toast = useToast();
   const status = useCartStore((state) => state.status);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState<string | null>(null);
@@ -24,7 +26,10 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
     setMessage(null);
     const result = await addItem(product, compact ? 1 : quantity);
     setFailed(!result.success);
-    setMessage(result.success ? "已加入购物车。" : result.message);
+    setMessage(result.success ? null : result.message);
+    if (result.success)
+      toast.success("已加入购物车", `${product.name} × ${compact ? 1 : quantity}`);
+    else toast.error("无法加入购物车", result.message);
   }
 
   if (compact) {

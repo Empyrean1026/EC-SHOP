@@ -184,7 +184,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 你搜索过的关键词只保存在当前浏览器中，不会上传到服务器。
               </p>
             </div>
-            <div className="rounded-3xl bg-[#dfe5ce] p-7">
+            <div className="rounded-3xl bg-[#dfe5ce] p-7 dark:bg-[#20271d]">
               <p className="text-xs font-semibold tracking-[0.16em] text-stone-600 uppercase">
                 Try these
               </p>

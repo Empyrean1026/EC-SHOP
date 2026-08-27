@@ -124,7 +124,7 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
               </address>
             </section>
 
-            <section className="rounded-3xl bg-[#dfe5ce] p-6">
+            <section className="rounded-3xl bg-[#dfe5ce] p-6 dark:bg-[#20271d]">
               <p className="text-xs text-stone-600">支付方式</p>
               <p className="mt-2 text-sm font-semibold text-stone-950">
                 {isStripe ? "Stripe 在线支付" : "货到付款"}

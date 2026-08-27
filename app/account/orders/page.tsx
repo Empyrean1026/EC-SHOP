@@ -3,6 +3,7 @@ import Link from "next/link";
 import { OrderPagination } from "@/components/orders/order-pagination";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/orders/order-status";
 import { ProductVisual } from "@/components/products/product-visual";
+import { EmptyState } from "@/components/ui/empty-state";
 import { requireUser } from "@/lib/auth/dal";
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/orders/status";
 import { formatProductPrice } from "@/lib/products/format";
@@ -180,24 +181,15 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
             ))}
           </div>
         ) : (
-          <div className="mt-7 grid min-h-80 place-items-center rounded-3xl border border-dashed border-stone-300 bg-white p-8 text-center">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.16em] text-orange-600 uppercase">
-                No orders
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-                没有符合条件的订单
-              </h2>
-              <p className="mt-3 text-sm text-stone-500">
-                可以清除筛选，或先去商品目录完成一次购物。
-              </p>
-              <Link
-                className="mt-6 inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white"
-                href="/products"
-              >
-                浏览商品
-              </Link>
-            </div>
+          <div className="mt-7">
+            <EmptyState
+              actionHref="/products"
+              actionLabel="浏览商品"
+              description="可以清除筛选，或先去商品目录完成一次购物。"
+              eyebrow="No orders"
+              icon="□"
+              title="没有符合条件的订单"
+            />
           </div>
         )}
 

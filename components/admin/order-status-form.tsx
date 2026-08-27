@@ -2,12 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 import { ORDER_STATUS_LABELS } from "@/lib/orders/status";
 import type { OrderStatus } from "@/models";
 import { updateOrderStatus } from "@/services/admin-client";
 
 export function OrderStatusForm({ orderId, allowed }: { orderId: string; allowed: OrderStatus[] }) {
   const router = useRouter();
+  const toast = useToast();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,10 +24,12 @@ export function OrderStatusForm({ orderId, allowed }: { orderId: string; allowed
     const result = await updateOrderStatus(orderId, status);
     if (!result.success) {
       setError(result.error.message);
+      toast.error("订单状态更新失败", result.error.message);
       setPending(false);
       return;
     }
     setPending(false);
+    toast.success("订单状态已更新", `订单已进入“${ORDER_STATUS_LABELS[status]}”。`);
     router.refresh();
   }
 

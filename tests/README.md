@@ -22,4 +22,6 @@
 
 `analytics.test.ts` validates timezone-aware daily/monthly periods, continuous zero-filled timelines, and strict currency separation.
 
+`ui.test.ts` validates explicit theme choices and operating-system fallback behavior.
+
 Run the suite with `npm test`.

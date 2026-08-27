@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/products/product-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { requireUser } from "@/lib/auth/dal";
 import { getUserWishlist } from "@/services/wishlist-service";
 
@@ -38,24 +39,15 @@ export default async function WishlistPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-8 grid min-h-80 place-items-center rounded-3xl border border-dashed border-stone-300 bg-white p-8 text-center">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.16em] text-orange-600 uppercase">
-                Empty wishlist
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-                还没有收藏商品
-              </h2>
-              <p className="mt-3 text-sm text-stone-500">
-                在商品卡片或详情页点击“加入收藏”即可保存。
-              </p>
-              <Link
-                className="mt-6 inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white"
-                href="/products"
-              >
-                浏览商品
-              </Link>
-            </div>
+          <div className="mt-8">
+            <EmptyState
+              actionHref="/products"
+              actionLabel="浏览商品"
+              description="在商品卡片或详情页点击“加入收藏”即可保存。"
+              eyebrow="Empty wishlist"
+              icon="♡"
+              title="还没有收藏商品"
+            />
           </div>
         )}
       </div>

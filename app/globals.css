@@ -1,8 +1,21 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f5f3ee;
   --foreground: #1c1917;
+  --surface: #ffffff;
+  --surface-muted: #f5f5f4;
+  color-scheme: light;
+}
+
+html.dark {
+  --background: #12100f;
+  --foreground: #f5f5f4;
+  --surface: #1c1917;
+  --surface-muted: #292524;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -21,6 +34,101 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+.skeleton {
+  background: linear-gradient(100deg, #e7e5e4 25%, #f5f5f4 45%, #e7e5e4 65%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.dark .skeleton {
+  background: linear-gradient(100deg, #292524 25%, #44403c 45%, #292524 65%);
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Phase 13 compatibility layer for surfaces authored before semantic theme tokens. */
+.dark .bg-white {
+  background-color: #1c1917;
+}
+
+.dark .bg-stone-50,
+.dark .bg-stone-100 {
+  background-color: #171412;
+}
+
+.dark .text-stone-950,
+.dark .text-stone-900,
+.dark .text-stone-800 {
+  color: #fafaf9;
+}
+
+.dark .text-stone-700,
+.dark .text-stone-600 {
+  color: #d6d3d1;
+}
+
+.dark .text-stone-500 {
+  color: #a8a29e;
+}
+
+.dark .border-stone-200,
+.dark .border-stone-300 {
+  border-color: #44403c;
+}
+
+.dark .bg-red-50 {
+  background-color: rgb(127 29 29 / 0.25);
+}
+
+.dark .bg-emerald-50 {
+  background-color: rgb(6 78 59 / 0.28);
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-100 {
+  background-color: rgb(120 53 15 / 0.28);
+}
+
+.dark .bg-orange-50 {
+  background-color: rgb(124 45 18 / 0.22);
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark select,
+.dark textarea {
+  background-color: #1c1917;
+  color: #fafaf9;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #78716c;
 }
 
 ::selection {
@@ -34,5 +142,9 @@ body {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .skeleton {
+    animation: none;
   }
 }

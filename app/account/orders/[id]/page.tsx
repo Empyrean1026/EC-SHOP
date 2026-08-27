@@ -155,7 +155,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               </address>
             </section>
 
-            <section className="rounded-3xl bg-[#dfe5ce] p-6 text-xs leading-6 text-stone-700">
+            <section className="rounded-3xl bg-[#dfe5ce] p-6 text-xs leading-6 text-stone-700 dark:bg-[#20271d]">
               <p>
                 创建：
                 {new Intl.DateTimeFormat("zh-CN", {

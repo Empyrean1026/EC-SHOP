@@ -5,11 +5,13 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { FormField } from "@/components/auth/form-field";
+import { useToast } from "@/components/ui/toast";
 import { updateProfile, type AccountClientError } from "@/services/account-client";
 import type { AccountProfile } from "@/types/account";
 
 export function ProfileForm({ profile }: { profile: AccountProfile }) {
   const router = useRouter();
+  const toast = useToast();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AccountClientError | null>(null);
   const [saved, setSaved] = useState(false);
@@ -27,11 +29,13 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
 
     if (!result.success) {
       setError(result.error);
+      toast.error("个人资料保存失败", result.error.message);
       setPending(false);
       return;
     }
 
     setSaved(true);
+    toast.success("个人资料已保存");
     setPending(false);
     router.refresh();
   }

@@ -2,10 +2,12 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 import { updateAdminStock } from "@/services/admin-client";
 
 export function InventoryEditor({ productId, stock }: { productId: string; stock: number }) {
   const router = useRouter();
+  const toast = useToast();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,10 +20,12 @@ export function InventoryEditor({ productId, stock }: { productId: string; stock
     const result = await updateAdminStock(productId, nextStock);
     if (!result.success) {
       setError(result.error.message);
+      toast.error("库存更新失败", result.error.message);
       setPending(false);
       return;
     }
     setPending(false);
+    toast.success("库存已更新", `当前库存为 ${nextStock} 件。`);
     router.refresh();
   }
 

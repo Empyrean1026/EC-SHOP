@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { FormField } from "@/components/auth/form-field";
+import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import { deleteAddress, saveAddress, type AccountClientError } from "@/services/account-client";
 import type { AccountAddress } from "@/types/account";
 
@@ -19,10 +21,12 @@ const emptyAddress: AccountAddress = {
 
 export function AddressForm({ address }: { address: AccountAddress | null }) {
   const router = useRouter();
+  const toast = useToast();
   const initial = address ?? emptyAddress;
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AccountClientError | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -43,17 +47,18 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
 
     if (!result.success) {
       setError(result.error);
+      toast.error("地址保存失败", result.error.message);
       setPending(false);
       return;
     }
 
     setNotice("默认收货地址已保存。");
+    toast.success("默认收货地址已保存");
     setPending(false);
     router.refresh();
   }
 
   async function handleDelete() {
-    if (!window.confirm("确定删除默认收货地址吗？历史订单中的地址快照不会改变。")) return;
     setPending(true);
     setError(null);
     setNotice(null);
@@ -61,11 +66,14 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
 
     if (!result.success) {
       setError(result.error);
+      toast.error("地址删除失败", result.error.message);
       setPending(false);
       return;
     }
 
     setNotice("默认收货地址已删除。");
+    setDeleteOpen(false);
+    toast.success("默认收货地址已删除", "历史订单中的地址快照保持不变。");
     setPending(false);
     router.refresh();
   }
@@ -173,12 +181,37 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
             className="h-12 rounded-full border border-red-200 px-7 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:opacity-60"
             type="button"
             disabled={pending}
-            onClick={handleDelete}
+            onClick={() => setDeleteOpen(true)}
           >
             删除地址
           </button>
         ) : null}
       </div>
+      <Modal
+        description="删除只影响以后结算时的自动填充，历史订单中的收货地址不会改变。"
+        onClose={() => !pending && setDeleteOpen(false)}
+        open={deleteOpen}
+        title="删除默认收货地址？"
+      >
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            className="h-11 rounded-full border border-stone-300 px-5 text-sm font-semibold text-stone-700"
+            disabled={pending}
+            onClick={() => setDeleteOpen(false)}
+            type="button"
+          >
+            取消
+          </button>
+          <button
+            className="h-11 rounded-full bg-red-700 px-5 text-sm font-semibold text-white disabled:opacity-60"
+            disabled={pending}
+            onClick={handleDelete}
+            type="button"
+          >
+            {pending ? "正在删除…" : "确认删除"}
+          </button>
+        </div>
+      </Modal>
     </form>
   );
 }

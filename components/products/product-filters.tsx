@@ -113,7 +113,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
         </button>
       </form>
 
-      <div className="hidden rounded-3xl bg-[#dfe5ce] p-5 lg:block">
+      <div className="hidden rounded-3xl bg-[#dfe5ce] p-5 lg:block dark:bg-[#20271d]">
         <p className="text-xs font-semibold tracking-[0.15em] text-stone-600 uppercase">
           Catalog API
         </p>

@@ -86,7 +86,10 @@ export default async function AdminPage() {
             <h2 className="mt-4 text-2xl font-semibold">添加新商品</h2>
             <p className="mt-3 text-sm text-orange-100">创建商品、设置分类、价格和初始库存。</p>
           </Link>
-          <Link className="rounded-3xl bg-[#dfe5ce] p-7 text-stone-950" href="/admin/orders">
+          <Link
+            className="rounded-3xl bg-[#dfe5ce] p-7 text-stone-950 dark:bg-[#20271d]"
+            href="/admin/orders"
+          >
             <p className="text-xs font-semibold tracking-wider uppercase">Order management</p>
             <h2 className="mt-4 text-2xl font-semibold">处理待履约订单</h2>
             <p className="mt-3 text-sm text-stone-600">按合法状态机推进处理、发货和完成。</p>

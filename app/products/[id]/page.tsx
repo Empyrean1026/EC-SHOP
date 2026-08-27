@@ -120,7 +120,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 productId={product.id}
                 initialWishlisted={wishlistIds.includes(product.id)}
               />
-              <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700">
+              <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700 dark:bg-[#20271d]">
                 加入时会检查当前库存；登录账户后购物车将安全同步到 MongoDB。
               </p>
             </div>
