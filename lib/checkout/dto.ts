@@ -53,6 +53,7 @@ export function toCheckoutOrder(value: unknown): CheckoutOrder {
     orderStatus: order.orderStatus as CheckoutOrder["orderStatus"],
     shippingAddress: toAddress(order.shippingAddress),
     stripePaymentIntentId: nullableString(order.stripePaymentIntentId),
+    paidAt: order.paidAt ? new Date(order.paidAt as string | number | Date).toISOString() : null,
     createdAt: new Date(order.createdAt as string | number | Date).toISOString(),
   };
 }

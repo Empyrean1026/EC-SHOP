@@ -31,6 +31,7 @@ export type CheckoutOrder = {
   orderStatus: OrderStatus;
   shippingAddress: CheckoutAddress;
   stripePaymentIntentId: string | null;
+  paidAt: string | null;
   createdAt: string;
 };
 

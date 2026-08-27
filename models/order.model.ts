@@ -84,6 +84,18 @@ const orderSchema = new Schema(
       unique: true,
       sparse: true,
     },
+    stripePaymentErrorCode: {
+      type: String,
+      trim: true,
+      maxlength: [128, "Stripe payment error code cannot exceed 128 characters"],
+    },
+    stripeLastEventId: {
+      type: String,
+      trim: true,
+      maxlength: [255, "Stripe event ID cannot exceed 255 characters"],
+    },
+    stripeLastEventAt: Date,
+    paidAt: Date,
     checkoutKey: {
       type: String,
       required: [true, "Checkout idempotency key is required"],
@@ -111,7 +123,13 @@ orderSchema.index(
   { userId: 1, cartVersion: 1 },
   { unique: true, partialFilterExpression: { cartVersion: { $type: "date" } } },
 );
-configureJsonSerialization(orderSchema, ["checkoutKey", "cartVersion"]);
+configureJsonSerialization(orderSchema, [
+  "checkoutKey",
+  "cartVersion",
+  "stripePaymentErrorCode",
+  "stripeLastEventId",
+  "stripeLastEventAt",
+]);
 
 export type Order = InferSchemaType<typeof orderSchema>;
 

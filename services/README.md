@@ -17,3 +17,7 @@ Domain services and external integrations live here. Keep transport details out 
 `checkout-service.ts` is server-only and owns checkout page data, authoritative order snapshots, cart confirmation checks, idempotent creation, conditional cart clearing, and owner-scoped order reads.
 
 `checkout-client.ts` submits the validated checkout form and the user's expected cart snapshot to the protected order endpoint.
+
+`payment-service.ts` owns server-side PaymentIntent creation/reuse, order binding, Webhook integrity checks, stale-event guards, and payment/order status transitions. It never accepts client-calculated amounts.
+
+`payment-client.ts` requests a CSRF-protected payment session and polls the owner-scoped database status after Stripe confirmation; it has no API that can mark an order paid.

@@ -12,4 +12,6 @@
 
 `checkout.test.ts` validates nested address inputs, explicit confirmation, tamper rejection, cart snapshot comparison, order DTO boundaries, and nested API error paths.
 
+`payment.test.ts` validates raw-body Stripe signature verification, PaymentIntent-to-order integrity binding, supported Webhook transitions, exact amount receipt, and failure handling.
+
 Run the suite with `npm test`.

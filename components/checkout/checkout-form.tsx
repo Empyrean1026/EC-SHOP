@@ -205,7 +205,11 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
       await synchronizeCartStore(cartStore);
     }
 
-    router.push(`/checkout/success/${result.data.order.id}`);
+    router.push(
+      result.data.order.paymentMethod === "stripe"
+        ? `/checkout/payment/${result.data.order.id}`
+        : `/checkout/success/${result.data.order.id}`,
+    );
     router.refresh();
   }
 
@@ -343,7 +347,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
             <div>
               <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">支付方式</h2>
               <p className="mt-1 text-sm text-stone-500">
-                本阶段创建订单，Stripe 扣款将在后续阶段接入。
+                Stripe 使用安全支付组件，最终结果由服务端 Webhook 确认。
               </p>
             </div>
           </div>
@@ -368,7 +372,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                     Stripe 在线支付
                   </span>
                   <span className="mt-1 block text-xs leading-5 text-stone-500">
-                    创建待支付订单，下一阶段进入安全支付。
+                    创建订单后进入 Stripe Payment Element 完成支付。
                   </span>
                 </span>
               </div>
@@ -460,11 +464,11 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
             {form.formState.isSubmitting
               ? "正在安全创建订单…"
               : selectedPaymentMethod === "stripe"
-                ? "创建待支付订单"
+                ? "创建订单并前往支付"
                 : "创建货到付款订单"}
           </button>
           <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-            当前不会发起 Stripe 扣款；重复提交同一结算请求不会重复创建订单。
+            重复提交不会重复创建订单；支付成功状态仅由 Stripe Webhook 写入。
           </p>
         </section>
       </div>

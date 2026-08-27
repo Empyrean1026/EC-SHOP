@@ -12,7 +12,7 @@
 6. 服务端重新读取 MongoDB 购物车和商品，不使用客户端数据生成订单金额。
 7. 创建成功后按购物车版本条件清空购物车，并进入仅订单所有者可访问的确认页。
 
-Stripe 选项在本阶段只创建 `pending` 待支付订单，不会创建 PaymentIntent 或发生扣款。
+Stripe 选项创建 `pending` 待支付订单后进入 `/checkout/payment/:orderId`。PaymentIntent 与 Webhook 的可信状态链路见 `payment-system.md`。
 
 ## API
 
@@ -48,8 +48,8 @@ Stripe 选项在本阶段只创建 `pending` 待支付订单，不会创建 Paym
 
 地址保存失败不会回滚已经创建的订单，但服务端会记录错误；订单本身始终保留提交时的配送快照。
 
-两种支付方式当前都创建 `paymentStatus: pending`、`orderStatus: pending` 的订单。后续 Stripe 阶段负责 PaymentIntent、Webhook、支付状态转换和失败恢复；后续订单管理阶段负责货到付款确认与履约状态。
+两种支付方式都先创建 `paymentStatus: pending`、`orderStatus: pending` 的订单。Stripe 支付通过验签 Webhook 转换支付状态；后续订单管理阶段负责货到付款确认与履约状态。
 
 ## 库存边界
 
-创建待支付订单不会预留或扣减库存。Stripe 支付确认阶段必须再次校验订单与库存，并使用事务或条件更新原子地完成库存扣减和状态转换。客户端显示的金额、订单快照甚至待支付订单本身，都不能替代支付前的服务端校验。
+创建待支付订单不会预留或扣减库存。第八阶段准确记录 Stripe 的付款事实，但不把支付 Webhook 冒充为库存事务；生产履约前仍需在库存阶段增加预留、释放、超时取消和退款补偿机制。

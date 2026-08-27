@@ -31,7 +31,7 @@ const foundations = [
   },
 ];
 
-const upcomingModules = ["Stripe 支付", "订单管理", "收藏夹", "评价系统", "库存管理", "运营分析"];
+const upcomingModules = ["订单管理", "收藏夹", "评价系统", "库存管理", "退款流程", "运营分析"];
 
 export default function Home() {
   return (
@@ -41,14 +41,15 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 07 / Checkout
+              Phase 08 / Stripe Payment
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
               <span className="text-orange-600">搭好可靠地基。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              购物车已经延伸到安全结算；地址、商品和金额经过双端校验，订单由服务端可信数据生成并防止重复提交。
+              Stripe PaymentIntent 已连接安全结算；浏览器负责确认支付，签名 Webhook
+              才能改变订单付款状态。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a

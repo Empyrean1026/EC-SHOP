@@ -1,0 +1,84 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { StripePaymentPanel } from "@/components/payment/stripe-payment-panel";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { formatProductPrice } from "@/lib/products/format";
+import { getStripePublishableKey, StripeConfigurationError } from "@/lib/stripe/server";
+import { getCheckoutOrder } from "@/services/checkout-service";
+
+export const metadata: Metadata = {
+  title: "Stripe 安全支付",
+  description: "使用 Stripe Payment Element 完成订单支付。",
+};
+
+type PaymentPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function PaymentPage({ params }: PaymentPageProps) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  const order = await getCheckoutOrder(user.id, (await params).id);
+  if (!order) notFound();
+  if (order.paymentMethod !== "stripe") redirect(`/checkout/success/${order.id}`);
+  if (order.paymentStatus === "paid") redirect(`/checkout/success/${order.id}`);
+
+  let publishableKey: string | null = null;
+  try {
+    publishableKey = getStripePublishableKey();
+  } catch (error) {
+    if (!(error instanceof StripeConfigurationError)) throw error;
+  }
+
+  return (
+    <section className="min-h-[75vh] bg-stone-100 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+        <div className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-8">
+          <p className="text-xs font-semibold tracking-[0.16em] text-orange-600 uppercase">
+            Secure payment
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950 sm:text-4xl">
+            使用 Stripe 完成支付
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-stone-500">
+            页面返回成功只表示支付步骤已提交；订单将在 Stripe Webhook 验签通过后标记为已支付。
+          </p>
+          <div className="mt-8">
+            <StripePaymentPanel order={order} publishableKey={publishableKey} />
+          </div>
+        </div>
+
+        <aside className="rounded-3xl bg-stone-950 p-6 text-white lg:sticky lg:top-24">
+          <p className="text-xs font-semibold tracking-[0.16em] text-orange-400 uppercase">
+            Payment summary
+          </p>
+          <p className="mt-5 text-xs break-all text-stone-400">订单号 {order.id}</p>
+          <dl className="mt-6 space-y-3 border-t border-white/15 pt-5 text-sm">
+            <div className="flex justify-between gap-4">
+              <dt className="text-stone-400">商品种类</dt>
+              <dd>{order.items.length}</dd>
+            </div>
+            <div className="flex justify-between gap-4">
+              <dt className="text-stone-400">支付状态</dt>
+              <dd>{order.paymentStatus}</dd>
+            </div>
+          </dl>
+          <div className="mt-6 border-t border-white/15 pt-5">
+            <p className="text-xs text-stone-400">应付金额</p>
+            <p className="mt-2 text-3xl font-semibold tracking-[-0.04em]">
+              {formatProductPrice(order.totalAmount, order.currency)}
+            </p>
+          </div>
+          <Link
+            className="mt-6 inline-block text-xs text-stone-400 underline"
+            href={`/checkout/success/${order.id}`}
+          >
+            暂不支付，查看订单
+          </Link>
+        </aside>
+      </div>
+    </section>
+  );
+}

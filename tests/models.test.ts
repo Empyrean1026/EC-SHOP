@@ -101,6 +101,9 @@ test("Order model stores item and address snapshots and derives item subtotals",
     shippingAddress: address,
     checkoutKey: "83dd6fe4-6f5d-48a4-8e15-5d3ff0bccfd4",
     cartVersion: new Date("2026-08-27T00:00:00.000Z"),
+    stripePaymentErrorCode: "card_declined",
+    stripeLastEventId: "evt_test_123",
+    stripeLastEventAt: new Date("2026-08-27T00:01:00.000Z"),
   });
 
   await order.validate();
@@ -114,6 +117,9 @@ test("Order model stores item and address snapshots and derives item subtotals",
   const serialized = order.toJSON() as Record<string, unknown>;
   assert.equal(serialized.checkoutKey, undefined);
   assert.equal(serialized.cartVersion, undefined);
+  assert.equal(serialized.stripePaymentErrorCode, undefined);
+  assert.equal(serialized.stripeLastEventId, undefined);
+  assert.equal(serialized.stripeLastEventAt, undefined);
 });
 
 test("Cart model allows one cart per user and rejects duplicate products", async () => {

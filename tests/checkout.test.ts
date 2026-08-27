@@ -122,11 +122,13 @@ test("checkout order DTO exposes snapshots without internal idempotency fields",
     shippingAddress: { ...validInput.shippingAddress, country: "JP" },
     checkoutKey: validInput.idempotencyKey,
     cartVersion: new Date(),
+    paidAt: new Date("2026-08-27T00:05:00.000Z"),
     createdAt: new Date("2026-08-27T00:00:00.000Z"),
   });
 
   assert.equal(order.id, "507f1f77bcf86cd799439012");
   assert.equal(order.totalAmount, 43000);
   assert.equal(order.shippingAddress.line2, null);
+  assert.equal(order.paidAt, "2026-08-27T00:05:00.000Z");
   assert.equal("checkoutKey" in order, false);
 });

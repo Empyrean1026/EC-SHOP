@@ -35,4 +35,27 @@ if (!Number.isInteger(bcryptSaltRounds) || bcryptSaltRounds < 10 || bcryptSaltRo
   process.exit(1);
 }
 
+const stripeVariables = {
+  STRIPE_SECRET_KEY: "sk_",
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_",
+  STRIPE_WEBHOOK_SECRET: "whsec_",
+};
+const configuredStripeVariables = Object.keys(stripeVariables).filter((name) => process.env[name]);
+
+if (
+  configuredStripeVariables.length > 0 &&
+  configuredStripeVariables.length !== Object.keys(stripeVariables).length
+) {
+  console.error("Environment check failed: configure all Stripe variables or none of them.");
+  process.exit(1);
+}
+
+for (const [name, prefix] of Object.entries(stripeVariables)) {
+  const value = process.env[name];
+  if (value && !value.startsWith(prefix)) {
+    console.error(`Environment check failed: ${name} must start with ${prefix}.`);
+    process.exit(1);
+  }
+}
+
 console.log("Environment check passed.");

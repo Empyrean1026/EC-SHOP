@@ -47,7 +47,7 @@ export function SiteHeader() {
             className="rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase transition hover:border-stone-950 hover:text-stone-950"
             href="/account"
           >
-            Phase 07
+            Phase 08
           </Link>
         </div>
       </div>

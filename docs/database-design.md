@@ -94,6 +94,10 @@ Products should be deactivated instead of deleted when referenced by existing or
 | `orderStatus`            | string      | Fulfillment lifecycle enum                 |
 | `shippingAddress`        | Address     | Required checkout-time snapshot            |
 | `stripePaymentIntentId`  | string      | Optional, sparse unique index              |
+| `stripePaymentErrorCode` | string      | Hidden last safe Stripe error code         |
+| `stripeLastEventId`      | string      | Hidden last processed Stripe event ID      |
+| `stripeLastEventAt`      | Date        | Hidden stale-event ordering guard          |
+| `paidAt`                 | Date        | Verified Webhook payment timestamp         |
 | `checkoutKey`            | string      | Hidden request idempotency key             |
 | `cartVersion`            | Date        | Hidden cart concurrency version            |
 | `createdAt`, `updatedAt` | Date        | Managed by Mongoose                        |
@@ -147,5 +151,5 @@ The following require transactional or cross-document checks and intentionally a
 - cart quantities cannot exceed current stock;
 - all checkout items must use the order currency;
 - `totalAmount` must be calculated from trusted prices, discounts, tax, and shipping;
-- payment confirmation, inventory decrement, and order state transition must be atomic;
+- inventory reservation, decrement, release, and refund compensation require a transaction-aware inventory service;
 - payment and order status transitions must be authorized and idempotent.

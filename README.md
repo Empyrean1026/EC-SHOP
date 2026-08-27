@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第七阶段“结算页面”已完成，当前包含：
+第八阶段“Stripe 支付”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -31,14 +31,16 @@
 - React Hook Form + Zod 地址表单、商品/金额确认和支付方式选择
 - 服务端可信价格生成订单快照、单币种限制与购物车版本并发校验
 - UUID 请求幂等、同购物车防重复下单和条件清空购物车
-- Stripe 待支付及货到付款订单、所有者限定的订单确认页面
-- 无需数据库连接的模型、认证、商品、搜索、购物车及结算单元测试
+- Stripe Payment Element、服务端 PaymentIntent 创建与订单级幂等复用
+- 原始请求体 Webhook 验签、金额/币种/归属校验及幂等支付状态转换
+- 支付失败重试、异步支付确认页面和所有者限定的支付状态查询
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算及支付单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-订单管理、收藏夹和 Stripe 实际支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md) 和 [`docs/checkout-system.md`](docs/checkout-system.md)。
+订单管理、收藏夹、退款和库存预留等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md) 和 [`docs/payment-system.md`](docs/payment-system.md)。
 
 ## 技术要求
 
@@ -60,15 +62,18 @@ npm run dev
 
 ## 环境变量
 
-| 变量                 | 用途                              | 示例                                |
-| -------------------- | --------------------------------- | ----------------------------------- |
-| `MONGODB_URI`        | 服务端 MongoDB 连接字符串         | `mongodb://localhost:27017/ec_site` |
-| `APP_URL`            | 服务端网站源站；用于 Origin 校验  | `http://localhost:3000`             |
-| `AUTH_SECRET`        | JWT HMAC 密钥，至少 32 字节       | 使用随机值                          |
-| `CSRF_SECRET`        | 独立 CSRF HMAC 密钥，至少 32 字节 | 使用另一份随机值                    |
-| `BCRYPT_SALT_ROUNDS` | bcrypt cost，允许 10–14           | `12`                                |
+| 变量                                 | 用途                                | 示例                                |
+| ------------------------------------ | ----------------------------------- | ----------------------------------- |
+| `MONGODB_URI`                        | 服务端 MongoDB 连接字符串           | `mongodb://localhost:27017/ec_site` |
+| `APP_URL`                            | 服务端网站源站；用于 Origin 校验    | `http://localhost:3000`             |
+| `AUTH_SECRET`                        | JWT HMAC 密钥，至少 32 字节         | 使用随机值                          |
+| `CSRF_SECRET`                        | 独立 CSRF HMAC 密钥，至少 32 字节   | 使用另一份随机值                    |
+| `BCRYPT_SALT_ROUNDS`                 | bcrypt cost，允许 10–14             | `12`                                |
+| `STRIPE_SECRET_KEY`                  | Stripe 服务端密钥，不得暴露给浏览器 | `sk_test_...`                       |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe Elements 公开密钥            | `pk_test_...`                       |
+| `STRIPE_WEBHOOK_SECRET`              | Webhook endpoint 签名密钥           | `whsec_...`                         |
 
-`.env.local` 已被 Git 忽略。不要在 `NEXT_PUBLIC_` 变量中放置密码、令牌或连接凭据。
+`.env.local` 已被 Git 忽略。三项 Stripe 变量必须同时配置；未配置时其他本地功能仍可运行，但支付页会安全停用。不要在 `NEXT_PUBLIC_` 变量中放置密码、令牌或连接凭据，Stripe publishable key 是唯一例外且本身不是秘密。
 
 ## 常用命令
 
@@ -79,7 +84,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车与结算测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算与支付测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:seed       # 幂等写入本地演示分类和商品
 npm run user:role -- --email=user@example.com --role=admin
@@ -116,10 +121,10 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证、商品、购物车与结算组件
+├── components/          # 可复用认证、商品、购物车、结算与支付组件
 ├── docs/                # 数据库及各阶段业务系统文档
 ├── hooks/               # 购物车操作等客户端 React Hooks
-├── lib/                 # 数据库、认证、购物车、结算与 API 工具
+├── lib/                 # 数据库、认证、购物车、结算、Stripe 与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
@@ -174,7 +179,17 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 创建订单 API：`POST /api/orders`
 - 成功页面：`/checkout/success/:orderId`
 
-结算仅对登录用户开放，支持地址填写与保存、商品和金额确认、Stripe/货到付款选择及幂等订单创建。Stripe 订单在本阶段保持待支付状态，不会发生实际扣款；完整安全与并发规则见 `docs/checkout-system.md`。
+结算仅对登录用户开放，支持地址填写与保存、商品和金额确认、Stripe/货到付款选择及幂等订单创建。Stripe 订单创建后进入独立支付页；完整安全与并发规则见 `docs/checkout-system.md`。
+
+## Stripe 支付入口
+
+- 支付页：`/checkout/payment/:orderId`
+- 支付返回页：`/checkout/payment/return?orderId=:orderId`
+- 创建/复用 PaymentIntent：`POST /api/orders/:orderId/payment-intent`
+- 查询可信支付状态：`GET /api/orders/:orderId/payment-status`
+- Stripe Webhook：`POST /api/webhooks/stripe`
+
+浏览器的 `confirmPayment` 结果不会直接更新订单。只有使用 `STRIPE_WEBHOOK_SECRET` 验签成功，且 PaymentIntent 的 ID、订单 metadata、用户、金额和币种全部匹配时，Webhook 才能推进 `paymentStatus`。本地转发、测试事件和状态规则见 `docs/payment-system.md`。
 
 ## GitHub
 
