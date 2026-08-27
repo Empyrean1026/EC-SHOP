@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { FormField } from "@/components/auth/form-field";
+import { synchronizeCartStore, useCartStoreApi } from "@/components/cart/cart-provider";
 import { loginUser, type AuthClientError } from "@/services/auth-client";
 
 type LoginFormProps = {
@@ -11,6 +12,7 @@ type LoginFormProps = {
 
 export function LoginForm({ redirectTo }: LoginFormProps) {
   const router = useRouter();
+  const cartStore = useCartStoreApi();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AuthClientError | null>(null);
 
@@ -31,6 +33,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       return;
     }
 
+    await synchronizeCartStore(cartStore);
     router.replace(redirectTo);
     router.refresh();
   }

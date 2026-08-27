@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第五阶段“商品搜索”已完成，当前包含：
+第六阶段“购物车”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -23,13 +23,18 @@
 - 独立搜索页、加权 MongoDB 全文索引、中文安全子串回退与相关度排序
 - 250ms 防抖自动补全、过期请求取消、键盘操作与无结果状态
 - 有候选上限的中英文模糊匹配与浏览器本地搜索历史
-- 无需数据库连接的模型、认证、商品及搜索单元测试
+- Zustand 5 全局购物车状态、SSR 安全的显式 hydration 与游客本地持久化
+- 加入、删除、数量修改、库存限制、清空、小计与按币种分别汇总
+- 登录用户 MongoDB 购物车、登录后安全合并与退出后的状态隔离
+- 服务端实时价格和库存校验、单项 99 件及 100 种商品容量限制
+- 受用户校验、Origin 与签名 CSRF Token 保护的账户购物车写接口
+- 无需数据库连接的模型、认证、商品、搜索及购物车单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-购物车操作、收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md) 和 [`docs/search-system.md`](docs/search-system.md)。
+收藏夹、订单流程和 Stripe 支付等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md) 和 [`docs/cart-system.md`](docs/cart-system.md)。
 
 ## 技术要求
 
@@ -70,7 +75,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证与商品单元测试
+npm test              # 运行模型、认证、商品、搜索与购物车单元测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:seed       # 幂等写入本地演示分类和商品
 npm run user:role -- --email=user@example.com --role=admin
@@ -107,16 +112,16 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证、商品与搜索 React 组件
-├── docs/                # 数据库、认证、商品与搜索系统文档
-├── hooks/               # 客户端 React Hooks
-├── lib/                 # 数据库、认证、校验与 API 工具
+├── components/          # 可复用认证、商品、搜索与购物车组件
+├── docs/                # 数据库及各阶段业务系统文档
+├── hooks/               # 购物车操作等客户端 React Hooks
+├── lib/                 # 数据库、认证、购物车、校验与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
 ├── scripts/             # 开发与运维脚本
-├── services/            # 认证客户端与服务端商品/搜索领域服务
-├── store/               # 全局客户端状态
+├── services/            # 浏览器传输与服务端领域服务
+├── store/               # Zustand 全局客户端状态
 ├── tests/               # 自动化测试
 ├── types/               # 跨层 TypeScript 类型
 ├── .env.example         # 可提交的环境变量模板
@@ -150,6 +155,14 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 公开 API：`GET /api/search`、`GET /api/search/suggestions`
 
 结果 API 支持全文、中文子串和有限模糊回退，并返回实际检索模式；搜索框提供防抖建议、请求取消、键盘导航和浏览器本地历史。部署前必须运行 `npm run db:indexes` 创建 `product_search` 索引，完整参数与扩展边界见 `docs/search-system.md`。
+
+## 购物车入口
+
+- 页面：`/cart`
+- 账户 API：`GET /api/cart`、`DELETE /api/cart`、`POST /api/cart/items`、`PATCH|DELETE /api/cart/items/:productId`、`POST /api/cart/sync`
+- 游客校验 API：`POST /api/cart/validate`
+
+游客购物车保存在当前浏览器，登录或注册后会自动合并到 MongoDB 账户购物车。客户端快照不作为价格或库存依据，服务端每次响应都使用实时商品数据重新计算；完整规则见 `docs/cart-system.md`。
 
 ## GitHub
 

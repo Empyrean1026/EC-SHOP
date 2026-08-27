@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { ProductVisual } from "@/components/products/product-visual";
+import { toCartProductSnapshot } from "@/lib/cart/product";
 import { formatProductPrice, getStockLabel } from "@/lib/products/format";
 import { getProductByIdentifier } from "@/services/product-service";
 
@@ -105,8 +107,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </dl>
 
             <div className="mt-auto pt-10">
-              <p className="rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700">
-                商品信息和实时库存已接入；购物车操作将在后续阶段启用。
+              <AddToCartButton product={toCartProductSnapshot(product)} />
+              <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700">
+                加入时会检查当前库存；登录账户后购物车将安全同步到 MongoDB。
               </p>
             </div>
           </div>

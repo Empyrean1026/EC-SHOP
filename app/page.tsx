@@ -31,7 +31,7 @@ const foundations = [
   },
 ];
 
-const upcomingModules = ["购物车", "收藏夹", "订单流程", "Stripe 支付", "用户中心", "库存管理"];
+const upcomingModules = ["收藏夹", "订单流程", "Stripe 支付", "评价系统", "库存管理", "运营分析"];
 
 export default function Home() {
   return (
@@ -41,15 +41,15 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 05 / Product search
+              Phase 06 / Shopping cart
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
               <span className="text-orange-600">搭好可靠地基。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              商品目录、认证与 MongoDB
-              搜索链路已经打通；全文索引、中文回退和实时建议共同提供稳定的发现体验。
+              从商品发现到购物车已经连成完整链路；游客状态本地保留，登录后安全合并到
+              MongoDB，并持续校验库存与价格。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -63,9 +63,9 @@ export default function Home() {
               </a>
               <a
                 className="inline-flex h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-900 transition hover:border-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-                href="/search"
+                href="/cart"
               >
-                体验商品搜索
+                查看购物车
               </a>
             </div>
           </div>

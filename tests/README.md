@@ -8,4 +8,6 @@
 
 `search.test.ts` validates strict search inputs, filter-preserving URLs, text normalization, CJK detection, edit-distance typo matching, and the weighted MongoDB text-index declaration.
 
+`cart.test.ts` validates strict cart inputs, hostile persistence cleanup, stock and quantity limits, derived totals, currency separation, and product snapshot conversion.
+
 Run the suite with `npm test`.

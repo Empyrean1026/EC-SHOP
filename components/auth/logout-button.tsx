@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCartStoreApi } from "@/components/cart/cart-provider";
 import { logoutUser } from "@/services/auth-client";
 
 export function LogoutButton() {
   const router = useRouter();
+  const cartStore = useCartStoreApi();
   const [pending, setPending] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -19,6 +21,7 @@ export function LogoutButton() {
       return;
     }
 
+    cartStore.getState().resetToGuest();
     router.replace("/login");
     router.refresh();
   }

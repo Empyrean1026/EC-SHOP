@@ -3,10 +3,12 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { FormField } from "@/components/auth/form-field";
+import { synchronizeCartStore, useCartStoreApi } from "@/components/cart/cart-provider";
 import { registerUser, type AuthClientError } from "@/services/auth-client";
 
 export function RegisterForm() {
   const router = useRouter();
+  const cartStore = useCartStoreApi();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<AuthClientError | null>(null);
 
@@ -29,6 +31,7 @@ export function RegisterForm() {
       return;
     }
 
+    await synchronizeCartStore(cartStore);
     router.replace("/account");
     router.refresh();
   }

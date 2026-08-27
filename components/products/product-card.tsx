@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { formatProductPrice, getStockLabel } from "@/lib/products/format";
+import { toCartProductSnapshot } from "@/lib/cart/product";
 import { ProductVisual } from "@/components/products/product-visual";
 import type { CatalogProduct } from "@/types/product";
 
@@ -42,6 +44,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.salesCount}
           </p>
         </div>
+        <AddToCartButton compact product={toCartProductSnapshot(product)} />
       </div>
     </article>
   );

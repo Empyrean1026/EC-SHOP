@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CartBadge } from "@/components/cart/cart-badge";
 
 const navigation = [
   { href: "/products", label: "商品" },
   { href: "/search", label: "搜索" },
+  { href: "/cart", label: "购物车" },
   { href: "/#foundation", label: "工程基线" },
 ];
 
@@ -40,11 +42,12 @@ export function SiteHeader() {
           >
             登录
           </Link>
+          <CartBadge />
           <Link
             className="rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase transition hover:border-stone-950 hover:text-stone-950"
             href="/account"
           >
-            Phase 05
+            Phase 06
           </Link>
         </div>
       </div>
