@@ -1,11 +1,25 @@
 import { config } from "dotenv";
 import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/mongodb";
-import { CartModel, CategoryModel, OrderModel, ProductModel, UserModel } from "@/models";
+import {
+  CartModel,
+  CategoryModel,
+  OrderModel,
+  ProductModel,
+  UserModel,
+  WishlistModel,
+} from "@/models";
 
 config({ path: ".env.local", quiet: true });
 
-const databaseModels = [UserModel, CategoryModel, ProductModel, OrderModel, CartModel];
+const databaseModels = [
+  UserModel,
+  CategoryModel,
+  ProductModel,
+  OrderModel,
+  CartModel,
+  WishlistModel,
+];
 
 async function createIndexes(): Promise<void> {
   await connectToDatabase();

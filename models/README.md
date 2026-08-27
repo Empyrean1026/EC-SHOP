@@ -9,6 +9,7 @@ Mongoose schemas, embedded subdocuments, shared enums, validators, and serializa
 | `ProductModel`  | `products`   | Catalog content, price, stock, sales, and rating aggregates |
 | `OrderModel`    | `orders`     | Checkout snapshots, idempotency, payment and fulfillment    |
 | `CartModel`     | `carts`      | One active cart per user with unique product lines          |
+| `WishlistModel` | `wishlists`  | One bounded set of unique saved products per user           |
 
 Import models through the barrel module:
 

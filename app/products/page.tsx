@@ -3,7 +3,9 @@ import { CategoryNavigation, ProductFilters } from "@/components/products/produc
 import { ProductCard } from "@/components/products/product-card";
 import { ProductPagination } from "@/components/products/product-pagination";
 import { productListQuerySchema } from "@/lib/validations/product";
+import { getCurrentUser } from "@/lib/auth/dal";
 import { listCategories, listProducts } from "@/services/product-service";
+import { getWishlistProductIds } from "@/services/wishlist-service";
 
 export const metadata: Metadata = {
   title: "商品目录",
@@ -30,7 +32,12 @@ function firstSearchParamValues(
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const parsed = productListQuerySchema.safeParse(firstSearchParamValues(await searchParams));
   const query = parsed.success ? parsed.data : productListQuerySchema.parse({});
-  const [result, categories] = await Promise.all([listProducts(query), listCategories()]);
+  const [result, categories, user] = await Promise.all([
+    listProducts(query),
+    listCategories(),
+    getCurrentUser(),
+  ]);
+  const wishlistIds = new Set(user ? await getWishlistProductIds(user.id) : []);
 
   return (
     <section className="bg-stone-100 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
@@ -71,7 +78,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             {result.items.length > 0 ? (
               <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {result.items.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    initialWishlisted={wishlistIds.has(product.id)}
+                  />
                 ))}
               </div>
             ) : (

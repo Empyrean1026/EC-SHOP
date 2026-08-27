@@ -33,7 +33,14 @@ const foundations = [
   },
 ];
 
-const upcomingModules = ["收藏夹", "评价系统", "库存管理", "退款流程", "管理员履约", "运营分析"];
+const upcomingModules = [
+  "管理员后台",
+  "评价系统",
+  "库存管理",
+  "退款流程",
+  "管理员履约",
+  "运营分析",
+];
 
 export default function Home() {
   return (
@@ -43,14 +50,14 @@ export default function Home() {
           <div>
             <div className="mb-7 flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-stone-500 uppercase">
               <span className="h-px w-9 bg-current" aria-hidden="true" />
-              Phase 09 / Order Management
+              Phase 10 / User Center
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
               为现代电商，
               <span className="text-orange-600">搭好可靠地基。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              订单中心连接结算与履约；用户可以回看历史、核对付款结果，并追踪从待处理到完成的配送状态。
+              用户中心汇集个人资料、默认收货地址、订单历史与收藏商品，让每一次购买都有清晰、安全的账户入口。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -64,9 +71,9 @@ export default function Home() {
               </a>
               <Link
                 className="inline-flex h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-900 transition hover:border-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-                href="/account/orders"
+                href="/account"
               >
-                查看订单
+                进入用户中心
               </Link>
             </div>
           </div>

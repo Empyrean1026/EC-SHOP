@@ -3,13 +3,15 @@ import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { formatProductPrice, getStockLabel } from "@/lib/products/format";
 import { toCartProductSnapshot } from "@/lib/cart/product";
 import { ProductVisual } from "@/components/products/product-visual";
+import { WishlistButton } from "@/components/account/wishlist-button";
 import type { CatalogProduct } from "@/types/product";
 
 type ProductCardProps = {
   product: CatalogProduct;
+  initialWishlisted?: boolean;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, initialWishlisted = false }: ProductCardProps) {
   return (
     <article className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-stone-900/8">
       <Link href={`/products/${product.slug}`} className="focus-visible:outline-orange-600">
@@ -45,6 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
         </div>
         <AddToCartButton compact product={toCartProductSnapshot(product)} />
+        <WishlistButton compact productId={product.id} initialWishlisted={initialWishlisted} />
       </div>
     </article>
   );

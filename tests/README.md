@@ -16,4 +16,6 @@
 
 `orders.test.ts` validates history query controls, the public lifecycle, legacy status normalization, safe list/detail DTOs, and filter-preserving pagination URLs.
 
+`account.test.ts` validates profile and address inputs, avatar protocol restrictions, strict wishlist identifiers, and safe account DTO boundaries.
+
 Run the suite with `npm test`.

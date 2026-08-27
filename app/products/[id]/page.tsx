@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { WishlistButton } from "@/components/account/wishlist-button";
 import { ProductVisual } from "@/components/products/product-visual";
 import { toCartProductSnapshot } from "@/lib/cart/product";
 import { formatProductPrice, getStockLabel } from "@/lib/products/format";
 import { getProductByIdentifier } from "@/services/product-service";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getWishlistProductIds } from "@/services/wishlist-service";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +28,16 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const product = await getProductByIdentifier((await params).id);
+  const [product, user] = await Promise.all([
+    getProductByIdentifier((await params).id),
+    getCurrentUser(),
+  ]);
 
   if (!product) {
     notFound();
   }
+
+  const wishlistIds = user ? await getWishlistProductIds(user.id) : [];
 
   return (
     <article className="bg-stone-100 px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
@@ -108,6 +116,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
             <div className="mt-auto pt-10">
               <AddToCartButton product={toCartProductSnapshot(product)} />
+              <WishlistButton
+                productId={product.id}
+                initialWishlisted={wishlistIds.includes(product.id)}
+              />
               <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700">
                 加入时会检查当前库存；登录账户后购物车将安全同步到 MongoDB。
               </p>

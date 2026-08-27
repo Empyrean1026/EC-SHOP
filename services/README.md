@@ -23,3 +23,5 @@ Domain services and external integrations live here. Keep transport details out 
 `payment-client.ts` requests a CSRF-protected payment session and polls the owner-scoped database status after Stripe confirmation; it has no API that can mark an order paid.
 
 `order-service.ts` owns user-scoped order history and detail queries, filtering, deterministic pagination, safe DTO conversion, and legacy lifecycle compatibility. It exposes no user-controlled fulfillment mutation.
+
+`account-service.ts` owns safe profile, default-address, and dashboard reads/writes. `wishlist-service.ts` owns active-product resolution, idempotent add/remove behavior, and the 100-item limit. `account-client.ts` attaches signed CSRF tokens to browser mutations.

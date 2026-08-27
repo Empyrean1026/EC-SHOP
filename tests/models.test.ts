@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { Types } from "mongoose";
-import { CartModel, CategoryModel, OrderModel, ProductModel, UserModel } from "@/models";
+import {
+  CartModel,
+  CategoryModel,
+  OrderModel,
+  ProductModel,
+  UserModel,
+  WishlistModel,
+} from "@/models";
 
 const passwordHash = `$2b$12$${"a".repeat(53)}`;
 const address = {
@@ -150,4 +157,22 @@ test("Cart model allows one cart per user and rejects duplicate products", async
   assert.equal(cartIndex?.[1].unique, true);
   assert.equal(checkoutKeyIndex?.[1].unique, true);
   assert.equal(cartVersionIndex?.[1].unique, true);
+});
+
+test("Wishlist model enforces one bounded set of unique products per user", async () => {
+  const productId = new Types.ObjectId();
+  const wishlist = new WishlistModel({
+    userId: new Types.ObjectId(),
+    productIds: [productId, productId],
+  });
+
+  await assert.rejects(wishlist.validate(), /only appear once/);
+
+  wishlist.productIds = Array.from({ length: 101 }, () => new Types.ObjectId());
+  await assert.rejects(wishlist.validate(), /more than 100/);
+
+  const wishlistIndex = WishlistModel.schema
+    .indexes()
+    .find(([fields]) => Object.hasOwn(fields, "userId"));
+  assert.equal(wishlistIndex?.[1].unique, true);
 });

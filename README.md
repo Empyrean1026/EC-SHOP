@@ -4,17 +4,17 @@
 
 ## 当前阶段
 
-第九阶段“订单系统”已完成，当前包含：
+第十阶段“用户中心”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
 - MongoDB / Mongoose 连接复用与数据库健康检查接口
-- User、Category、Product、Order、Cart 模型及嵌入式子文档
+- User、Category、Product、Order、Cart、Wishlist 模型及嵌入式子文档
 - 字段验证、JSON 安全序列化、关系索引与显式生产索引脚本
 - 注册、登录、退出与当前用户 API
 - bcrypt 密码哈希、JOSE JWT 与服务端 HttpOnly Cookie 会话
 - Zod 严格输入验证、签名 CSRF 令牌、Origin 校验与请求体限制
-- 用户中心、管理员后台、Next.js Proxy 和数据库级 RBAC
+- 用户中心、管理员 RBAC 基线、Next.js Proxy 和数据库级权限校验
 - 基础认证限流、统一安全错误响应与管理员角色维护脚本
 - 商品列表、详情、分类导航、关键词搜索、组合过滤和稳定分页
 - 价格、销量、评分排序与实时库存状态显示
@@ -38,13 +38,19 @@
 - Pending、Paid、Processing、Shipped、Completed、Cancelled 订单生命周期
 - 独立支付状态与配送状态、响应式进度展示及旧状态兼容迁移
 - 所有者限定的订单列表/详情 API 与安全订单 DTO
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付及订单单元测试
+- 响应式用户仪表盘、账户子导航与订单/收藏数量摘要
+- 个人姓名和 HTTP(S) 头像更新、只读身份字段与安全资料 DTO
+- 默认收货地址的新增、修改、删除与结算预填复用
+- 独立 Wishlist 模型、100 件容量限制和唯一商品约束
+- 商品列表、详情及收藏页的幂等加入/移除交互
+- 受用户校验、Origin、签名 CSRF Token 和严格 Zod 输入保护的账户写接口
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单及账户单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-收藏夹、管理员履约、退款和库存预留等业务功能将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md) 和 [`docs/order-system.md`](docs/order-system.md)。
+下一阶段重点实现管理员后台；管理员履约、退款和库存预留等业务能力尚未完成。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md) 和 [`docs/user-center.md`](docs/user-center.md)。
 
 ## 技术要求
 
@@ -88,7 +94,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付与订单测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单与账户测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
@@ -126,10 +132,10 @@ docker compose down
 ec-site/
 ├── app/                 # 页面、布局与 Route Handlers
 │   └── api/health/      # MongoDB 健康检查 API
-├── components/          # 可复用认证、商品、购物车、结算、支付与订单组件
+├── components/          # 可复用认证、商品、购物车、结算、支付、订单与账户组件
 ├── docs/                # 数据库及各阶段业务系统文档
 ├── hooks/               # 购物车操作等客户端 React Hooks
-├── lib/                 # 数据库、认证、购物车、结算、Stripe、订单与 API 工具
+├── lib/                 # 数据库、认证、购物车、结算、Stripe、订单、账户与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
 ├── models/              # Mongoose 模型、子文档、枚举与验证器
 ├── public/              # 静态资源
@@ -204,6 +210,15 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 订单详情 API：`GET /api/orders/:orderId`
 
 历史页面支持订单状态、支付状态、新旧排序和分页。列表与详情均通过当前数据库用户 ID 限定归属；响应不暴露 PaymentIntent、Webhook、结算幂等键或购物车版本等内部字段。第九阶段只提供用户只读视图，履约状态写操作保留给后续管理员订单阶段。完整规则见 `docs/order-system.md`。
+
+## 用户中心入口
+
+- 页面：`/account`、`/account/profile`、`/account/orders`、`/account/address`、`/account/wishlist`
+- 资料 API：`GET|PATCH /api/account/profile`
+- 地址 API：`GET|PUT|DELETE /api/account/address`
+- 收藏 API：`GET /api/wishlist`、`POST /api/wishlist/items`、`DELETE /api/wishlist/items/:productId`
+
+用户中心所有页面和数据均限定当前登录用户。邮箱与角色不可通过资料 API 修改；地址修改不会影响历史订单快照；收藏夹只返回当前仍在销售的商品。写接口均要求同源请求和签名 CSRF Token，完整边界见 `docs/user-center.md`。
 
 ## GitHub
 
