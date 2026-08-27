@@ -18,4 +18,6 @@
 
 `account.test.ts` validates profile and address inputs, avatar protocol restrictions, strict wishlist identifiers, and safe account DTO boundaries.
 
+`admin.test.ts` validates strict dashboard queries, inventory and fulfillment mutations, the forward-only order state machine, and filter-preserving admin pagination.
+
 Run the suite with `npm test`.

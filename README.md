@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十阶段“用户中心”已完成，当前包含：
+第十一阶段“管理员后台”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -44,13 +44,19 @@
 - 独立 Wishlist 模型、100 件容量限制和唯一商品约束
 - 商品列表、详情及收藏页的幂等加入/移除交互
 - 受用户校验、Origin、签名 CSRF Token 和严格 Zod 输入保护的账户写接口
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单及账户单元测试
+- 管理员运营仪表盘、响应式后台导航与业务数量摘要
+- 全量商品管理、上下架编辑、低库存筛选和聚焦库存更新
+- 全量订单检索、订单详情和前进式履约状态机
+- Stripe 未付款履约拦截、货到付款完成收款与并发更新保护
+- 用户安全只读列表、角色/地址状态/订单数量查询
+- 管理员专用读取 API 与 RBAC、Origin、CSRF 保护的写接口
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户及管理员单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-下一阶段重点实现管理员后台；管理员履约、退款和库存预留等业务能力尚未完成。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md) 和 [`docs/user-center.md`](docs/user-center.md)。
+退款、库存预留、角色审计和运营分析等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md) 和 [`docs/admin-panel.md`](docs/admin-panel.md)。
 
 ## 技术要求
 
@@ -94,7 +100,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单与账户测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户与管理员测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
@@ -209,7 +215,7 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 订单列表 API：`GET /api/orders`
 - 订单详情 API：`GET /api/orders/:orderId`
 
-历史页面支持订单状态、支付状态、新旧排序和分页。列表与详情均通过当前数据库用户 ID 限定归属；响应不暴露 PaymentIntent、Webhook、结算幂等键或购物车版本等内部字段。第九阶段只提供用户只读视图，履约状态写操作保留给后续管理员订单阶段。完整规则见 `docs/order-system.md`。
+历史页面支持订单状态、支付状态、新旧排序和分页。列表与详情均通过当前数据库用户 ID 限定归属；响应不暴露 PaymentIntent、Webhook、结算幂等键或购物车版本等内部字段。用户接口保持只读，管理员履约写操作采用独立 RBAC 与状态机。完整规则见 `docs/order-system.md`。
 
 ## 用户中心入口
 
@@ -219,6 +225,14 @@ Next.js 16 将框架级请求拦截文件命名为根目录 `proxy.ts`；`middle
 - 收藏 API：`GET /api/wishlist`、`POST /api/wishlist/items`、`DELETE /api/wishlist/items/:productId`
 
 用户中心所有页面和数据均限定当前登录用户。邮箱与角色不可通过资料 API 修改；地址修改不会影响历史订单快照；收藏夹只返回当前仍在销售的商品。写接口均要求同源请求和签名 CSRF Token，完整边界见 `docs/user-center.md`。
+
+## 管理员后台入口
+
+- 页面：`/admin`、`/admin/products`、`/admin/products/new`、`/admin/products/:id/edit`、`/admin/orders`、`/admin/orders/:id`、`/admin/users`
+- 读取 API：`GET /api/admin/dashboard`、`GET /api/admin/products`、`GET /api/admin/orders`、`GET /api/admin/users`
+- 写入 API：`PATCH /api/admin/products/:id/stock`、`PATCH /api/admin/orders/:id`，以及原有商品 CRUD API
+
+管理员页面和 API 都会重新查询数据库角色；商品删除采用软下架，订单履约禁止跳级、回退和未付款 Stripe 订单发货，用户列表不返回密码哈希或完整地址。完整规则见 `docs/admin-panel.md`。
 
 ## GitHub
 

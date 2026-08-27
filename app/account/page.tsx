@@ -138,9 +138,7 @@ export default async function AccountPage() {
           >
             <p className="text-xs font-semibold tracking-[0.15em] uppercase">Administrator</p>
             <h2 className="mt-3 text-xl font-semibold">进入管理员后台</h2>
-            <p className="mt-2 text-sm text-stone-600">
-              下一阶段将集中完善商品、订单、库存和用户管理。
-            </p>
+            <p className="mt-2 text-sm text-stone-600">管理商品、订单、库存和用户数据。</p>
           </Link>
         ) : null}
       </div>

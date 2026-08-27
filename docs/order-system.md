@@ -49,7 +49,7 @@
 
 支付状态仍独立使用 `pending`、`processing`、`paid`、`failed`、`partially_refunded` 和 `refunded`。例如订单可以处于 `shipped`，同时支付状态仍为 `paid`。
 
-第九阶段没有给浏览器提供修改配送状态的 API。Stripe Webhook 只能处理可信付款事实；后续管理员履约功能需要实现受 RBAC、CSRF 和状态转换表保护的写接口。
+用户订单接口保持只读。第十一阶段新增受 RBAC、CSRF、合法状态转换表和并发条件保护的管理员履约接口；Stripe 支付状态仍由可信 Webhook 控制，只有货到付款完成时会同步记录已收款。
 
 ## 旧数据迁移
 

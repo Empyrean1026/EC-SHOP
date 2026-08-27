@@ -25,3 +25,5 @@ Domain services and external integrations live here. Keep transport details out 
 `order-service.ts` owns user-scoped order history and detail queries, filtering, deterministic pagination, safe DTO conversion, and legacy lifecycle compatibility. It exposes no user-controlled fulfillment mutation.
 
 `account-service.ts` owns safe profile, default-address, and dashboard reads/writes. `wishlist-service.ts` owns active-product resolution, idempotent add/remove behavior, and the 100-item limit. `account-client.ts` attaches signed CSRF tokens to browser mutations.
+
+`admin-service.ts` owns operational summaries, all-product queries, all-order fulfillment, safe user lists, and concurrent status guards. `admin-client.ts` carries signed CSRF tokens for catalog, inventory, and order mutations.
