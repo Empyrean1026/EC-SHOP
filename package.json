@@ -1,7 +1,25 @@
 {
   "name": "ec-site",
   "version": "0.1.0",
+  "description": "A full-stack e-commerce application built with Next.js, MongoDB, and Stripe.",
   "private": true,
+  "license": "UNLICENSED",
+  "keywords": [
+    "e-commerce",
+    "nextjs",
+    "typescript",
+    "mongodb",
+    "mongoose",
+    "stripe"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Empyrean1026/EC-SHOP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Empyrean1026/EC-SHOP/issues"
+  },
+  "homepage": "https://github.com/Empyrean1026/EC-SHOP#readme",
   "engines": {
     "node": ">=20.19.0"
   },

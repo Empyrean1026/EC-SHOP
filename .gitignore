@@ -25,6 +25,12 @@
 
 # misc
 .DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
 *.pem
 *.key
 *.p12
@@ -44,7 +50,7 @@ yarn-error.log*
 !.env.example
 
 # vercel
-.vercel
+.vercel/
 
 # typescript
 *.tsbuildinfo
