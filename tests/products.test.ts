@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { Types } from "mongoose";
+import { ProductModel } from "@/models";
 import { toCatalogProduct } from "@/lib/products/dto";
 import { formatProductPrice, getStockLabel } from "@/lib/products/format";
 import { escapeRegularExpression } from "@/lib/products/search";
@@ -139,4 +140,15 @@ test("keyword search escapes regular-expression control characters", () => {
 
   assert.equal(expression.test("Lamp.*(sale)? collection"), true);
   assert.equal(expression.test("lamp discounted sale"), false);
+});
+
+test("Product declares indexes for catalog sorting and inventory filters", () => {
+  const indexes = ProductModel.schema.indexes().map(([fields]) => fields);
+
+  assert.equal(
+    indexes.some(
+      (fields) => fields.isActive === 1 && fields.stock === 1 && fields.createdAt === -1,
+    ),
+    true,
+  );
 });

@@ -3,6 +3,7 @@ import { authorizeAdminMutation } from "@/lib/api/admin";
 import { readJsonBody } from "@/lib/api/request";
 import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
+import { invalidateCatalogCache } from "@/lib/cache/catalog";
 import { getValidationErrors } from "@/lib/validations/errors";
 import {
   productIdentifierSchema,
@@ -74,6 +75,8 @@ export async function PUT(request: NextRequest, { params }: ProductRouteContext)
   try {
     const product = await updateProduct(productId.data, parsed.data);
 
+    if (product) invalidateCatalogCache();
+
     return product ? apiSuccess({ product }) : apiError("PRODUCT_NOT_FOUND", "商品不存在。", 404);
   } catch (error) {
     if (error instanceof ProductCategoryNotFoundError) {
@@ -103,6 +106,8 @@ export async function DELETE(request: NextRequest, { params }: ProductRouteConte
 
   try {
     const product = await deactivateProduct(productId.data);
+
+    if (product) invalidateCatalogCache();
 
     return product
       ? apiSuccess({ deleted: true, product })

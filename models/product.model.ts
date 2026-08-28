@@ -121,6 +121,7 @@ productSchema.index({ category: 1, isActive: 1, price: 1 });
 productSchema.index({ isActive: 1, createdAt: -1 });
 productSchema.index({ isActive: 1, salesCount: -1, createdAt: -1 });
 productSchema.index({ isActive: 1, rating: -1, createdAt: -1 });
+productSchema.index({ isActive: 1, stock: 1, createdAt: -1 });
 configureJsonSerialization(productSchema);
 
 export type Product = InferSchemaType<typeof productSchema>;

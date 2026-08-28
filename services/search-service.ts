@@ -1,9 +1,12 @@
 import "server-only";
 
 import { logServerEvent } from "@/lib/api/logger";
+import { unstable_cache } from "next/cache";
 
 import { Types, type QueryFilter } from "mongoose";
 import { connectToDatabase } from "@/lib/mongodb";
+import { CATALOG_CACHE_TAG } from "@/lib/cache/catalog";
+import { CATALOG_CACHE_SECONDS, SEARCH_SUGGESTION_CACHE_SECONDS } from "@/lib/cache/constants";
 import { toCatalogProduct } from "@/lib/products/dto";
 import { escapeRegularExpression } from "@/lib/products/search";
 import { SEARCH_FUZZY_CANDIDATE_LIMIT } from "@/lib/search/constants";
@@ -231,7 +234,7 @@ async function runFuzzySearch(
   };
 }
 
-export async function searchProducts(query: SearchQuery): Promise<ProductSearchResult> {
+async function searchProductsFromDatabase(query: SearchQuery): Promise<ProductSearchResult> {
   if (!query.q) return emptySearchResult(query);
 
   await connectToDatabase();
@@ -256,6 +259,15 @@ export async function searchProducts(query: SearchQuery): Promise<ProductSearchR
   if (substringResult.pagination.total > 0 || !query.fuzzy) return substringResult;
 
   return runFuzzySearch(query, baseFilter);
+}
+
+const searchProductsCached = unstable_cache(searchProductsFromDatabase, ["catalog-search-v1"], {
+  revalidate: CATALOG_CACHE_SECONDS,
+  tags: [CATALOG_CACHE_TAG],
+});
+
+export function searchProducts(query: SearchQuery): Promise<ProductSearchResult> {
+  return searchProductsCached(query);
 }
 
 function suggestionFromProduct(product: CatalogProduct): SearchSuggestion {
@@ -284,7 +296,9 @@ function suggestionOrder(left: CatalogProduct, right: CatalogProduct, query: str
   );
 }
 
-export async function suggestProducts(query: SuggestionQuery): Promise<SearchSuggestionsResult> {
+async function suggestProductsFromDatabase(
+  query: SuggestionQuery,
+): Promise<SearchSuggestionsResult> {
   await connectToDatabase();
 
   const expression = new RegExp(escapeRegularExpression(query.q), "i");
@@ -330,4 +344,17 @@ export async function suggestProducts(query: SuggestionQuery): Promise<SearchSug
     query: query.q,
     mode: directProducts.length > 0 ? "substring" : fuzzyProducts.length > 0 ? "fuzzy" : "none",
   };
+}
+
+const suggestProductsCached = unstable_cache(
+  suggestProductsFromDatabase,
+  ["catalog-suggestions-v1"],
+  {
+    revalidate: SEARCH_SUGGESTION_CACHE_SECONDS,
+    tags: [CATALOG_CACHE_TAG],
+  },
+);
+
+export function suggestProducts(query: SuggestionQuery): Promise<SearchSuggestionsResult> {
+  return suggestProductsCached(query);
 }

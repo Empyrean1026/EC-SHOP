@@ -6,6 +6,11 @@ const useHsts = isProduction && process.env.APP_URL?.startsWith("https://");
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 14_400,
+    qualities: [60, 75],
+  },
   async headers() {
     return [
       {

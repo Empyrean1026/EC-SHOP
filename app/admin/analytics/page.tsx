@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SalesAnalyticsCharts } from "@/components/admin/sales-analytics-charts";
+import { SalesAnalyticsChartsLazy } from "@/components/admin/sales-analytics-charts-lazy";
 import { requireUser } from "@/lib/auth/dal";
 import { formatProductPrice } from "@/lib/products/format";
 import { getSalesAnalytics } from "@/services/analytics-service";
@@ -92,7 +92,7 @@ export default async function AdminAnalyticsPage() {
           ))}
         </div>
 
-        <SalesAnalyticsCharts analytics={analytics} />
+        <SalesAnalyticsChartsLazy analytics={analytics} />
 
         <aside className="mt-4 rounded-2xl border border-stone-200 bg-stone-50 px-5 py-4 text-xs leading-5 text-stone-500">
           数据源：MongoDB 的订单、用户和商品集合。销售额仅包含 `paymentStatus = paid`；日/月趋势按

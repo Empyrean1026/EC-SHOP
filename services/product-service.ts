@@ -1,8 +1,11 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { Types, type QueryFilter } from "mongoose";
 import { connectToDatabase } from "@/lib/mongodb";
+import { CATALOG_CACHE_TAG } from "@/lib/cache/catalog";
+import { CATALOG_CACHE_SECONDS, CATEGORY_CACHE_SECONDS } from "@/lib/cache/constants";
 import { toCatalogCategory, toCatalogProduct } from "@/lib/products/dto";
 import { escapeRegularExpression } from "@/lib/products/search";
 import type {
@@ -53,7 +56,7 @@ function emptyProductList(query: ProductListQuery): ProductListResult {
   };
 }
 
-export async function listProducts(query: ProductListQuery): Promise<ProductListResult> {
+async function listProductsFromDatabase(query: ProductListQuery): Promise<ProductListResult> {
   await connectToDatabase();
 
   const filter: QueryFilter<Product> = { isActive: true };
@@ -115,7 +118,16 @@ export async function listProducts(query: ProductListQuery): Promise<ProductList
   };
 }
 
-export const getProductByIdentifier = cache(
+const listProductsCached = unstable_cache(listProductsFromDatabase, ["catalog-products-v1"], {
+  revalidate: CATALOG_CACHE_SECONDS,
+  tags: [CATALOG_CACHE_TAG],
+});
+
+export function listProducts(query: ProductListQuery): Promise<ProductListResult> {
+  return listProductsCached(query);
+}
+
+const getProductByIdentifierCached = unstable_cache(
   async (identifier: string): Promise<CatalogProduct | null> => {
     await connectToDatabase();
 
@@ -128,6 +140,12 @@ export const getProductByIdentifier = cache(
 
     return product ? toCatalogProduct(product) : null;
   },
+  ["catalog-product-detail-v1"],
+  { revalidate: CATALOG_CACHE_SECONDS, tags: [CATALOG_CACHE_TAG] },
+);
+
+export const getProductByIdentifier = cache((identifier: string) =>
+  getProductByIdentifierCached(identifier),
 );
 
 async function requireActiveCategory(categoryId: string): Promise<void> {
@@ -188,7 +206,7 @@ export async function deactivateProduct(productId: string): Promise<CatalogProdu
   return product ? toCatalogProduct(product.toObject()) : null;
 }
 
-export async function listCategories(): Promise<CatalogCategory[]> {
+async function listCategoriesFromDatabase(): Promise<CatalogCategory[]> {
   await connectToDatabase();
 
   const categories = await CategoryModel.find({ isActive: true }).sort({ name: 1, _id: 1 }).lean();
@@ -203,3 +221,12 @@ export async function listCategories(): Promise<CatalogCategory[]> {
     toCatalogCategory(category, countByCategory.get(category._id.toString()) ?? 0),
   );
 }
+
+export const listCategories = unstable_cache(
+  listCategoriesFromDatabase,
+  ["catalog-categories-v1"],
+  {
+    revalidate: CATEGORY_CACHE_SECONDS,
+    tags: [CATALOG_CACHE_TAG],
+  },
+);

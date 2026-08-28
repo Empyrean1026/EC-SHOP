@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { adminServiceErrorResponse, authorizeAdminMutation } from "@/lib/api/admin";
+import { invalidateCatalogCache } from "@/lib/cache/catalog";
 import { readJsonBody } from "@/lib/api/request";
 import { apiError, apiSuccess } from "@/lib/api/response";
 import { updateAdminStockSchema } from "@/lib/validations/admin";
@@ -20,6 +21,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
   }
   try {
     const product = await updateProduct(productId.data, parsed.data);
+    if (product) invalidateCatalogCache();
     return product ? apiSuccess({ product }) : apiError("PRODUCT_NOT_FOUND", "商品不存在。", 404);
   } catch (error) {
     return adminServiceErrorResponse(error, "Unable to update stock");

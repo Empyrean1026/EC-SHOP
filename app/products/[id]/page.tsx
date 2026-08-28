@@ -68,6 +68,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               image={product.images[0]}
               name={product.name}
               priority
+              sizes="(min-width: 1024px) 54vw, 100vw"
             />
           </div>
 
@@ -139,6 +140,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   image={image}
                   key={image}
                   name={`${product.name} 图片 ${index + 2}`}
+                  sizes="(min-width: 640px) 25vw, 50vw"
                 />
               ))}
             </div>

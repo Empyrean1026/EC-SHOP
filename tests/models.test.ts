@@ -152,11 +152,15 @@ test("Cart model allows one cart per user and rejects duplicate products", async
   const cartVersionIndex = OrderModel.schema
     .indexes()
     .find(([fields]) => Object.hasOwn(fields, "cartVersion"));
+  const roleNameIndex = UserModel.schema
+    .indexes()
+    .find(([fields]) => fields.role === 1 && fields.name === 1);
 
   assert.equal(userIndex?.[1].unique, true);
   assert.equal(cartIndex?.[1].unique, true);
   assert.equal(checkoutKeyIndex?.[1].unique, true);
   assert.equal(cartVersionIndex?.[1].unique, true);
+  assert.ok(roleNameIndex);
 });
 
 test("Wishlist model enforces one bounded set of unique products per user", async () => {

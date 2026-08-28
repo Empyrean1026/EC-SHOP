@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { OrderModel } from "@/models";
 import { toOrderDetail, toOrderHistoryItem } from "@/lib/orders/dto";
 import {
   legacyCompatibleOrderStatusFilter,
@@ -106,4 +107,21 @@ test("order history URLs preserve filters while changing pages", () => {
   assert.match(url, /status=paid/);
   assert.match(url, /paymentStatus=paid/);
   assert.match(url, /sort=oldest/);
+});
+
+test("Order declares compound indexes for user and admin status pagination", () => {
+  const indexes = OrderModel.schema.indexes().map(([fields]) => fields);
+
+  assert.equal(
+    indexes.some(
+      (fields) => fields.userId === 1 && fields.orderStatus === 1 && fields.createdAt === -1,
+    ),
+    true,
+  );
+  assert.equal(
+    indexes.some(
+      (fields) => fields.orderStatus === 1 && fields.paymentStatus === 1 && fields.createdAt === -1,
+    ),
+    true,
+  );
 });

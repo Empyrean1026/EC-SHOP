@@ -1,9 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 type ProductVisualProps = {
   name: string;
   image?: string;
   priority?: boolean;
+  sizes?: string;
   className?: string;
 };
 
@@ -18,6 +19,7 @@ export function ProductVisual({
   name,
   image,
   priority = false,
+  sizes = "(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw",
   className = "",
 }: ProductVisualProps) {
   const background = backgrounds[name.codePointAt(0)! % backgrounds.length];
@@ -29,13 +31,17 @@ export function ProductVisual({
       role={image ? undefined : "img"}
     >
       {image ? (
-        <img
+        <Image
           className="size-full object-cover transition duration-500 group-hover:scale-[1.02]"
           src={image}
           alt={name}
-          loading={priority ? "eager" : "lazy"}
+          fill
+          sizes={sizes}
+          preload={priority}
+          loading={priority ? undefined : "lazy"}
           decoding="async"
           referrerPolicy="no-referrer"
+          unoptimized={/^https?:\/\//i.test(image)}
         />
       ) : (
         <div className="absolute inset-0 grid place-items-center">

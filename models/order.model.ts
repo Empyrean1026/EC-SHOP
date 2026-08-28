@@ -116,6 +116,9 @@ orderSchema.index({ userId: 1, createdAt: -1 });
 orderSchema.index({ orderStatus: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, paidAt: -1 });
+orderSchema.index({ userId: 1, orderStatus: 1, createdAt: -1 });
+orderSchema.index({ userId: 1, paymentStatus: 1, createdAt: -1 });
+orderSchema.index({ orderStatus: 1, paymentStatus: 1, createdAt: -1 });
 orderSchema.index(
   { userId: 1, checkoutKey: 1 },
   { unique: true, partialFilterExpression: { checkoutKey: { $type: "string" } } },

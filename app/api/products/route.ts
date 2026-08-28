@@ -3,6 +3,7 @@ import { authorizeAdminMutation } from "@/lib/api/admin";
 import { readJsonBody } from "@/lib/api/request";
 import { apiError, apiInternalError, apiSuccess } from "@/lib/api/response";
 import { isDuplicateKeyError } from "@/lib/mongodb-errors";
+import { invalidateCatalogCache } from "@/lib/cache/catalog";
 import { getValidationErrors } from "@/lib/validations/errors";
 import { createProductSchema, productListQuerySchema } from "@/lib/validations/product";
 import {
@@ -56,7 +57,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    return apiSuccess({ product: await createProduct(parsed.data) }, 201);
+    const product = await createProduct(parsed.data);
+    invalidateCatalogCache();
+    return apiSuccess({ product }, 201);
   } catch (error) {
     if (error instanceof ProductCategoryNotFoundError) {
       return apiError("CATEGORY_NOT_FOUND", "指定的商品分类不存在或已停用。", 422);

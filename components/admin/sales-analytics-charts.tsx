@@ -116,10 +116,14 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
   const initialCurrency =
     analytics.summary.revenueByCurrency.find((item) => item.amount > 0)?.currency ?? "jpy";
   const [currency, setCurrency] = useState<CurrencyCode>(initialCurrency);
-  const topProductData = analytics.topProducts.map((product) => ({
-    ...product,
-    shortName: product.name.length > 12 ? `${product.name.slice(0, 12)}…` : product.name,
-  }));
+  const topProductData = useMemo(
+    () =>
+      analytics.topProducts.map((product) => ({
+        ...product,
+        shortName: product.name.length > 12 ? `${product.name.slice(0, 12)}…` : product.name,
+      })),
+    [analytics.topProducts],
+  );
 
   return (
     <>

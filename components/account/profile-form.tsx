@@ -1,8 +1,7 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
-
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormField } from "@/components/auth/form-field";
 import { useToast } from "@/components/ui/toast";
@@ -44,11 +43,15 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
     <form className="space-y-5" method="post" onSubmit={handleSubmit} noValidate>
       <div className="flex items-center gap-4 rounded-2xl bg-stone-100 p-4">
         {profile.avatar ? (
-          <img
+          <Image
             className="size-16 rounded-full object-cover"
             src={profile.avatar}
             alt="当前头像"
+            width={64}
+            height={64}
+            loading="lazy"
             referrerPolicy="no-referrer"
+            unoptimized
           />
         ) : (
           <div className="grid size-16 place-items-center rounded-full bg-stone-950 text-xl font-semibold text-white">

@@ -57,6 +57,7 @@ const userSchema = new Schema(
 );
 
 userSchema.index({ role: 1, createdAt: -1 });
+userSchema.index({ role: 1, name: 1 });
 configureJsonSerialization(userSchema, ["passwordHash"]);
 
 export type User = InferSchemaType<typeof userSchema>;
