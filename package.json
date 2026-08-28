@@ -29,7 +29,7 @@
     "postbuild": "node scripts/prepare-standalone.mjs",
     "start": "node --env-file=.env.local .next/standalone/server.js",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "env:check": "node scripts/check-env.mjs",
