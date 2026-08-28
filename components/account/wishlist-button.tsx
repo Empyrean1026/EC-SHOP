@@ -36,13 +36,15 @@ export function WishlistButton({
         return;
       }
       setError(result.error.message);
-      toast.error("收藏更新失败", result.error.message);
+      toast.error("お気に入りを更新できません", result.error.message);
       setPending(false);
       return;
     }
 
     setWishlisted(result.data.wishlisted);
-    toast.success(result.data.wishlisted ? "已加入收藏" : "已从收藏中移除");
+    toast.success(
+      result.data.wishlisted ? "お気に入りに追加しました" : "お気に入りから削除しました",
+    );
     setPending(false);
     router.refresh();
   }
@@ -60,7 +62,7 @@ export function WishlistButton({
         onClick={toggleWishlist}
         aria-pressed={wishlisted}
       >
-        {pending ? "正在更新…" : wishlisted ? "♥ 已收藏" : "♡ 加入收藏"}
+        {pending ? "更新しています…" : wishlisted ? "♥ お気に入り登録済み" : "♡ お気に入りに追加"}
       </button>
       {error ? (
         <p className="mt-2 text-xs text-red-700" role="alert">

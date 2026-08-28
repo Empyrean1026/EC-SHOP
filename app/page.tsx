@@ -4,36 +4,43 @@ const foundations = [
   {
     index: "01",
     name: "Next.js 16",
-    detail: "App Router 与 React Server Components",
+    detail: "App RouterとReact Server Components",
   },
   {
     index: "02",
     name: "TypeScript",
-    detail: "严格类型检查与统一路径别名",
+    detail: "厳格な型チェックと統一されたパスエイリアス",
   },
   {
     index: "03",
     name: "MongoDB",
-    detail: "Mongoose 连接复用与健康检查",
+    detail: "Mongoose 接続の再利用とヘルスチェック",
   },
   {
     index: "04",
     name: "Tailwind CSS",
-    detail: "移动优先布局、深浅主题与状态组件",
+    detail: "モバイルファースト、テーマ切替、状態表示コンポーネント",
   },
   {
     index: "05",
     name: "Code Quality",
-    detail: "ESLint、Prettier 与类型校验",
+    detail: "ESLint、Prettier、型チェック",
   },
   {
     index: "06",
     name: "Docker",
-    detail: "应用与数据库的一键本地编排",
+    detail: "アプリとデータベースをワンコマンドで起動",
   },
 ];
 
-const upcomingModules = ["促销系统", "评价系统", "库存预留", "退款流程", "权限审计", "部署优化"];
+const upcomingModules = [
+  "プロモーション",
+  "レビュー",
+  "在庫引当",
+  "返金フロー",
+  "権限監査",
+  "デプロイ最適化",
+];
 
 export default function Home() {
   return (
@@ -46,19 +53,19 @@ export default function Home() {
               Phase 13 / UI &amp; UX
             </div>
             <h1 className="max-w-3xl text-5xl leading-[0.96] font-semibold tracking-[-0.055em] text-balance text-stone-950 sm:text-6xl lg:text-7xl">
-              为现代电商，
-              <span className="block text-orange-600">搭好可靠地基。</span>
+              モダンなECサイトを、
+              <span className="block text-orange-600">堅牢な基盤から。</span>
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-stone-600 sm:text-lg sm:leading-8">
-              从移动端到桌面端保持一致的购物体验，以深浅主题、即时状态反馈和可访问交互，
-              让完整业务链路更清晰、更从容。
+              モバイルからデスクトップまで一貫したショッピング体験を提供。テーマ切替、わかりやすいフィードバック、アクセシブルな操作で、
+              購入までの流れを快適にします。
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 className="inline-flex h-12 items-center justify-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white transition hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
                 href="#foundation"
               >
-                查看工程基线
+                技術構成を見る
                 <span className="ml-2" aria-hidden="true">
                   ↓
                 </span>
@@ -67,14 +74,14 @@ export default function Home() {
                 className="inline-flex h-12 items-center justify-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-900 transition hover:border-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
                 href="/products"
               >
-                浏览商品体验
+                商品を見る
               </Link>
             </div>
           </div>
 
           <div
             className="relative min-h-[430px] rounded-[2rem] bg-stone-950 p-5 shadow-2xl shadow-stone-900/15 sm:p-7"
-            aria-label="电商界面视觉占位预览"
+            aria-label="ECサイト画面のプレビュー"
           >
             <div className="absolute -top-12 -right-16 -z-10 h-52 w-52 rounded-full bg-orange-300/70 blur-3xl" />
             <div className="flex items-center justify-between border-b border-white/10 pb-5 text-white">
@@ -115,13 +122,13 @@ export default function Home() {
                 Ready to build
               </p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.035em] text-stone-950 sm:text-4xl">
-                六项工程基线，
+                6つの技術基盤で、
                 <br />
-                一致的开发体验。
+                一貫した開発体験を。
               </h2>
               <p className="mt-5 max-w-md text-sm leading-7 text-stone-600">
-                从本地开发到 Docker
-                运行，目录职责、数据连接和质量检查均已明确，为后续业务阶段留出稳定边界。
+                ローカル開発から Docker
+                環境まで、ディレクトリ構成、データ接続、品質チェックを明確化し、今後の機能追加にも対応できる基盤を整えています。
               </p>
             </div>
             <div className="grid border-t border-l border-stone-200 sm:grid-cols-2">
@@ -147,12 +154,12 @@ export default function Home() {
                 Architecture
               </p>
               <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.04em] text-stone-950 sm:text-5xl">
-                单仓库，全栈链路清晰可见。
+                単一リポジトリで、フルスタックの構成を明快に。
               </h2>
             </div>
             <p className="max-w-md text-sm leading-7 text-stone-700">
-              App Router 同时承载页面与服务端 Route Handlers，Mongoose 统一管理 MongoDB
-              连接，减少早期不必要的服务拆分。
+              App Router が画面とサーバー側の Route Handlers を担い、Mongoose で MongoDB
+              接続を一元管理。初期段階での不要なサービス分割を避けています。
             </p>
           </div>
           <div className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-stone-950/15 sm:grid-cols-4">
@@ -181,9 +188,9 @@ export default function Home() {
                 Coming next
               </p>
               <h2 className="mt-4 text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
-                地基就绪，
+                基盤を整え、
                 <br />
-                业务按阶段生长。
+                機能を段階的に拡張。
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-px border-t border-l border-white/15 bg-white/15">

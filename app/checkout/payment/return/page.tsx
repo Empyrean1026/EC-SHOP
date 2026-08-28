@@ -5,8 +5,8 @@ import { getCurrentUser } from "@/lib/auth/dal";
 import { getCheckoutOrder } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
-  title: "确认支付状态",
-  description: "等待 Stripe Webhook 确认订单支付结果。",
+  title: "お支払い状況を確認",
+  description: "Stripe Webhookによるお支払い結果の確認を待ちます。",
 };
 
 type PaymentReturnPageProps = {
@@ -30,7 +30,7 @@ export default async function PaymentReturnPage({ searchParams }: PaymentReturnP
       <div className="mx-auto max-w-3xl rounded-3xl border border-stone-200 bg-white p-7 sm:p-10">
         <PaymentStatusWatcher orderId={order.id} initialStatus={order.paymentStatus} />
         <p className="mt-8 border-t border-stone-200 pt-5 text-xs break-all text-stone-400">
-          订单号：{order.id}
+          注文番号：{order.id}
         </p>
       </div>
     </section>

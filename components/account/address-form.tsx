@@ -47,13 +47,13 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
 
     if (!result.success) {
       setError(result.error);
-      toast.error("地址保存失败", result.error.message);
+      toast.error("お届け先を保存できません", result.error.message);
       setPending(false);
       return;
     }
 
-    setNotice("默认收货地址已保存。");
-    toast.success("默认收货地址已保存");
+    setNotice("既定のお届け先を保存しました。");
+    toast.success("既定のお届け先を保存しました");
     setPending(false);
     router.refresh();
   }
@@ -66,14 +66,17 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
 
     if (!result.success) {
       setError(result.error);
-      toast.error("地址删除失败", result.error.message);
+      toast.error("お届け先を削除できません", result.error.message);
       setPending(false);
       return;
     }
 
-    setNotice("默认收货地址已删除。");
+    setNotice("既定のお届け先を削除しました。");
     setDeleteOpen(false);
-    toast.success("默认收货地址已删除", "历史订单中的地址快照保持不变。");
+    toast.success(
+      "既定のお届け先を削除しました",
+      "過去の注文に保存されたお届け先は変更されません。",
+    );
     setPending(false);
     router.refresh();
   }
@@ -84,7 +87,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="fullName"
           name="fullName"
-          label="收件人姓名"
+          label="お名前"
           defaultValue={initial.fullName}
           autoComplete="name"
           required
@@ -93,7 +96,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="phone"
           name="phone"
-          label="联系电话"
+          label="電話番号"
           defaultValue={initial.phone}
           autoComplete="tel"
           required
@@ -103,7 +106,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
       <FormField
         id="line1"
         name="line1"
-        label="详细地址"
+        label="住所"
         defaultValue={initial.line1}
         autoComplete="address-line1"
         required
@@ -112,7 +115,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
       <FormField
         id="line2"
         name="line2"
-        label="楼层、房间等（可选）"
+        label="建物名・部屋番号（任意）"
         defaultValue={initial.line2}
         autoComplete="address-line2"
         error={error?.details?.line2}
@@ -121,7 +124,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="city"
           name="city"
-          label="城市"
+          label="市区町村"
           defaultValue={initial.city}
           autoComplete="address-level2"
           required
@@ -130,7 +133,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="state"
           name="state"
-          label="都道府县 / 州（可选）"
+          label="都道府県"
           defaultValue={initial.state}
           autoComplete="address-level1"
           error={error?.details?.state}
@@ -138,7 +141,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="postalCode"
           name="postalCode"
-          label="邮政编码"
+          label="郵便番号"
           defaultValue={initial.postalCode}
           autoComplete="postal-code"
           required
@@ -147,7 +150,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
         <FormField
           id="country"
           name="country"
-          label="国家代码"
+          label="国コード"
           defaultValue={initial.country}
           autoComplete="country"
           placeholder="JP"
@@ -174,7 +177,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
           type="submit"
           disabled={pending}
         >
-          {pending ? "正在处理…" : address ? "更新默认地址" : "保存默认地址"}
+          {pending ? "処理しています…" : address ? "既定のお届け先を更新" : "既定のお届け先を保存"}
         </button>
         {address ? (
           <button
@@ -183,15 +186,15 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
             disabled={pending}
             onClick={() => setDeleteOpen(true)}
           >
-            删除地址
+            お届け先を削除
           </button>
         ) : null}
       </div>
       <Modal
-        description="删除只影响以后结算时的自动填充，历史订单中的收货地址不会改变。"
+        description="削除しても、今後の購入手続きで自動入力されなくなるだけで、過去の注文に保存されたお届け先は変更されません。"
         onClose={() => !pending && setDeleteOpen(false)}
         open={deleteOpen}
-        title="删除默认收货地址？"
+        title="既定のお届け先を削除しますか？"
       >
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
@@ -200,7 +203,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
             onClick={() => setDeleteOpen(false)}
             type="button"
           >
-            取消
+            キャンセル
           </button>
           <button
             className="h-11 rounded-full bg-red-700 px-5 text-sm font-semibold text-white disabled:opacity-60"
@@ -208,7 +211,7 @@ export function AddressForm({ address }: { address: AccountAddress | null }) {
             onClick={handleDelete}
             type="button"
           >
-            {pending ? "正在删除…" : "确认删除"}
+            {pending ? "削除しています…" : "削除する"}
           </button>
         </div>
       </Modal>

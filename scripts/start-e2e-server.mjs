@@ -1,10 +1,14 @@
 import { spawn } from "node:child_process";
+import { rmSync } from "node:fs";
 import { config } from "dotenv";
 
 config({ path: ".env.local", quiet: true });
 
 const port = process.env.E2E_PORT ?? "3100";
 const hostname = "127.0.0.1";
+
+rmSync(".next/dev/cache/fetch-cache", { recursive: true, force: true });
+
 const child = spawn(
   process.execPath,
   ["node_modules/next/dist/bin/next", "dev", "--hostname", hostname, "--port", port],

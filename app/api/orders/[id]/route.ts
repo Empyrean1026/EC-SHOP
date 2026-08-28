@@ -15,9 +15,9 @@ export async function GET(request: NextRequest, context: OrderRouteContext) {
     }
 
     const order = await getUserOrder(authentication.user.id, (await context.params).id);
-    if (!order) return apiError("ORDER_NOT_FOUND", "订单不存在。", 404);
+    if (!order) return apiError("ORDER_NOT_FOUND", "注文が見つかりません。", 404);
     return apiSuccess(order);
   } catch (error) {
-    return apiInternalError(error, "api.orders.detail", "暂时无法读取订单。");
+    return apiInternalError(error, "api.orders.detail", "注文を取得できません。");
   }
 }

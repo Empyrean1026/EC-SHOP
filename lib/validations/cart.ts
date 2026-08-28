@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { CART_MAX_DISTINCT_ITEMS, CART_MAX_QUANTITY } from "@/lib/cart/constants";
 
-export const cartProductIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "商品 ID 格式无效");
+export const cartProductIdSchema = z
+  .string()
+  .regex(/^[a-f\d]{24}$/i, "商品IDの形式が正しくありません");
 
 const cartLineInputSchema = z
   .object({
@@ -31,7 +33,7 @@ export const cartLinesSchema = z
   .refine(
     (value) => new Set(value.items.map((item) => item.productId)).size === value.items.length,
     {
-      message: "购物车中的商品不能重复",
+      message: "同じ商品をカートに重複して登録できません",
       path: ["items"],
     },
   );

@@ -41,7 +41,7 @@ export function RegisterForm() {
       <FormField
         id="name"
         name="name"
-        label="姓名"
+        label="氏名"
         type="text"
         autoComplete="name"
         required
@@ -50,7 +50,7 @@ export function RegisterForm() {
       <FormField
         id="email"
         name="email"
-        label="邮箱"
+        label="メールアドレス"
         type="email"
         autoComplete="email"
         autoCapitalize="none"
@@ -61,7 +61,7 @@ export function RegisterForm() {
       <FormField
         id="password"
         name="password"
-        label="密码"
+        label="パスワード"
         type="password"
         autoComplete="new-password"
         required
@@ -70,14 +70,14 @@ export function RegisterForm() {
       <FormField
         id="confirmPassword"
         name="confirmPassword"
-        label="确认密码"
+        label="パスワード（確認）"
         type="password"
         autoComplete="new-password"
         required
         error={error?.details?.confirmPassword}
       />
       <p className="text-xs leading-5 text-stone-500">
-        密码至少 8 个字符，并包含大写字母、小写字母和数字。
+        パスワードは8文字以上で、英大文字・英小文字・数字をそれぞれ1文字以上含めてください。
       </p>
 
       {error ? (
@@ -91,7 +91,7 @@ export function RegisterForm() {
         type="submit"
         disabled={pending}
       >
-        {pending ? "正在创建账户…" : "创建账户"}
+        {pending ? "アカウントを作成しています…" : "アカウントを作成"}
       </button>
     </form>
   );

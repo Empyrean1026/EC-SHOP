@@ -16,30 +16,33 @@ export function OrderPagination({
     "rounded-full border border-stone-300 bg-white px-5 py-2.5 text-xs font-semibold text-stone-700 transition hover:border-stone-950 hover:text-stone-950";
 
   return (
-    <nav className="mt-10 flex items-center justify-between gap-4" aria-label="订单分页">
+    <nav
+      className="mt-10 flex items-center justify-between gap-4"
+      aria-label="注文履歴のページ送り"
+    >
       {pagination.hasPreviousPage ? (
         <Link
           className={linkClassName}
           href={buildOrderHistoryUrl(query, { page: query.page - 1 })}
         >
-          ← 上一页
+          ← 前へ
         </Link>
       ) : (
-        <span className={`${linkClassName} cursor-not-allowed opacity-40`}>← 上一页</span>
+        <span className={`${linkClassName} cursor-not-allowed opacity-40`}>← 前へ</span>
       )}
       <p className="text-xs text-stone-500">
-        第 <strong className="text-stone-950">{pagination.page}</strong> / {pagination.totalPages}{" "}
-        页
+        <strong className="text-stone-950">{pagination.page}</strong> / {pagination.totalPages}{" "}
+        ページ
       </p>
       {pagination.hasNextPage ? (
         <Link
           className={linkClassName}
           href={buildOrderHistoryUrl(query, { page: query.page + 1 })}
         >
-          下一页 →
+          次へ →
         </Link>
       ) : (
-        <span className={`${linkClassName} cursor-not-allowed opacity-40`}>下一页 →</span>
+        <span className={`${linkClassName} cursor-not-allowed opacity-40`}>次へ →</span>
       )}
     </nav>
   );

@@ -2,35 +2,39 @@ import { z } from "zod";
 
 const passwordSchema = z
   .string()
-  .min(8, "密码至少需要 8 个字符")
+  .min(8, "パスワードは8文字以上で入力してください")
   .refine((password) => new TextEncoder().encode(password).byteLength <= 72, {
-    message: "密码的 UTF-8 长度不能超过 72 字节",
+    message: "パスワードはUTF-8で72バイト以内にしてください",
   })
-  .regex(/[a-z]/, "密码至少需要一个小写字母")
-  .regex(/[A-Z]/, "密码至少需要一个大写字母")
-  .regex(/[0-9]/, "密码至少需要一个数字");
+  .regex(/[a-z]/, "パスワードには英小文字を1文字以上含めてください")
+  .regex(/[A-Z]/, "パスワードには英大文字を1文字以上含めてください")
+  .regex(/[0-9]/, "パスワードには数字を1文字以上含めてください");
 
 export const registerSchema = z
   .object({
-    name: z.string().trim().min(2, "姓名至少需要 2 个字符").max(100, "姓名不能超过 100 个字符"),
-    email: z.string().trim().toLowerCase().email("请输入有效的邮箱地址").max(254),
+    name: z
+      .string()
+      .trim()
+      .min(2, "氏名は2文字以上で入力してください")
+      .max(100, "氏名は100文字以内で入力してください"),
+    email: z.string().trim().toLowerCase().email("有効なメールアドレスを入力してください").max(254),
     password: passwordSchema,
     confirmPassword: z.string(),
   })
   .strict()
   .refine((data) => data.password === data.confirmPassword, {
-    message: "两次输入的密码不一致",
+    message: "確認用パスワードが一致しません",
     path: ["confirmPassword"],
   });
 
 export const loginSchema = z
   .object({
-    email: z.string().trim().toLowerCase().email("请输入有效的邮箱地址").max(254),
+    email: z.string().trim().toLowerCase().email("有効なメールアドレスを入力してください").max(254),
     password: z
       .string()
-      .min(1, "请输入密码")
+      .min(1, "パスワードを入力してください")
       .refine((password) => new TextEncoder().encode(password).byteLength <= 72, {
-        message: "密码的 UTF-8 长度不能超过 72 字节",
+        message: "パスワードはUTF-8で72バイト以内にしてください",
       }),
   })
   .strict();

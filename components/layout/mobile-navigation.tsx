@@ -5,12 +5,12 @@ import Link from "next/link";
 import { Modal } from "@/components/ui/modal";
 
 const navigation = [
-  { href: "/products", label: "商品目录", detail: "浏览分类与库存" },
-  { href: "/search", label: "搜索", detail: "查找想要的商品" },
-  { href: "/cart", label: "购物车", detail: "确认商品与金额" },
-  { href: "/account/orders", label: "我的订单", detail: "付款与配送状态" },
-  { href: "/account/wishlist", label: "收藏夹", detail: "保存喜欢的商品" },
-  { href: "/account", label: "用户中心", detail: "资料、地址与账户" },
+  { href: "/products", label: "商品一覧", detail: "カテゴリーと在庫を見る" },
+  { href: "/search", label: "検索", detail: "商品を検索" },
+  { href: "/cart", label: "カート", detail: "商品と金額を確認" },
+  { href: "/account/orders", label: "注文履歴", detail: "支払いと配送状況" },
+  { href: "/account/wishlist", label: "お気に入り", detail: "気になる商品を保存" },
+  { href: "/account", label: "マイページ", detail: "プロフィールとお届け先" },
 ];
 
 export function MobileNavigation() {
@@ -19,7 +19,7 @@ export function MobileNavigation() {
     <>
       <button
         aria-expanded={open}
-        aria-label="打开导航"
+        aria-label="メニューを開く"
         className="grid size-10 place-items-center rounded-full border border-stone-300 text-stone-700 lg:hidden dark:border-stone-700 dark:text-stone-200"
         onClick={() => setOpen(true)}
         type="button"
@@ -36,12 +36,12 @@ export function MobileNavigation() {
         </svg>
       </button>
       <Modal
-        description="快速前往购物、订单和账户功能。"
+        description="商品、注文、アカウント機能へすばやく移動できます。"
         onClose={() => setOpen(false)}
         open={open}
-        title="站点导航"
+        title="サイトナビゲーション"
       >
-        <nav className="grid gap-2" aria-label="移动端主导航">
+        <nav className="grid gap-2" aria-label="モバイルナビゲーション">
           {navigation.map((item) => (
             <Link
               className="flex items-center justify-between gap-4 rounded-2xl border border-stone-200 px-4 py-3 transition hover:border-orange-300 hover:bg-orange-50 dark:border-stone-700 dark:hover:bg-stone-800"
@@ -64,7 +64,7 @@ export function MobileNavigation() {
           href="/login"
           onClick={() => setOpen(false)}
         >
-          登录账户
+          ログイン
         </Link>
       </Modal>
     </>

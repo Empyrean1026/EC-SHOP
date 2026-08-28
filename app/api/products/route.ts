@@ -21,14 +21,19 @@ export async function GET(request: NextRequest) {
   );
 
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "查询参数无效。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "検索条件が正しくありません。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {
     const result = await listProducts(parsed.data);
     return apiSuccess({ ...result, filters: parsed.data });
   } catch (error) {
-    return apiInternalError(error, "api.products.list", "暂时无法加载商品。");
+    return apiInternalError(error, "api.products.list", "商品を読み込めません。");
   }
 }
 
@@ -50,7 +55,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查提交的商品字段。",
+      "商品の入力内容をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );
@@ -62,13 +67,17 @@ export async function POST(request: NextRequest) {
     return apiSuccess({ product }, 201);
   } catch (error) {
     if (error instanceof ProductCategoryNotFoundError) {
-      return apiError("CATEGORY_NOT_FOUND", "指定的商品分类不存在或已停用。", 422);
+      return apiError(
+        "CATEGORY_NOT_FOUND",
+        "指定したカテゴリーが見つからないか、利用停止中です。",
+        422,
+      );
     }
 
     if (isDuplicateKeyError(error)) {
-      return apiError("SLUG_ALREADY_EXISTS", "该商品 Slug 已被使用。", 409);
+      return apiError("SLUG_ALREADY_EXISTS", "この商品の Slug はすでに使用されています。", 409);
     }
 
-    return apiInternalError(error, "api.products.create", "暂时无法创建商品。");
+    return apiInternalError(error, "api.products.create", "商品を登録できません。");
   }
 }

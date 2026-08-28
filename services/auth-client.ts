@@ -41,7 +41,10 @@ export async function registerUser(input: {
   try {
     return await parseAuthResult(await postAuth("/api/auth/register", input));
   } catch {
-    return { success: false, error: networkError("网络异常，请稍后重试。") };
+    return {
+      success: false,
+      error: networkError("通信エラーが発生しました。しばらくしてからお試しください。"),
+    };
   }
 }
 
@@ -52,7 +55,10 @@ export async function loginUser(input: {
   try {
     return await parseAuthResult(await postAuth("/api/auth/login", input));
   } catch {
-    return { success: false, error: networkError("网络异常，请稍后重试。") };
+    return {
+      success: false,
+      error: networkError("通信エラーが発生しました。しばらくしてからお試しください。"),
+    };
   }
 }
 

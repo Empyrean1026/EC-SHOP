@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "EC Site",
     template: "%s | EC Site",
   },
-  description: "基于 Next.js、TypeScript 与 MongoDB 构建的现代化全栈电商平台。",
+  description: "Next.js、TypeScript、MongoDB で構築したモダンなフルスタックECプラットフォーム。",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
-      lang="zh-CN"
+      lang="ja-JP"
       className="h-full scroll-smooth"
       data-scroll-behavior="smooth"
       suppressHydrationWarning

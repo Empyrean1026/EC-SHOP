@@ -1,0 +1,37 @@
+name: バグ報告 / Bug report
+description: 再現可能な不具合を報告します / Report a reproducible problem
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: 機密情報、認証情報、個人情報は記載しないでください。Please do not include secrets, credentials, or personal data.
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概要 / Summary
+      description: 発生した問題を簡潔に説明してください。Describe the problem briefly.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 再現手順 / Steps to reproduce
+      placeholder: "1. …\n2. …\n3. …"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する結果 / Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 実行環境 / Environment
+      description: OS、Node.js、ブラウザ、実行方法（local/Docker）を記載してください。
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ・画像 / Logs or screenshots
+      render: shell

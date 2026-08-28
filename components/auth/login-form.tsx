@@ -43,7 +43,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       <FormField
         id="email"
         name="email"
-        label="邮箱"
+        label="メールアドレス"
         type="email"
         autoComplete="email"
         autoCapitalize="none"
@@ -54,7 +54,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       <FormField
         id="password"
         name="password"
-        label="密码"
+        label="パスワード"
         type="password"
         autoComplete="current-password"
         required
@@ -72,7 +72,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         type="submit"
         disabled={pending}
       >
-        {pending ? "正在登录…" : "登录"}
+        {pending ? "ログインしています…" : "ログイン"}
       </button>
     </form>
   );

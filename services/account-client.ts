@@ -27,7 +27,7 @@ async function mutateAccount<T>(
   } catch {
     return {
       success: false,
-      error: networkError("网络异常，修改尚未保存。"),
+      error: networkError("通信エラーが発生し、変更は保存されませんでした。"),
     };
   }
 }

@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "搜索建议参数无效。",
+      "検索候補の条件が正しくありません。",
       422,
       getValidationErrors(parsed.error),
     );
@@ -23,6 +23,6 @@ export async function GET(request: NextRequest) {
   try {
     return apiSuccess(await suggestProducts(parsed.data));
   } catch (error) {
-    return apiInternalError(error, "api.search.suggestions", "暂时无法加载搜索建议。");
+    return apiInternalError(error, "api.search.suggestions", "検索候補を読み込めません。");
   }
 }

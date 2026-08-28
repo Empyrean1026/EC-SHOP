@@ -9,7 +9,7 @@ import { adminOrderListQuerySchema } from "@/lib/validations/admin";
 import { ORDER_STATUSES, PAYMENT_STATUSES } from "@/models";
 import { listAdminOrders } from "@/services/admin-service";
 
-export const metadata: Metadata = { title: "订单管理" };
+export const metadata: Metadata = { title: "注文管理" };
 export const dynamic = "force-dynamic";
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 const firstValues = (values: Record<string, string | string[] | undefined>) =>
@@ -29,9 +29,9 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
         <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
           Admin / Orders
         </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">订单管理</h1>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">注文管理</h1>
         <p className="mt-3 text-sm text-stone-500">
-          共 {result.pagination.total} 张符合条件的订单。
+          全 {result.pagination.total} 件の注文が見つかりました。
         </p>
         <form
           className="mt-7 grid gap-3 rounded-2xl border border-stone-200 bg-white p-4 md:grid-cols-5"
@@ -41,14 +41,14 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
             className="h-11 rounded-xl border border-stone-300 px-3 text-sm"
             name="q"
             defaultValue={query.q}
-            placeholder="订单号、姓名或邮箱"
+            placeholder="注文番号・氏名・メールアドレス"
           />
           <select
             className="h-11 rounded-xl border border-stone-300 bg-white px-3 text-sm"
             name="status"
             defaultValue={query.status ?? ""}
           >
-            <option value="">全部订单状态</option>
+            <option value="">すべての注文状況</option>
             {ORDER_STATUSES.map((status) => (
               <option value={status} key={status}>
                 {ORDER_STATUS_LABELS[status]}
@@ -60,7 +60,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
             name="paymentStatus"
             defaultValue={query.paymentStatus ?? ""}
           >
-            <option value="">全部支付状态</option>
+            <option value="">すべてのお支払い状況</option>
             {PAYMENT_STATUSES.map((status) => (
               <option value={status} key={status}>
                 {PAYMENT_STATUS_LABELS[status]}
@@ -72,19 +72,19 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
             name="sort"
             defaultValue={query.sort}
           >
-            <option value="newest">最新订单</option>
-            <option value="oldest">最早订单</option>
+            <option value="newest">注文日の新しい順</option>
+            <option value="oldest">注文日の古い順</option>
           </select>
           <button
             className="h-11 rounded-full bg-stone-950 px-5 text-xs font-semibold text-white"
             type="submit"
           >
-            应用筛选
+            絞り込む
           </button>
         </form>
         {!parsed.success ? (
           <p className="mt-4 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-            查询参数无效，已恢复默认条件。
+            検索条件が正しくないため、既定の条件に戻しました。
           </p>
         ) : null}
         <div className="mt-6 space-y-4">
@@ -98,11 +98,11 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                   <div className="min-w-0">
                     <p className="text-xs break-all text-stone-500">{order.id}</p>
                     <h2 className="mt-2 truncate font-semibold text-stone-950">
-                      {order.customer?.name ?? "账户已删除"}
+                      {order.customer?.name ?? "削除済みアカウント"}
                     </h2>
                     <p className="mt-1 truncate text-xs text-stone-500">
                       {order.customer?.email ?? "—"} ·{" "}
-                      {new Intl.DateTimeFormat("zh-CN", {
+                      {new Intl.DateTimeFormat("ja-JP", {
                         dateStyle: "medium",
                         timeStyle: "short",
                       }).format(new Date(order.createdAt))}
@@ -118,7 +118,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                       className="rounded-full border border-stone-300 px-4 py-2 text-xs font-semibold"
                       href={`/admin/orders/${order.id}`}
                     >
-                      处理订单
+                      注文を処理
                     </Link>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
             ))
           ) : (
             <div className="grid min-h-64 place-items-center rounded-3xl border border-dashed border-stone-300 bg-white">
-              <p className="text-stone-500">没有符合条件的订单。</p>
+              <p className="text-stone-500">条件に一致する注文はありません。</p>
             </div>
           )}
         </div>

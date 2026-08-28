@@ -1,0 +1,26 @@
+name: 機能提案 / Feature request
+description: 改善案や新機能を提案します / Suggest an improvement or feature
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 解決したい課題 / Problem
+      description: 誰が、どの場面で困っているかを説明してください。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案内容 / Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 代替案 / Alternatives
+  - type: textarea
+    id: impact
+    attributes:
+      label: 影響範囲 / Impact
+      description: UI、API、DB、決済、互換性への影響があれば記載してください。

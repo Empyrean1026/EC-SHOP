@@ -19,7 +19,7 @@ export async function PATCH(request: NextRequest, context: CartItemRouteContext)
 
   const productId = cartProductIdSchema.safeParse((await context.params).productId);
   if (!productId.success) {
-    return apiError("VALIDATION_ERROR", "商品 ID 格式无效。", 422);
+    return apiError("VALIDATION_ERROR", "商品IDの形式が正しくありません。", 422);
   }
 
   const body = await readJsonBody(request, CART_BODY_LIMIT_BYTES);
@@ -27,7 +27,12 @@ export async function PATCH(request: NextRequest, context: CartItemRouteContext)
 
   const parsed = updateCartItemSchema.safeParse(body.data);
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "请检查商品数量。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "商品の数量をご確認ください。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {
@@ -45,7 +50,7 @@ export async function DELETE(request: NextRequest, context: CartItemRouteContext
 
   const productId = cartProductIdSchema.safeParse((await context.params).productId);
   if (!productId.success) {
-    return apiError("VALIDATION_ERROR", "商品 ID 格式无效。", 422);
+    return apiError("VALIDATION_ERROR", "商品IDの形式が正しくありません。", 422);
   }
 
   try {

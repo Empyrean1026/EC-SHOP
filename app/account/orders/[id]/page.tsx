@@ -12,8 +12,8 @@ import { formatProductPrice } from "@/lib/products/format";
 import { getUserOrder } from "@/services/order-service";
 
 export const metadata: Metadata = {
-  title: "订单详情",
-  description: "查看订单商品、付款状态、配送进度和收货地址。",
+  title: "注文詳細",
+  description: "注文商品、お支払い状況、配送状況、お届け先を確認します。",
 };
 
 type OrderDetailPageProps = {
@@ -40,9 +40,9 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                 Order detail
               </p>
               <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-                订单详情
+                注文詳細
               </h1>
-              <p className="mt-4 text-xs break-all text-stone-400">订单号：{order.id}</p>
+              <p className="mt-4 text-xs break-all text-stone-400">注文番号：{order.id}</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <OrderStatusBadge status={order.orderStatus} />
@@ -57,9 +57,9 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-start">
           <section className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-8">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-xl font-semibold text-stone-950">商品明细</h2>
+              <h2 className="text-xl font-semibold text-stone-950">商品明細</h2>
               <span className="text-xs text-stone-500">
-                {order.items.length} 种 · {order.totalQuantity} 件
+                {order.items.length} 種類 · {order.totalQuantity} 点
               </span>
             </div>
             <div className="mt-5 divide-y divide-stone-200">
@@ -94,7 +94,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               ))}
             </div>
             <div className="mt-5 flex justify-between gap-4 border-t border-stone-200 pt-5">
-              <p className="text-sm text-stone-500">订单总额</p>
+              <p className="text-sm text-stone-500">注文合計</p>
               <p className="text-2xl font-semibold tracking-[-0.03em] text-stone-950">
                 {formatProductPrice(order.totalAmount, order.currency)}
               </p>
@@ -103,16 +103,16 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
           <aside className="space-y-5 lg:sticky lg:top-24">
             <section className="rounded-3xl border border-stone-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-stone-950">支付信息</h2>
+              <h2 className="text-sm font-semibold text-stone-950">お支払い情報</h2>
               <dl className="mt-4 space-y-3 text-sm">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-stone-500">支付方式</dt>
+                  <dt className="text-stone-500">お支払い方法</dt>
                   <dd className="font-semibold text-stone-900">
-                    {order.paymentMethod === "stripe" ? "Stripe 在线支付" : "货到付款"}
+                    {order.paymentMethod === "stripe" ? "クレジットカード（Stripe）" : "代金引換"}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <dt className="text-stone-500">支付状态</dt>
+                  <dt className="text-stone-500">お支払い状況</dt>
                   <dd>
                     <PaymentStatusBadge status={order.paymentStatus} />
                   </dd>
@@ -120,8 +120,8 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               </dl>
               {order.paidAt ? (
                 <p className="mt-4 text-xs leading-5 text-stone-500">
-                  确认时间：
-                  {new Intl.DateTimeFormat("zh-CN", {
+                  支払い確認日時：
+                  {new Intl.DateTimeFormat("ja-JP", {
                     dateStyle: "medium",
                     timeStyle: "short",
                   }).format(new Date(order.paidAt))}
@@ -132,13 +132,13 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                   className="mt-5 inline-flex h-10 w-full items-center justify-center rounded-full bg-orange-600 px-5 text-xs font-semibold text-white hover:bg-orange-700"
                   href={`/checkout/payment/${order.id}`}
                 >
-                  {order.paymentStatus === "failed" ? "重新支付" : "继续支付"}
+                  {order.paymentStatus === "failed" ? "もう一度支払う" : "支払いを続ける"}
                 </Link>
               ) : null}
             </section>
 
             <section className="rounded-3xl border border-stone-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-stone-950">收货地址</h2>
+              <h2 className="text-sm font-semibold text-stone-950">お届け先</h2>
               <address className="mt-4 text-sm leading-7 text-stone-600 not-italic">
                 <p className="font-semibold text-stone-900">{order.shippingAddress.fullName}</p>
                 <p>{order.shippingAddress.phone}</p>
@@ -157,15 +157,15 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
             <section className="rounded-3xl bg-[#dfe5ce] p-6 text-xs leading-6 text-stone-700 dark:bg-[#20271d]">
               <p>
-                创建：
-                {new Intl.DateTimeFormat("zh-CN", {
+                注文日時：
+                {new Intl.DateTimeFormat("ja-JP", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 }).format(new Date(order.createdAt))}
               </p>
               <p>
-                更新：
-                {new Intl.DateTimeFormat("zh-CN", {
+                更新日時：
+                {new Intl.DateTimeFormat("ja-JP", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 }).format(new Date(order.updatedAt))}
@@ -179,13 +179,13 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             className="inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white hover:bg-orange-600"
             href="/account/orders"
           >
-            返回订单列表
+            注文履歴に戻る
           </Link>
           <Link
             className="inline-flex h-11 items-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-800 hover:border-stone-950"
             href="/products"
           >
-            继续购物
+            買い物を続ける
           </Link>
         </div>
       </div>

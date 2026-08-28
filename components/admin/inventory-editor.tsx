@@ -20,12 +20,12 @@ export function InventoryEditor({ productId, stock }: { productId: string; stock
     const result = await updateAdminStock(productId, nextStock);
     if (!result.success) {
       setError(result.error.message);
-      toast.error("库存更新失败", result.error.message);
+      toast.error("在庫を更新できません", result.error.message);
       setPending(false);
       return;
     }
     setPending(false);
-    toast.success("库存已更新", `当前库存为 ${nextStock} 件。`);
+    toast.success("在庫を更新しました", `現在の在庫は${nextStock} 点。`);
     router.refresh();
   }
 
@@ -38,7 +38,7 @@ export function InventoryEditor({ productId, stock }: { productId: string; stock
         min="0"
         step="1"
         defaultValue={stock}
-        aria-label="库存数量"
+        aria-label="在庫数"
       />
       <button
         className="h-9 rounded-full bg-stone-950 px-3 text-xs font-semibold text-white disabled:opacity-60"

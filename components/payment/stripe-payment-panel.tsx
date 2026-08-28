@@ -30,7 +30,10 @@ function StripeConfirmationForm({ orderId }: { orderId: string }) {
     });
 
     if (result.error) {
-      setMessage(result.error.message ?? "支付未能完成，请检查支付信息后重试。");
+      setMessage(
+        result.error.message ??
+          "お支払いを完了できませんでした。入力内容を確認して、もう一度お試しください。",
+      );
       setSubmitting(false);
       return;
     }
@@ -55,10 +58,11 @@ function StripeConfirmationForm({ orderId }: { orderId: string }) {
         disabled={!stripe || !elements || submitting}
         type="submit"
       >
-        {submitting ? "正在提交至 Stripe…" : "安全支付"}
+        {submitting ? "Stripe に送信しています…" : "安全なお支払い"}
       </button>
       <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-        支付信息由 Stripe Elements 安全收集，本网站不会接触完整卡号。
+        お支払い情報は Stripe Elements
+        が安全に収集します。当サイトがカード番号全体を取り扱うことはありません。
       </p>
     </form>
   );
@@ -107,7 +111,8 @@ export function StripePaymentPanel({
   if (!publishableKey) {
     return (
       <div className="rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-900" role="alert">
-        Stripe 尚未配置。请设置服务端密钥、公开密钥和 Webhook 签名密钥后重试。
+        Stripe が設定されていません。シークレットキー、公開可能キー、Webhook
+        署名シークレットを設定してからお試しください。
       </div>
     );
   }
@@ -115,7 +120,7 @@ export function StripePaymentPanel({
   if (loading) {
     return (
       <div className="grid min-h-48 place-items-center text-sm text-stone-500" role="status">
-        正在创建安全支付会话…
+        安全な決済セッションを作成しています…
       </div>
     );
   }
@@ -131,7 +136,7 @@ export function StripePaymentPanel({
           onClick={() => window.location.reload()}
           type="button"
         >
-          重新连接支付服务
+          決済サービスに再接続
         </button>
       </div>
     );
@@ -140,12 +145,12 @@ export function StripePaymentPanel({
   if (!session?.clientSecret || !stripePromise) {
     return (
       <div className="rounded-2xl bg-blue-50 p-5 text-sm leading-6 text-blue-900">
-        <p>Stripe 已接收支付，正在等待 Webhook 确认最终结果。</p>
+        <p>Stripe が決済を受け付けました。Webhook による最終確認を待っています。</p>
         <Link
           className="mt-3 inline-block font-semibold underline"
           href={`/checkout/payment/return?orderId=${order.id}`}
         >
-          查看支付确认状态
+          お支払い状況を確認
         </Link>
       </div>
     );

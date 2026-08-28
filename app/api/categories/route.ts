@@ -7,6 +7,6 @@ export async function GET() {
   try {
     return apiSuccess({ categories: await listCategories() });
   } catch (error) {
-    return apiInternalError(error, "api.categories.list", "暂时无法加载商品分类。");
+    return apiInternalError(error, "api.categories.list", "カテゴリーを読み込めません。");
   }
 }

@@ -17,25 +17,37 @@ export async function authorizeAdminMutation(request: NextRequest): Promise<Next
     }
 
     if (!(await validateCsrfRequest(request))) {
-      return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
+      return apiError("INVALID_CSRF_TOKEN", "セキュリティトークンが無効または期限切れです。", 403);
     }
 
     return null;
   } catch (error) {
-    return apiInternalError(error, "api.admin.authorize", "暂时无法验证管理员权限。");
+    return apiInternalError(error, "api.admin.authorize", "管理者権限を確認できません。");
   }
 }
 
 export function adminServiceErrorResponse(error: unknown, context: string): NextResponse {
   if (error instanceof AdminOrderNotFoundError) {
-    return apiError("ORDER_NOT_FOUND", "订单不存在。", 404);
+    return apiError("ORDER_NOT_FOUND", "注文が見つかりません。", 404);
   }
   if (error instanceof InvalidOrderTransitionError) {
-    return apiError("INVALID_ORDER_TRANSITION", "该订单不能进入所选状态。", 409);
+    return apiError(
+      "INVALID_ORDER_TRANSITION",
+      "この注文は選択したステータスに変更できません。",
+      409,
+    );
   }
   if (error instanceof ConcurrentOrderUpdateError) {
-    return apiError("ORDER_CHANGED", "订单已被其他操作更新，请刷新后重试。", 409);
+    return apiError(
+      "ORDER_CHANGED",
+      "注文内容が別の操作で更新されました。ページを再読み込みしてお試しください。",
+      409,
+    );
   }
 
-  return apiInternalError(error, `api.admin.${context}`, "管理员服务暂时不可用。");
+  return apiInternalError(
+    error,
+    `api.admin.${context}`,
+    "管理者サービスを一時的に利用できません。",
+  );
 }

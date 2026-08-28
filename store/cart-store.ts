@@ -153,7 +153,7 @@ export function createCartStore() {
 
         addLocalItem(product, quantity = 1) {
           if (product.stock <= 0) {
-            return { success: false, message: "该商品暂时缺货。" };
+            return { success: false, message: "この商品は在庫切れです。" };
           }
 
           const items = [...get().items];
@@ -162,11 +162,11 @@ export function createCartStore() {
           const maximum = Math.min(product.stock, CART_MAX_QUANTITY);
 
           if (nextQuantity > maximum) {
-            return { success: false, message: `当前最多可购买 ${maximum} 件。` };
+            return { success: false, message: `現在購入できるのは最大${maximum} 点。` };
           }
 
           if (index < 0 && items.length >= CART_MAX_DISTINCT_ITEMS) {
-            return { success: false, message: "购物车最多可包含 100 种商品。" };
+            return { success: false, message: "カートに追加できる商品は最大100種類です。" };
           }
 
           const nextItem = {
@@ -186,13 +186,13 @@ export function createCartStore() {
           const items = [...get().items];
           const index = items.findIndex((item) => item.product.id === productId);
 
-          if (index < 0) return { success: false, message: "购物车中没有该商品。" };
+          if (index < 0) return { success: false, message: "カートにこの商品はありません。" };
 
           const current = items[index]!;
           const maximum = Math.min(current.product.stock, CART_MAX_QUANTITY);
 
           if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > maximum) {
-            return { success: false, message: `数量必须在 1–${maximum} 之间。` };
+            return { success: false, message: `数量は1〜${maximum}点で指定してください。` };
           }
 
           items[index] = {

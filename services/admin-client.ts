@@ -23,9 +23,12 @@ async function mutateAdmin<T>(
       headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
       ...(data === undefined ? {} : { body: JSON.stringify(data) }),
     });
-    return parseApiResponse<T>(response, "管理员请求失败。");
+    return parseApiResponse<T>(response, "管理者リクエストに失敗しました。");
   } catch {
-    return { success: false, error: networkError("网络异常，操作未完成。") };
+    return {
+      success: false,
+      error: networkError("通信エラーが発生し、操作を完了できませんでした。"),
+    };
   }
 }
 

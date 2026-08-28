@@ -8,16 +8,16 @@ export default function ProductNotFound() {
           Product not found
         </p>
         <h1 className="mt-5 text-4xl font-semibold tracking-[-0.04em] text-stone-950">
-          商品不存在或已下架
+          商品が見つからないか、販売を終了しています
         </h1>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          该商品可能已经停止销售，也可能使用了无效的商品地址。
+          この商品は販売を終了したか、商品URLが正しくない可能性があります。
         </p>
         <Link
           className="mt-7 inline-flex rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
           href="/products"
         >
-          返回商品目录
+          商品一覧に戻る
         </Link>
       </div>
     </section>

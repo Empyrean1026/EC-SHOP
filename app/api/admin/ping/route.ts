@@ -12,7 +12,7 @@ export const GET = withApiErrorHandling(async function pingAdmin(request: NextRe
   }
 
   return apiSuccess({
-    message: "管理员权限验证成功。",
+    message: "管理者権限を確認しました。",
     user: authentication.user,
   });
 }, "api.admin.ping");

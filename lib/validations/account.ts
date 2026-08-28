@@ -5,18 +5,22 @@ const avatarSchema = z
   .union([
     z.literal(""),
     z
-      .url("请输入有效的头像网址")
-      .max(2048, "头像网址不能超过 2048 个字符")
+      .url("有効なプロフィール画像URLを入力してください")
+      .max(2048, "プロフィール画像URLは2048文字以内で入力してください")
       .refine((value) => {
         const protocol = new URL(value).protocol;
         return protocol === "http:" || protocol === "https:";
-      }, "头像网址必须使用 HTTP 或 HTTPS"),
+      }, "プロフィール画像URLは HTTP または HTTPS を使用してください"),
   ])
   .transform((value) => value || null);
 
 export const updateProfileSchema = z
   .object({
-    name: z.string().trim().min(2, "姓名至少需要 2 个字符").max(100, "姓名不能超过 100 个字符"),
+    name: z
+      .string()
+      .trim()
+      .min(2, "氏名は2文字以上で入力してください")
+      .max(100, "氏名は100文字以内で入力してください"),
     avatar: avatarSchema,
   })
   .strict();
@@ -25,7 +29,7 @@ export const updateAddressSchema = shippingAddressSchema;
 
 export const wishlistProductSchema = z
   .object({
-    productId: z.string().regex(/^[a-f\d]{24}$/i, "商品 ID 格式无效"),
+    productId: z.string().regex(/^[a-f\d]{24}$/i, "商品IDの形式が正しくありません"),
   })
   .strict();
 

@@ -6,7 +6,10 @@ import type { OrderPaymentStatus, PaymentIntentSession } from "@/types/payment";
 type PaymentClientResult<T> = { success: true; data: T } | { success: false; error: ApiError };
 
 async function responseResult<T>(response: Response): Promise<PaymentClientResult<T>> {
-  return parseApiResponse<T>(response, "支付请求失败，请稍后重试。");
+  return parseApiResponse<T>(
+    response,
+    "決済リクエストに失敗しました。しばらくしてからお試しください。",
+  );
 }
 
 export async function createPaymentIntentSession(
@@ -23,7 +26,7 @@ export async function createPaymentIntentSession(
   } catch {
     return {
       success: false,
-      error: networkError("无法连接支付服务，请稍后重试。"),
+      error: networkError("決済サービスに接続できません。しばらくしてからお試しください。"),
     };
   }
 }
@@ -40,7 +43,7 @@ export async function fetchOrderPaymentStatus(
   } catch {
     return {
       success: false,
-      error: networkError("暂时无法读取支付状态。"),
+      error: networkError("お支払い状況を取得できません。"),
     };
   }
 }

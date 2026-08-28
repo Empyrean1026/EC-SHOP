@@ -7,8 +7,8 @@ import { formatProductPrice } from "@/lib/products/format";
 import { getCheckoutOrder } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
-  title: "订单已创建",
-  description: "查看刚刚创建的订单。",
+  title: "ご注文を受け付けました",
+  description: "作成した注文の内容を確認します。",
 };
 
 type CheckoutSuccessPageProps = {
@@ -25,12 +25,12 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
   const isStripe = order.paymentMethod === "stripe";
   const isPaid = order.paymentStatus === "paid";
   const paymentMessage = !isStripe
-    ? "已选择货到付款，订单正在等待商家确认。"
+    ? "代金引換を選択しました。ショップが注文内容を確認しています。"
     : isPaid
-      ? "Stripe 签名 Webhook 已确认付款，订单已进入已付款状态。"
+      ? "Stripe の署名付き Webhook で支払いを確認しました。注文は支払い済みです。"
       : order.paymentStatus === "failed"
-        ? "Stripe Webhook 已报告付款失败，你可以重新进入安全支付页。"
-        : "支付尚未由 Stripe Webhook 最终确认，当前不会显示为已付款。";
+        ? "Stripe Webhook から支払い失敗が通知されました。決済画面からもう一度お試しください。"
+        : "Stripe Webhook による最終確認が完了していないため、まだ支払い済みとは表示されません。";
 
   return (
     <section className="min-h-[75vh] bg-stone-100 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
@@ -48,22 +48,22 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
             {isPaid ? "Payment verified" : "Order created"}
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-            {isPaid ? "支付已安全确认" : "订单已安全创建"}
+            {isPaid ? "お支払いを確認しました" : "ご注文を受け付けました"}
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-300">{paymentMessage}</p>
           <div className="mt-7 flex flex-wrap gap-x-8 gap-y-2 text-xs text-stone-400">
-            <p>订单号：{order.id}</p>
+            <p>注文番号：{order.id}</p>
             <p>
-              创建时间：
-              {new Intl.DateTimeFormat("zh-CN", {
+              注文日時：
+              {new Intl.DateTimeFormat("ja-JP", {
                 dateStyle: "medium",
                 timeStyle: "short",
               }).format(new Date(order.createdAt))}
             </p>
             {order.paidAt ? (
               <p>
-                支付确认：
-                {new Intl.DateTimeFormat("zh-CN", {
+                支払い確認：
+                {new Intl.DateTimeFormat("ja-JP", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 }).format(new Date(order.paidAt))}
@@ -75,8 +75,8 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
         <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
           <section className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-8">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-xl font-semibold text-stone-950">商品明细</h2>
-              <span className="text-xs text-stone-500">{order.items.length} 种商品</span>
+              <h2 className="text-xl font-semibold text-stone-950">商品明細</h2>
+              <span className="text-xs text-stone-500">{order.items.length} 種類の商品</span>
             </div>
             <div className="mt-5 divide-y divide-stone-200">
               {order.items.map((item) => (
@@ -107,7 +107,7 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
 
           <aside className="space-y-5">
             <section className="rounded-3xl border border-stone-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-stone-950">收货地址</h2>
+              <h2 className="text-sm font-semibold text-stone-950">お届け先</h2>
               <address className="mt-4 text-sm leading-7 text-stone-600 not-italic">
                 <p className="font-semibold text-stone-900">{order.shippingAddress.fullName}</p>
                 <p>{order.shippingAddress.phone}</p>
@@ -125,12 +125,12 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
             </section>
 
             <section className="rounded-3xl bg-[#dfe5ce] p-6 dark:bg-[#20271d]">
-              <p className="text-xs text-stone-600">支付方式</p>
+              <p className="text-xs text-stone-600">お支払い方法</p>
               <p className="mt-2 text-sm font-semibold text-stone-950">
-                {isStripe ? "Stripe 在线支付" : "货到付款"}
+                {isStripe ? "クレジットカード（Stripe）" : "代金引換"}
               </p>
-              <p className="mt-2 text-xs text-stone-600">状态：{order.paymentStatus}</p>
-              <p className="mt-5 text-xs text-stone-600">订单总额</p>
+              <p className="mt-2 text-xs text-stone-600">状況：{order.paymentStatus}</p>
+              <p className="mt-5 text-xs text-stone-600">注文合計</p>
               <p className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-stone-950">
                 {formatProductPrice(order.totalAmount, order.currency)}
               </p>
@@ -144,26 +144,26 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
               className="inline-flex h-11 items-center rounded-full bg-orange-600 px-6 text-sm font-semibold text-white hover:bg-orange-700"
               href={`/checkout/payment/${order.id}`}
             >
-              {order.paymentStatus === "failed" ? "重新支付" : "继续支付"}
+              {order.paymentStatus === "failed" ? "もう一度支払う" : "支払いを続ける"}
             </Link>
           ) : null}
           <Link
             className="inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white hover:bg-orange-600"
             href={`/account/orders/${order.id}`}
           >
-            查看订单详情
+            注文詳細を見る
           </Link>
           <Link
             className="inline-flex h-11 items-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-800 hover:border-stone-950"
             href="/account/orders"
           >
-            查看全部订单
+            注文履歴を見る
           </Link>
           <Link
             className="inline-flex h-11 items-center rounded-full border border-stone-300 bg-white px-6 text-sm font-semibold text-stone-800 hover:border-stone-950"
             href="/products"
           >
-            继续购物
+            買い物を続ける
           </Link>
         </div>
       </div>

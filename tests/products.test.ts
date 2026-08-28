@@ -153,9 +153,9 @@ test("catalog URLs preserve active filters while changing pages", () => {
 test("price and inventory formatters handle currency units and low stock", () => {
   assert.match(formatProductPrice(21500, "jpy"), /21,500/);
   assert.match(formatProductPrice(1299, "usd"), /12\.99/);
-  assert.equal(getStockLabel(0), "暂时缺货");
-  assert.equal(getStockLabel(3), "仅剩 3 件");
-  assert.equal(getStockLabel(8), "现货供应");
+  assert.equal(getStockLabel(0), "在庫切れ");
+  assert.equal(getStockLabel(3), "残り3 点");
+  assert.equal(getStockLabel(8), "在庫あり");
 });
 
 test("keyword search escapes regular-expression control characters", () => {

@@ -5,7 +5,7 @@ import { requireUser } from "@/lib/auth/dal";
 import { getAdminProduct } from "@/services/admin-service";
 import { listCategories } from "@/services/product-service";
 
-export const metadata: Metadata = { title: "编辑商品" };
+export const metadata: Metadata = { title: "商品を編集" };
 export const dynamic = "force-dynamic";
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,7 +22,9 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
           Admin / Edit product
         </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">编辑商品</h1>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
+          商品を編集
+        </h1>
         <p className="mt-3 text-sm text-stone-500">
           {product.name} · {product.id}
         </p>

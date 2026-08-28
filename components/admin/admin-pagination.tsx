@@ -15,23 +15,23 @@ export function AdminPagination({
   const className = "rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold";
 
   return (
-    <nav className="mt-8 flex items-center justify-between gap-3" aria-label="后台分页">
+    <nav className="mt-8 flex items-center justify-between gap-3" aria-label="管理画面のページ送り">
       {pagination.hasPreviousPage ? (
         <Link className={className} href={buildAdminPageUrl(path, query, pagination.page - 1)}>
-          ← 上一页
+          ← 前へ
         </Link>
       ) : (
-        <span className={`${className} opacity-40`}>← 上一页</span>
+        <span className={`${className} opacity-40`}>← 前へ</span>
       )}
       <p className="text-xs text-stone-500">
-        第 {pagination.page} / {pagination.totalPages} 页
+        {pagination.page} / {pagination.totalPages} ページ
       </p>
       {pagination.hasNextPage ? (
         <Link className={className} href={buildAdminPageUrl(path, query, pagination.page + 1)}>
-          下一页 →
+          次へ →
         </Link>
       ) : (
-        <span className={`${className} opacity-40`}>下一页 →</span>
+        <span className={`${className} opacity-40`}>次へ →</span>
       )}
     </nav>
   );

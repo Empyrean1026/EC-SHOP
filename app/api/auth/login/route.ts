@@ -14,13 +14,17 @@ import { getValidationErrors } from "@/lib/validations/errors";
 
 export async function POST(request: NextRequest) {
   if (!(await validateCsrfRequest(request))) {
-    return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
+    return apiError("INVALID_CSRF_TOKEN", "セキュリティトークンが無効または期限切れです。", 403);
   }
 
   const rateLimit = await consumeAuthAttempt(request, "login");
 
   if (!rateLimit.allowed) {
-    const response = apiError("RATE_LIMITED", "认证请求过于频繁，请稍后重试。", 429);
+    const response = apiError(
+      "RATE_LIMITED",
+      "認証リクエストが多すぎます。しばらくしてからお試しください。",
+      429,
+    );
     response.headers.set("Retry-After", String(rateLimit.retryAfterSeconds));
     return response;
   }
@@ -36,7 +40,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查提交的字段。",
+      "入力内容をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );
@@ -52,7 +56,11 @@ export async function POST(request: NextRequest) {
     );
 
     if (!user || !passwordMatches) {
-      return apiError("INVALID_CREDENTIALS", "邮箱或密码不正确。", 401);
+      return apiError(
+        "INVALID_CREDENTIALS",
+        "メールアドレスまたはパスワードが正しくありません。",
+        401,
+      );
     }
 
     const authUser = toAuthUser(user);
@@ -63,6 +71,10 @@ export async function POST(request: NextRequest) {
     await clearAuthAttempts(request, "login");
     return response;
   } catch (error) {
-    return apiInternalError(error, "api.auth.login", "暂时无法登录，请稍后重试。");
+    return apiInternalError(
+      error,
+      "api.auth.login",
+      "ログインできません。しばらくしてからお試しください。",
+    );
   }
 }

@@ -15,13 +15,17 @@ import { getValidationErrors } from "@/lib/validations/errors";
 
 export async function POST(request: NextRequest) {
   if (!(await validateCsrfRequest(request))) {
-    return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
+    return apiError("INVALID_CSRF_TOKEN", "セキュリティトークンが無効または期限切れです。", 403);
   }
 
   const rateLimit = await consumeAuthAttempt(request, "register");
 
   if (!rateLimit.allowed) {
-    const response = apiError("RATE_LIMITED", "认证请求过于频繁，请稍后重试。", 429);
+    const response = apiError(
+      "RATE_LIMITED",
+      "認証リクエストが多すぎます。しばらくしてからお試しください。",
+      429,
+    );
     response.headers.set("Retry-After", String(rateLimit.retryAfterSeconds));
     return response;
   }
@@ -37,7 +41,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查提交的字段。",
+      "入力内容をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );
@@ -49,7 +53,7 @@ export async function POST(request: NextRequest) {
     const existingUser = await UserModel.exists({ email: parsed.data.email });
 
     if (existingUser) {
-      return apiError("EMAIL_ALREADY_EXISTS", "该邮箱已注册。", 409);
+      return apiError("EMAIL_ALREADY_EXISTS", "このメールアドレスはすでに登録されています。", 409);
     }
 
     const passwordHash = await hashPassword(parsed.data.password);
@@ -67,9 +71,13 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (isDuplicateKeyError(error)) {
-      return apiError("EMAIL_ALREADY_EXISTS", "该邮箱已注册。", 409);
+      return apiError("EMAIL_ALREADY_EXISTS", "このメールアドレスはすでに登録されています。", 409);
     }
 
-    return apiInternalError(error, "api.auth.register", "暂时无法创建账户，请稍后重试。");
+    return apiInternalError(
+      error,
+      "api.auth.register",
+      "アカウントを作成できません。しばらくしてからお試しください。",
+    );
   }
 }

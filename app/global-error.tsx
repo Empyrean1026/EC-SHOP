@@ -14,9 +14,9 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="zh-CN">
+    <html lang="ja-JP">
       <head>
-        <title>页面暂时不可用 | EC Site</title>
+        <title>ページを表示できません | EC Site</title>
       </head>
       <body style={{ margin: 0 }}>
         <main className="global-error-shell">
@@ -25,11 +25,13 @@ export default function GlobalError({
               !
             </span>
             <p className="global-error-label">Critical error</p>
-            <h1>网站暂时无法显示</h1>
-            <p>根页面发生了意外错误。请重新加载；如问题持续，请提供下方错误编号。</p>
-            {error.digest ? <code>错误编号：{error.digest}</code> : null}
+            <h1>サイトを表示できません</h1>
+            <p>
+              ページで予期しないエラーが発生しました。再読み込みしても解決しない場合は、下記のエラーIDをお知らせください。
+            </p>
+            {error.digest ? <code>エラーID：{error.digest}</code> : null}
             <button onClick={retry} type="button">
-              重新加载
+              再読み込み
             </button>
           </section>
         </main>

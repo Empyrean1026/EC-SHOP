@@ -57,7 +57,7 @@ function ToastCard({ toast, dismiss }: { toast: ToastItem; dismiss: (id: number)
         </div>
       </div>
       <button
-        aria-label="关闭通知"
+        aria-label="通知を閉じる"
         className="absolute top-3 right-3 grid size-7 place-items-center rounded-full text-stone-400 hover:bg-stone-100 hover:text-stone-950 dark:hover:bg-stone-800 dark:hover:text-white"
         onClick={() => dismiss(toast.id)}
         type="button"

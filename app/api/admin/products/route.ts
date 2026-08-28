@@ -17,7 +17,12 @@ export async function GET(request: NextRequest) {
     Object.fromEntries(request.nextUrl.searchParams.entries()),
   );
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "查询参数无效。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "検索条件が正しくありません。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
   try {
     return apiSuccess({ ...(await listAdminProducts(parsed.data)), filters: parsed.data });

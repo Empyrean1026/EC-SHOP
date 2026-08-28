@@ -8,17 +8,18 @@ export default function ProductsError({ reset }: { reset: () => void }) {
           Catalog unavailable
         </p>
         <h1 className="mt-5 text-4xl font-semibold tracking-[-0.04em] text-stone-950">
-          暂时无法加载商品
+          商品を読み込めません
         </h1>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          请确认 MongoDB 已启动并稍后重试。错误详情不会暴露给浏览器。
+          MongoDB
+          が起動していることを確認し、しばらくしてからお試しください。エラーの詳細は画面には表示されません。
         </p>
         <button
           className="mt-7 rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
           type="button"
           onClick={reset}
         >
-          重新加载
+          再読み込み
         </button>
       </div>
     </section>

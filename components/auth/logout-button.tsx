@@ -34,11 +34,11 @@ export function LogoutButton() {
         onClick={logout}
         disabled={pending}
       >
-        {pending ? "正在退出…" : "退出登录"}
+        {pending ? "ログアウトしています…" : "ログアウト"}
       </button>
       {failed ? (
         <p className="mt-3 text-xs text-red-700" role="alert">
-          退出失败，请刷新页面后重试。
+          ログアウトできませんでした。ページを再読み込みしてお試しください。
         </p>
       ) : null}
     </div>

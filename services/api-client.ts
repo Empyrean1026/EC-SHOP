@@ -8,7 +8,7 @@ function fallbackError(message: string, code = "REQUEST_FAILED"): ApiError {
 
 export async function parseApiResponse<T>(
   response: Response,
-  fallbackMessage = "请求失败，请稍后重试。",
+  fallbackMessage = "リクエストに失敗しました。しばらくしてからお試しください。",
 ): Promise<ApiClientResult<T>> {
   let body: ApiResponse<T>;
 

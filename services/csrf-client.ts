@@ -9,7 +9,7 @@ export async function requestCsrfToken(): Promise<string> {
   const body = (await response.json()) as ApiResponse<{ csrfToken: string }>;
 
   if (!response.ok || !body.success) {
-    throw new Error("无法初始化安全会话，请刷新页面后重试。");
+    throw new Error("安全なセッションを開始できません。ページを再読み込みしてお試しください。");
   }
 
   return body.data.csrfToken;

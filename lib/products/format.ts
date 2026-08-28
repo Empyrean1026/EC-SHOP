@@ -4,22 +4,24 @@ export function formatProductPrice(price: number, currency: CurrencyCode): strin
   const fractionDigits = currency === "jpy" ? 0 : 2;
   const amount = currency === "jpy" ? price : price / 100;
 
-  return new Intl.NumberFormat("zh-CN", {
+  const formatted = new Intl.NumberFormat("ja-JP", {
     style: "currency",
     currency: currency.toUpperCase(),
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   }).format(amount);
+
+  return currency === "jpy" ? formatted.replace("￥", "¥") : formatted;
 }
 
 export function getStockLabel(stock: number): string {
   if (stock === 0) {
-    return "暂时缺货";
+    return "在庫切れ";
   }
 
   if (stock <= 5) {
-    return `仅剩 ${stock} 件`;
+    return `残り${stock} 点`;
   }
 
-  return "现货供应";
+  return "在庫あり";
 }

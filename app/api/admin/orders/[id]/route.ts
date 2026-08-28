@@ -16,10 +16,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     return apiError(authentication.code, authentication.message, authentication.status);
   }
   const orderId = productIdSchema.safeParse((await context.params).id);
-  if (!orderId.success) return apiError("INVALID_ORDER_ID", "订单 ID 格式无效。", 400);
+  if (!orderId.success)
+    return apiError("INVALID_ORDER_ID", "注文IDの形式が正しくありません。", 400);
   try {
     const order = await getAdminOrder(orderId.data);
-    return order ? apiSuccess({ order }) : apiError("ORDER_NOT_FOUND", "订单不存在。", 404);
+    return order
+      ? apiSuccess({ order })
+      : apiError("ORDER_NOT_FOUND", "注文が見つかりません。", 404);
   } catch (error) {
     return adminServiceErrorResponse(error, "Unable to load order");
   }
@@ -29,12 +32,18 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
   const authorizationError = await authorizeAdminMutation(request);
   if (authorizationError) return authorizationError;
   const orderId = productIdSchema.safeParse((await context.params).id);
-  if (!orderId.success) return apiError("INVALID_ORDER_ID", "订单 ID 格式无效。", 400);
+  if (!orderId.success)
+    return apiError("INVALID_ORDER_ID", "注文IDの形式が正しくありません。", 400);
   const body = await readJsonBody(request);
   if (!body.success) return apiError(body.code, body.message, body.status);
   const parsed = updateAdminOrderStatusSchema.safeParse(body.data);
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "订单状态无效。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "注文状況が正しくありません。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
   try {
     return apiSuccess({

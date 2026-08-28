@@ -5,8 +5,8 @@ import { getCurrentUser } from "@/lib/auth/dal";
 import { getCheckoutPageData } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
-  title: "结算",
-  description: "确认商品、配送地址和支付方式并创建订单。",
+  title: "購入手続き",
+  description: "商品、お届け先、お支払い方法を確認して注文を確定します。",
 };
 
 export default async function CheckoutPage() {
@@ -23,10 +23,10 @@ export default async function CheckoutPage() {
             Phase 07 / Checkout
           </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
-            确认并创建订单
+            ご注文内容の確認
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600">
-            地址和支付方式由你确认；商品、库存与金额将在服务端重新计算。
+            お届け先とお支払い方法をご確認ください。商品、在庫、金額はサーバー側で再計算します。
           </p>
         </div>
 

@@ -24,7 +24,9 @@ export function ProductCard({ product, initialWishlisted = false }: ProductCardP
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center justify-between gap-3 text-[10px] font-semibold tracking-[0.14em] uppercase">
-          <span className="truncate text-orange-600">{product.category?.name ?? "未分类"}</span>
+          <span className="truncate text-orange-600">
+            {product.category?.name ?? "カテゴリーなし"}
+          </span>
           <span className={product.stock > 0 ? "text-emerald-700" : "text-stone-400"}>
             {getStockLabel(product.stock)}
           </span>
@@ -42,7 +44,7 @@ export function ProductCard({ product, initialWishlisted = false }: ProductCardP
             {formatProductPrice(product.price, product.currency)}
           </p>
           <p className="text-xs text-stone-400">
-            {product.rating > 0 ? `${product.rating.toFixed(1)} ★` : "暂无评分"} · 已售{" "}
+            {product.rating > 0 ? `${product.rating.toFixed(1)} ★` : "レビューなし"} · 販売数{" "}
             {product.salesCount}
           </p>
         </div>

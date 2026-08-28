@@ -1,21 +1,21 @@
 import { ORDER_STATUSES, type OrderStatus, type PaymentStatus } from "@/models/constants";
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: "待处理",
-  paid: "已付款",
-  processing: "处理中",
-  shipped: "已发货",
-  completed: "已完成",
-  cancelled: "已取消",
+  pending: "注文受付",
+  paid: "支払い済み",
+  processing: "発送準備中",
+  shipped: "発送済み",
+  completed: "配送完了",
+  cancelled: "キャンセル済み",
 };
 
 export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  pending: "待支付",
-  processing: "支付处理中",
-  paid: "已支付",
-  failed: "支付失败",
-  partially_refunded: "部分退款",
-  refunded: "已退款",
+  pending: "未払い",
+  processing: "支払い処理中",
+  paid: "支払い済み",
+  failed: "支払い失敗",
+  partially_refunded: "一部返金",
+  refunded: "返金済み",
 };
 
 export const ORDER_PROGRESS_STATUSES: Exclude<OrderStatus, "cancelled">[] = [

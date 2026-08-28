@@ -218,7 +218,7 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
             setFocused(true);
           }}
           onKeyDown={handleKeyDown}
-          placeholder="搜索商品名称、描述或分类"
+          placeholder="商品名・説明・カテゴリーから検索"
           role="combobox"
           type="search"
           value={value}
@@ -229,7 +229,7 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
           }`}
           type="submit"
         >
-          搜索
+          検索
         </button>
       </div>
 
@@ -239,7 +239,7 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
             <>
               <div className="flex items-center justify-between border-b border-stone-100 px-4 py-3">
                 <p className="text-[10px] font-semibold tracking-[0.15em] text-stone-500 uppercase">
-                  搜索历史
+                  検索履歴
                 </p>
                 <button
                   className="text-xs text-stone-400 transition hover:text-orange-600"
@@ -247,7 +247,7 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
                   onClick={clearHistory}
                   type="button"
                 >
-                  清空
+                  クリア
                 </button>
               </div>
             </>
@@ -297,8 +297,8 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
                         {suggestion.name}
                       </span>
                       <span className="mt-0.5 block text-[11px] text-stone-400">
-                        {suggestion.categoryName ?? "未分类"} ·{" "}
-                        {suggestion.stock > 0 ? "有库存" : "缺货"}
+                        {suggestion.categoryName ?? "カテゴリーなし"} ·{" "}
+                        {suggestion.stock > 0 ? "在庫あり" : "在庫切れ"}
                       </span>
                     </span>
                     <span className="shrink-0 text-xs font-semibold text-stone-600">
@@ -311,17 +311,17 @@ export function SearchBox({ initialValue = "", prominent = false }: SearchBoxPro
 
           {showSuggestions && (status === "pending" || status === "loading") ? (
             <p className="px-4 py-5 text-center text-xs text-stone-400" role="status">
-              正在查找建议…
+              候補を検索しています…
             </p>
           ) : null}
           {showSuggestions && status === "success" && suggestions.length === 0 ? (
             <p className="px-4 py-5 text-center text-xs text-stone-400" role="status">
-              暂无建议，按 Enter 查看完整搜索结果
+              候補がありません。Enter キーで検索結果を表示できます
             </p>
           ) : null}
           {showSuggestions && status === "error" ? (
             <p className="px-4 py-5 text-center text-xs text-red-600" role="status">
-              搜索建议暂时不可用，仍可按 Enter 搜索
+              検索候補を取得できません。Enter キーで検索できます
             </p>
           ) : null}
         </div>

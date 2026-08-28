@@ -45,8 +45,10 @@ export function OrderProgress({ status }: { status: OrderStatus }) {
   if (status === "cancelled") {
     return (
       <div className="rounded-2xl bg-stone-100 p-5">
-        <p className="text-sm font-semibold text-stone-800">订单已取消</p>
-        <p className="mt-1 text-xs leading-5 text-stone-500">该订单不会继续进入配送流程。</p>
+        <p className="text-sm font-semibold text-stone-800">注文はキャンセルされました</p>
+        <p className="mt-1 text-xs leading-5 text-stone-500">
+          この注文の配送手続きは行われません。
+        </p>
       </div>
     );
   }
@@ -54,7 +56,7 @@ export function OrderProgress({ status }: { status: OrderStatus }) {
   const currentIndex = ORDER_PROGRESS_STATUSES.indexOf(status);
 
   return (
-    <ol className="grid grid-cols-5 gap-1" aria-label="订单配送进度">
+    <ol className="grid grid-cols-5 gap-1" aria-label="注文の配送状況">
       {ORDER_PROGRESS_STATUSES.map((step, index) => {
         const active = index <= currentIndex;
         const current = index === currentIndex;

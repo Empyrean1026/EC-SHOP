@@ -7,7 +7,7 @@ import {
   PRODUCT_SORT_VALUES,
 } from "@/lib/products/constants";
 
-const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "分类 ID 格式无效");
+const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "カテゴリーIDの形式が正しくありません");
 const emptyToUndefined = (value: unknown) =>
   typeof value === "string" && value.trim() === "" ? undefined : value;
 const optionalText = (maximum: number) =>
@@ -18,7 +18,10 @@ const imageUrlSchema = z
   .string()
   .trim()
   .max(2048)
-  .refine(isHttpOrPublicAssetUrl, "图片地址必须使用 HTTP、HTTPS 或安全的站内资源路径");
+  .refine(
+    isHttpOrPublicAssetUrl,
+    "画像URLには HTTP、HTTPS、または安全なサイト内パスを使用してください",
+  );
 
 export const productListQuerySchema = z
   .object({
@@ -48,21 +51,21 @@ export const productListQuerySchema = z
       value.maxPrice === undefined ||
       value.minPrice <= value.maxPrice,
     {
-      message: "最低价格不能高于最高价格",
+      message: "最低価格は最高価格以下にしてください",
       path: ["minPrice"],
     },
   );
 
 const productFields = {
-  name: z.string().trim().min(2, "商品名称至少需要 2 个字符").max(200),
+  name: z.string().trim().min(2, "商品名は2文字以上で入力してください").max(200),
   slug: z
     .string()
     .trim()
     .toLowerCase()
-    .min(2, "Slug 至少需要 2 个字符")
+    .min(2, "Slug は2文字以上で入力してください")
     .max(220)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能包含小写字母、数字和连字符"),
-  description: z.string().trim().min(10, "商品描述至少需要 10 个字符").max(10_000),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug には英小文字、数字、ハイフンのみ使用できます"),
+  description: z.string().trim().min(10, "商品説明は10文字以上で入力してください").max(10_000),
   price: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
   currency: z.enum(CURRENCY_CODES).default("jpy"),
   categoryId: objectIdSchema,
@@ -87,17 +90,17 @@ export const updateProductSchema = z
   })
   .strict()
   .refine((value) => Object.keys(value).length > 0, {
-    message: "至少需要提供一个待更新字段",
+    message: "更新する項目を1つ以上指定してください",
   });
 
-export const productIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "商品 ID 格式无效");
+export const productIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "商品IDの形式が正しくありません");
 export const productIdentifierSchema = z.union([
   productIdSchema,
   z
     .string()
     .min(2)
     .max(220)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "商品标识格式无效"),
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "商品識別子の形式が正しくありません"),
 ]);
 
 export type ProductListQuery = z.infer<typeof productListQuerySchema>;

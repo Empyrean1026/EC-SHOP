@@ -11,7 +11,7 @@ export function CartBadge() {
     <Link
       className="relative grid size-9 place-items-center rounded-full border border-stone-300 bg-white text-stone-700 transition hover:border-stone-950 hover:text-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
       href="/cart"
-      aria-label={`购物车，${hydrated ? quantity : 0} 件商品`}
+      aria-label={`カート、${hydrated ? quantity : 0}点の商品`}
     >
       <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24">
         <path

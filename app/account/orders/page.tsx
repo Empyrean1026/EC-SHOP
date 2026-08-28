@@ -12,8 +12,8 @@ import { ORDER_STATUSES, PAYMENT_STATUSES } from "@/models/constants";
 import { listUserOrders } from "@/services/order-service";
 
 export const metadata: Metadata = {
-  title: "我的订单",
-  description: "查看订单历史、付款状态与配送进度。",
+  title: "注文履歴",
+  description: "注文履歴、お支払い状況、配送状況を確認します。",
 };
 
 export const dynamic = "force-dynamic";
@@ -43,14 +43,14 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
               Phase 09 / Order history
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950 sm:text-5xl">
-              我的订单
+              注文履歴
             </h1>
             <p className="mt-3 text-sm text-stone-500">
-              查看付款结果与配送状态，共 {result.pagination.total} 张订单。
+              お支払いと配送の状況を確認できます。全{result.pagination.total}件の注文があります。
             </p>
           </div>
           <Link className="text-sm font-semibold text-stone-700 underline" href="/account">
-            返回用户中心
+            マイページに戻る
           </Link>
         </div>
 
@@ -59,13 +59,13 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
           method="get"
         >
           <label className="text-xs font-semibold text-stone-600">
-            订单状态
+            注文状況
             <select
               className="mt-2 h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-sm text-stone-900"
               defaultValue={query.status ?? ""}
               name="status"
             >
-              <option value="">全部状态</option>
+              <option value="">すべてのステータス</option>
               {ORDER_STATUSES.map((status) => (
                 <option key={status} value={status}>
                   {ORDER_STATUS_LABELS[status]}
@@ -74,13 +74,13 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
             </select>
           </label>
           <label className="text-xs font-semibold text-stone-600">
-            支付状态
+            お支払い状況
             <select
               className="mt-2 h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-sm text-stone-900"
               defaultValue={query.paymentStatus ?? ""}
               name="paymentStatus"
             >
-              <option value="">全部支付状态</option>
+              <option value="">すべてのお支払い状況</option>
               {PAYMENT_STATUSES.map((status) => (
                 <option key={status} value={status}>
                   {PAYMENT_STATUS_LABELS[status]}
@@ -89,14 +89,14 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
             </select>
           </label>
           <label className="text-xs font-semibold text-stone-600">
-            排序
+            並び順
             <select
               className="mt-2 h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-sm text-stone-900"
               defaultValue={query.sort}
               name="sort"
             >
-              <option value="newest">最新订单</option>
-              <option value="oldest">最早订单</option>
+              <option value="newest">注文日の新しい順</option>
+              <option value="oldest">注文日の古い順</option>
             </select>
           </label>
           <div className="flex items-end gap-2">
@@ -104,20 +104,20 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
               className="h-11 flex-1 rounded-full bg-stone-950 px-4 text-xs font-semibold text-white hover:bg-orange-600"
               type="submit"
             >
-              应用筛选
+              絞り込む
             </button>
             <Link
               className="grid h-11 place-items-center rounded-full border border-stone-300 px-4 text-xs font-semibold text-stone-700"
               href="/account/orders"
             >
-              清除
+              クリア
             </Link>
           </div>
         </form>
 
         {!parsed.success ? (
           <p className="mt-5 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-            部分订单查询参数无效，已恢复默认条件。
+            一部の検索条件が正しくないため、既定の条件に戻しました。
           </p>
         ) : null}
 
@@ -130,9 +130,9 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
               >
                 <div className="flex flex-col justify-between gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center">
                   <div>
-                    <p className="text-xs break-all text-stone-500">订单号 {order.id}</p>
+                    <p className="text-xs break-all text-stone-500">注文番号 {order.id}</p>
                     <p className="mt-2 text-xs text-stone-400">
-                      {new Intl.DateTimeFormat("zh-CN", {
+                      {new Intl.DateTimeFormat("ja-JP", {
                         dateStyle: "medium",
                         timeStyle: "short",
                       }).format(new Date(order.createdAt))}
@@ -161,7 +161,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                         {order.items.map((item) => item.name).join("、")}
                       </p>
                       <p className="mt-1 text-xs text-stone-500">
-                        {order.itemCount} 种商品 · 共 {order.totalQuantity} 件
+                        {order.itemCount} 種類 · 合計 {order.totalQuantity} 点
                       </p>
                     </div>
                   </div>
@@ -173,7 +173,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
                       className="mt-2 inline-flex h-9 items-center rounded-full border border-stone-300 px-4 text-xs font-semibold text-stone-800 hover:border-stone-950"
                       href={`/account/orders/${order.id}`}
                     >
-                      查看详情
+                      詳細を見る
                     </Link>
                   </div>
                 </div>
@@ -184,11 +184,11 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
           <div className="mt-7">
             <EmptyState
               actionHref="/products"
-              actionLabel="浏览商品"
-              description="可以清除筛选，或先去商品目录完成一次购物。"
+              actionLabel="商品を見る"
+              description="絞り込みを解除するか、商品一覧からお買い物をお楽しみください。"
               eyebrow="No orders"
               icon="□"
-              title="没有符合条件的订单"
+              title="条件に一致する注文はありません"
             />
           </div>
         )}

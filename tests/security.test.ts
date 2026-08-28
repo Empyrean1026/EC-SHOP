@@ -128,7 +128,7 @@ test("React text rendering escapes markup and URL validation blocks script proto
   const markup = renderToStaticMarkup(createElement("p", null, '<script>alert("xss")</script>'));
   assert.equal(markup, "<p>&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;</p>");
   assert.equal(
-    updateProfileSchema.safeParse({ name: "安全用户", avatar: "javascript:alert(1)" }).success,
+    updateProfileSchema.safeParse({ name: "安全ユーザー", avatar: "javascript:alert(1)" }).success,
     false,
   );
 });

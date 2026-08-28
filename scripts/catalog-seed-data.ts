@@ -1,16 +1,37 @@
 export const categorySeeds = [
-  { name: "家居生活", slug: "home-living", description: "为日常空间选择克制而耐用的物件。" },
-  { name: "数码设备", slug: "electronics", description: "兼顾效率、触感与长期使用体验。" },
-  { name: "户外出行", slug: "outdoors", description: "轻量、可靠，适合城市与短途户外。" },
-  { name: "文具办公", slug: "stationery", description: "让书写与桌面工作更专注。" },
-  { name: "运动健身", slug: "sports-fitness", description: "适合居家训练、拉伸和日常体能练习。" },
+  {
+    name: "ホーム・生活雑貨",
+    slug: "home-living",
+    description: "毎日の暮らしに馴染む、シンプルで長く使えるアイテムを揃えました。",
+  },
+  {
+    name: "デジタル・家電",
+    slug: "electronics",
+    description: "使いやすさと心地よい操作感、長く使える品質を大切にしたアイテムです。",
+  },
+  {
+    name: "アウトドア",
+    slug: "outdoors",
+    description: "軽量で扱いやすく、街歩きや日帰りのアウトドアに適したアイテムです。",
+  },
+  {
+    name: "文具・オフィス",
+    slug: "stationery",
+    description: "筆記やデスクワークに集中しやすい環境を整えます。",
+  },
+  {
+    name: "スポーツ・フィットネス",
+    slug: "sports-fitness",
+    description: "自宅でのトレーニングやストレッチ、日々の体力づくりに適しています。",
+  },
 ] as const;
 
 export const productSeeds = [
   {
-    name: "岩石台灯",
+    name: "ストーンテーブルランプ",
     slug: "stone-table-lamp",
-    description: "天然石材质感与柔和漫射光结合，为阅读角落提供安静而温暖的照明。",
+    description:
+      "天然石のような質感と柔らかな拡散光で、読書スペースを穏やかに照らすテーブルランプです。",
     price: 21500,
     categorySlug: "home-living",
     stock: 8,
@@ -19,9 +40,10 @@ export const productSeeds = [
     salesCount: 158,
   },
   {
-    name: "亚麻靠垫",
+    name: "リネンクッション",
     slug: "linen-cushion",
-    description: "高密度亚麻外层搭配弹性填充，适合沙发、座椅和卧室的日常使用。",
+    description:
+      "高密度のリネン生地と弾力のある中材を組み合わせ、ソファやチェア、寝室で使いやすいクッションです。",
     price: 6800,
     categorySlug: "home-living",
     stock: 3,
@@ -30,9 +52,10 @@ export const productSeeds = [
     salesCount: 96,
   },
   {
-    name: "录音室耳机",
+    name: "スタジオヘッドホン",
     slug: "studio-headphones",
-    description: "封闭式声学结构与轻量头梁设计，提供清晰监听和长时间佩戴舒适度。",
+    description:
+      "密閉型の音響設計と軽量ヘッドバンドにより、クリアなモニタリングと長時間でも快適な装着感を実現します。",
     price: 32900,
     categorySlug: "electronics",
     stock: 12,
@@ -41,9 +64,10 @@ export const productSeeds = [
     salesCount: 211,
   },
   {
-    name: "机械键盘",
+    name: "メカニカルキーボード",
     slug: "mechanical-keyboard",
-    description: "紧凑布局、热插拔轴体和低饱和配色，为桌面工作提供稳定输入体验。",
+    description:
+      "コンパクトな配列、ホットスワップ対応スイッチ、落ち着いた配色で、快適なタイピングを支えます。",
     price: 18900,
     categorySlug: "electronics",
     stock: 0,
@@ -52,9 +76,10 @@ export const productSeeds = [
     salesCount: 184,
   },
   {
-    name: "轻量随行水瓶",
+    name: "軽量ボトル",
     slug: "trail-bottle",
-    description: "耐用不锈钢瓶身配合防漏旋盖，适合通勤、徒步和日常补水。",
+    description:
+      "丈夫なステンレスボトルと漏れにくいスクリューキャップを採用し、通勤やハイキング、日常の水分補給に適しています。",
     price: 4200,
     categorySlug: "outdoors",
     stock: 24,
@@ -63,9 +88,10 @@ export const productSeeds = [
     salesCount: 302,
   },
   {
-    name: "折叠日用背包",
+    name: "折りたたみデイパック",
     slug: "packable-daypack",
-    description: "可折叠轻量面料与多层收纳结构，兼顾旅行备用和城市短途使用。",
+    description:
+      "折りたためる軽量素材と複数の収納スペースを備え、旅行の予備バッグや街歩きに便利です。",
     price: 12800,
     categorySlug: "outdoors",
     stock: 6,
@@ -74,9 +100,10 @@ export const productSeeds = [
     salesCount: 143,
   },
   {
-    name: "黄铜中性笔",
+    name: "真鍮ボールペン",
     slug: "brass-pen",
-    description: "实心黄铜笔身会随使用形成独特光泽，平衡重量带来稳定书写手感。",
+    description:
+      "無垢の真鍮軸は使うほどに風合いが増し、ほどよい重さで安定した書き心地を楽しめます。",
     price: 5600,
     categorySlug: "stationery",
     stock: 15,
@@ -85,9 +112,10 @@ export const productSeeds = [
     salesCount: 267,
   },
   {
-    name: "方格笔记本",
+    name: "方眼ノート",
     slug: "grid-notebook",
-    description: "柔和护眼纸张搭配浅色方格，适合记录、草图和日常项目规划。",
+    description:
+      "目にやさしい紙と淡い方眼罫を採用し、メモ、スケッチ、日々の計画に使いやすいノートです。",
     price: 1800,
     categorySlug: "stationery",
     stock: 42,
@@ -96,9 +124,10 @@ export const productSeeds = [
     salesCount: 389,
   },
   {
-    name: "真空不锈钢随行杯",
+    name: "真空ステンレスタンブラー",
     slug: "vacuum-stainless-tumbler",
-    description: "双层真空不锈钢杯体搭配防漏旋盖，适合通勤饮水与短途出行。",
+    description:
+      "二重真空構造のステンレス製で、漏れにくいスクリューキャップを採用。通勤や外出時の水分補給に便利です。",
     price: 3480,
     categorySlug: "outdoors",
     stock: 36,
@@ -108,9 +137,10 @@ export const productSeeds = [
     salesCount: 74,
   },
   {
-    name: "柔光阅读台灯",
+    name: "調光デスクライト",
     slug: "soft-reading-desk-lamp",
-    description: "可调角度灯臂与柔和扩散灯罩，为阅读、书写和夜间桌面工作提供均匀照明。",
+    description:
+      "角度を調整できるアームと柔らかな拡散シェードで、読書や筆記、夜間のデスクワークを均一に照らします。",
     price: 5980,
     categorySlug: "home-living",
     stock: 18,
@@ -120,9 +150,10 @@ export const productSeeds = [
     salesCount: 61,
   },
   {
-    name: "六角包胶哑铃",
+    name: "ラバーコーティング六角ダンベル",
     slug: "hex-coated-dumbbell",
-    description: "防滚六角造型配合缓冲包胶表面，适合居家力量训练与基础动作练习。",
+    description:
+      "転がりにくい六角形と床を傷つけにくいラバーコーティングで、自宅での筋力トレーニングに適しています。",
     price: 4500,
     categorySlug: "sports-fitness",
     stock: 20,
@@ -132,9 +163,10 @@ export const productSeeds = [
     salesCount: 92,
   },
   {
-    name: "缓冲瑜伽垫",
+    name: "クッションヨガマット",
     slug: "cushioned-yoga-mat",
-    description: "细密防滑纹理与适中缓冲厚度兼顾稳定和舒适，适合瑜伽、拉伸与核心训练。",
+    description:
+      "細かな滑り止め加工と適度なクッション性で、ヨガ、ストレッチ、体幹トレーニングを快適に行えます。",
     price: 3980,
     categorySlug: "sports-fitness",
     stock: 28,
@@ -144,9 +176,10 @@ export const productSeeds = [
     salesCount: 87,
   },
   {
-    name: "双层保温饭盒",
+    name: "二段保温ランチボックス",
     slug: "double-insulated-lunch-box",
-    description: "双层独立内胆与密封上盖便于分装主食和配菜，适合办公室午餐与日常携带。",
+    description:
+      "二段の独立容器と密閉ふたで主食とおかずを分けて収納でき、オフィスランチや日常の持ち運びに便利です。",
     price: 4200,
     categorySlug: "home-living",
     stock: 24,
@@ -156,9 +189,10 @@ export const productSeeds = [
     salesCount: 53,
   },
   {
-    name: "铝合金电脑支架",
+    name: "アルミ製ノートPCスタンド",
     slug: "aluminum-laptop-stand",
-    description: "开放式金属结构抬高屏幕并保留散热空间，折叠后便于收纳和携带。",
+    description:
+      "開放的なアルミ構造で画面の高さと放熱性を確保し、折りたたんで持ち運べるノートPCスタンドです。",
     price: 5200,
     categorySlug: "stationery",
     stock: 22,
@@ -168,9 +202,10 @@ export const productSeeds = [
     salesCount: 104,
   },
   {
-    name: "模块化桌面收纳盒",
+    name: "モジュール式デスクオーガナイザー",
     slug: "modular-desk-organizer",
-    description: "高低分区可整理笔具、便签和小型配件，圆角模块可自由组合桌面布局。",
+    description:
+      "高さの異なる収納部に筆記具や付箋、小物を整理でき、角の丸いモジュールを自由に組み合わせられます。",
     price: 2900,
     categorySlug: "stationery",
     stock: 40,
@@ -180,9 +215,10 @@ export const productSeeds = [
     salesCount: 68,
   },
   {
-    name: "静音无线鼠标",
+    name: "静音ワイヤレスマウス",
     slug: "silent-wireless-mouse",
-    description: "轻量对称轮廓配合低噪按键，适合办公室、共享空间和移动办公使用。",
+    description:
+      "軽量で左右対称の形状と静音ボタンを採用し、オフィスや共有スペース、外出先での作業に適しています。",
     price: 3600,
     categorySlug: "electronics",
     stock: 32,
@@ -192,9 +228,10 @@ export const productSeeds = [
     salesCount: 126,
   },
   {
-    name: "折叠便携风扇",
+    name: "折りたたみ携帯扇風機",
     slug: "folding-portable-fan",
-    description: "可折叠支架支持手持与桌面两种方式，多档风量适合通勤和小空间降温。",
+    description:
+      "折りたたみスタンドで手持ちと卓上の両方に対応。風量を切り替えられ、通勤時やデスク周りで便利です。",
     price: 2980,
     categorySlug: "electronics",
     stock: 45,
@@ -204,9 +241,10 @@ export const productSeeds = [
     salesCount: 83,
   },
   {
-    name: "五级阻力带套装",
+    name: "5段階トレーニングバンドセット",
     slug: "five-level-resistance-bands",
-    description: "五种阻力等级便于循序增加训练强度，适合热身、拉伸和居家全身训练。",
+    description:
+      "5段階の負荷レベルで強度を調整でき、ウォームアップ、ストレッチ、自宅での全身トレーニングに適しています。",
     price: 2600,
     categorySlug: "sports-fitness",
     stock: 50,

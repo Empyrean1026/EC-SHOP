@@ -25,8 +25,8 @@ function mutationHeaders(csrfToken: string): Record<string, string> {
   };
 }
 
-test("核心 API 从注册、购物车到订单形成完整闭环", async ({ request }) => {
-  await test.step("商品列表和详情可读取", async () => {
+test("主要APIで新規登録からカート、注文までの一連の処理が完了する", async ({ request }) => {
+  await test.step("商品一覧と商品詳細を取得できる", async () => {
     const listResponse = await request.get("/api/products?category=e2e-products&limit=10");
     expect(listResponse.status()).toBe(200);
     const list = await listResponse.json();
@@ -37,10 +37,10 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     const detailResponse = await request.get(`/api/products/${PRODUCT_ID}`);
     expect(detailResponse.status()).toBe(200);
     const detail = await detailResponse.json();
-    expect(detail.data.product).toMatchObject({ id: PRODUCT_ID, name: "E2E 测试商品" });
+    expect(detail.data.product).toMatchObject({ id: PRODUCT_ID, name: "E2Eテスト商品" });
   });
 
-  await test.step("未登录用户不能创建商品", async () => {
+  await test.step("未ログインのユーザーは商品を登録できない", async () => {
     const anonymous = await playwrightRequest.newContext({ baseURL: ORIGIN });
     try {
       const response = await anonymous.post("/api/products", { data: {} });
@@ -54,12 +54,12 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     }
   });
 
-  await test.step("注册、错误密码和正确登录", async () => {
+  await test.step("新規登録、誤ったパスワード、正しいログインを検証する", async () => {
     let csrfToken = await getCsrfToken(request);
     const registration = await request.post("/api/auth/register", {
       headers: mutationHeaders(csrfToken),
       data: {
-        name: "API 测试用户",
+        name: "APIテストユーザー",
         email: "api.e2e@example.com",
         password: "TestPass123",
         confirmPassword: "TestPass123",
@@ -91,7 +91,7 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     });
   });
 
-  await test.step("购物车按服务端价格和库存计算", async () => {
+  await test.step("カートをサーバー側の価格と在庫で計算する", async () => {
     const csrfToken = await getCsrfToken(request);
     const added = await request.post("/api/cart/items", {
       headers: mutationHeaders(csrfToken),
@@ -114,13 +114,13 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
   });
 
   let orderId = "";
-  await test.step("结算创建订单并清空购物车", async () => {
+  await test.step("購入手続きで注文を作成しカートを空にする", async () => {
     const csrfToken = await getCsrfToken(request);
     const checkout = await request.post("/api/orders", {
       headers: mutationHeaders(csrfToken),
       data: {
         shippingAddress: {
-          fullName: "API 测试用户",
+          fullName: "APIテストユーザー",
           phone: "+81 90 1234 5678",
           line1: "1-2-3 Test",
           line2: "",
@@ -156,7 +156,7 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     });
   });
 
-  await test.step("订单历史与详情一致", async () => {
+  await test.step("注文履歴と注文詳細が一致する", async () => {
     const history = await request.get("/api/orders");
     expect(history.status()).toBe(200);
     const historyBody = await history.json();
@@ -171,7 +171,7 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     });
   });
 
-  await test.step("支付接口拒绝非 Stripe 订单", async () => {
+  await test.step("支払いAPIがStripe以外の注文を拒否する", async () => {
     const csrfToken = await getCsrfToken(request);
     const response = await request.post(`/api/orders/${orderId}/payment-intent`, {
       headers: mutationHeaders(csrfToken),
@@ -183,7 +183,7 @@ test("核心 API 从注册、购物车到订单形成完整闭环", async ({ req
     });
   });
 
-  await test.step("Stripe Webhook 必须通过签名验证", async () => {
+  await test.step("Stripe Webhookで署名検証を必須とする", async () => {
     const response = await request.post("/api/webhooks/stripe", {
       headers: { "Content-Type": "application/json", "stripe-signature": "invalid" },
       data: {},

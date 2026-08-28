@@ -24,7 +24,7 @@ const CURRENCY_LABELS: Record<CurrencyCode, string> = {
 
 function compactAmount(value: number, currency: CurrencyCode): string {
   const amount = currency === "jpy" ? value : value / 100;
-  return new Intl.NumberFormat("zh-CN", {
+  return new Intl.NumberFormat("ja-JP", {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(amount);
@@ -54,7 +54,7 @@ function SalesLineChart({
   if (!hasRevenue) {
     return (
       <div className="flex h-72 items-center justify-center rounded-2xl bg-stone-50 px-6 text-center text-sm text-stone-500">
-        当前时段没有 {CURRENCY_LABELS[currency]} 已付款销售记录。
+        この期間には {CURRENCY_LABELS[currency]} 支払い済みの売上データがありません。
       </div>
     );
   }
@@ -63,7 +63,7 @@ function SalesLineChart({
     <div
       className="h-72 w-full"
       role="img"
-      aria-label={`${CURRENCY_LABELS[currency]} 销售额趋势图`}
+      aria-label={`${CURRENCY_LABELS[currency]} 売上推移グラフ`}
     >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
@@ -93,9 +93,9 @@ function SalesLineChart({
               borderRadius: 16,
               boxShadow: "0 12px 30px rgb(28 25 23 / 0.1)",
             }}
-            formatter={(value) => [formatProductPrice(Number(value), currency), "已确认销售额"]}
+            formatter={(value) => [formatProductPrice(Number(value), currency), "確定売上"]}
             labelFormatter={(label, payload) =>
-              `${String(label)} · ${Number(payload[0]?.payload?.orderCount ?? 0)} 张订单`
+              `${String(label)} · ${Number(payload[0]?.payload?.orderCount ?? 0)} 件の注文`
             }
           />
           <Line
@@ -133,13 +133,13 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
             Sales analytics
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-stone-950">
-            销售趋势
+            売上推移
           </h2>
-          <p className="mt-2 text-sm text-stone-500">付款确认日 · {analytics.timezone}</p>
+          <p className="mt-2 text-sm text-stone-500">支払い確認日 · {analytics.timezone}</p>
         </div>
         <div
           className="inline-flex w-fit rounded-full border border-stone-200 bg-white p-1"
-          aria-label="图表币种"
+          aria-label="表示通貨"
         >
           {CURRENCY_CODES.map((code) => (
             <button
@@ -161,20 +161,16 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
 
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
         <article className="rounded-3xl border border-stone-200 bg-white p-5 sm:p-7">
-          <h3 className="text-lg font-semibold text-stone-950">每日销售额</h3>
-          <p className="mt-1 text-xs text-stone-500">
-            最近 30 个日历日 · {CURRENCY_LABELS[currency]}
-          </p>
+          <h3 className="text-lg font-semibold text-stone-950">日次売上</h3>
+          <p className="mt-1 text-xs text-stone-500">直近30日間 · {CURRENCY_LABELS[currency]}</p>
           <div className="mt-5">
             <SalesLineChart currency={currency} interval={4} points={analytics.dailySales} />
           </div>
         </article>
 
         <article className="rounded-3xl border border-stone-200 bg-white p-5 sm:p-7">
-          <h3 className="text-lg font-semibold text-stone-950">每月销售额</h3>
-          <p className="mt-1 text-xs text-stone-500">
-            最近 12 个日历月 · {CURRENCY_LABELS[currency]}
-          </p>
+          <h3 className="text-lg font-semibold text-stone-950">月次売上</h3>
+          <p className="mt-1 text-xs text-stone-500">直近12か月 · {CURRENCY_LABELS[currency]}</p>
           <div className="mt-5">
             <SalesLineChart currency={currency} interval={1} points={analytics.monthlySales} />
           </div>
@@ -184,19 +180,25 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
       <article className="mt-4 rounded-3xl border border-stone-200 bg-white p-5 sm:p-7">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
           <div>
-            <h3 className="text-lg font-semibold text-stone-950">热销商品</h3>
-            <p className="mt-1 text-xs text-stone-500">全部已付款订单 · 按售出件数排名 · Top 5</p>
+            <h3 className="text-lg font-semibold text-stone-950">人気商品</h3>
+            <p className="mt-1 text-xs text-stone-500">
+              すべての支払い済み注文 · 販売点数順 · Top 5
+            </p>
           </div>
-          <p className="text-xs text-stone-500">金额列：{CURRENCY_LABELS[currency]}</p>
+          <p className="text-xs text-stone-500">金額：{CURRENCY_LABELS[currency]}</p>
         </div>
 
         {topProductData.length === 0 ? (
           <div className="mt-5 flex h-56 items-center justify-center rounded-2xl bg-stone-50 px-6 text-center text-sm text-stone-500">
-            暂无已付款商品数据，完成测试付款后会自动出现排名。
+            支払い済みの商品データはまだありません。テスト決済完了後にランキングが表示されます。
           </div>
         ) : (
           <>
-            <div className="mt-5 h-72 w-full" role="img" aria-label="热销商品售出件数条形图">
+            <div
+              className="mt-5 h-72 w-full"
+              role="img"
+              aria-label="人気商品の販売点数を示す棒グラフ"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={topProductData}
@@ -227,7 +229,7 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
                       borderRadius: 16,
                       boxShadow: "0 12px 30px rgb(28 25 23 / 0.1)",
                     }}
-                    formatter={(value) => [`${Number(value)} 件`, "售出数量"]}
+                    formatter={(value) => [`${Number(value)} 点`, "販売点数"]}
                   />
                   <Bar dataKey="quantity" fill="#65734b" maxBarSize={32} radius={[0, 8, 8, 0]} />
                 </BarChart>
@@ -238,11 +240,11 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
               <table className="w-full min-w-[36rem] text-left text-sm">
                 <thead className="text-xs text-stone-500">
                   <tr className="border-b border-stone-200">
-                    <th className="pb-3 font-medium">排名</th>
+                    <th className="pb-3 font-medium">順位</th>
                     <th className="pb-3 font-medium">商品</th>
-                    <th className="pb-3 text-right font-medium">售出</th>
-                    <th className="pb-3 text-right font-medium">订单</th>
-                    <th className="pb-3 text-right font-medium">已确认销售额</th>
+                    <th className="pb-3 text-right font-medium">販売点数</th>
+                    <th className="pb-3 text-right font-medium">注文</th>
+                    <th className="pb-3 text-right font-medium">確定売上</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -250,8 +252,8 @@ export function SalesAnalyticsCharts({ analytics }: { analytics: SalesAnalytics 
                     <tr className="border-b border-stone-100 last:border-0" key={product.productId}>
                       <td className="py-4 text-stone-400">{String(index + 1).padStart(2, "0")}</td>
                       <td className="py-4 font-medium text-stone-950">{product.name}</td>
-                      <td className="py-4 text-right text-stone-700">{product.quantity} 件</td>
-                      <td className="py-4 text-right text-stone-700">{product.orderCount} 张</td>
+                      <td className="py-4 text-right text-stone-700">{product.quantity} 点</td>
+                      <td className="py-4 text-right text-stone-700">{product.orderCount} 件</td>
                       <td className="py-4 text-right font-medium text-stone-950">
                         {formatProductPrice(product.revenue[currency], currency)}
                       </td>

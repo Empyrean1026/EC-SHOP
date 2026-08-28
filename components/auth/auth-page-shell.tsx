@@ -30,7 +30,7 @@ export function AuthPageShell({
               Secure commerce
             </p>
             <p className="mt-8 max-w-sm text-4xl leading-tight font-semibold tracking-[-0.04em]">
-              身份由服务端验证，凭据始终留在安全边界内。
+              本人確認はサーバー側で行い、認証情報は安全な領域で保護されます。
             </p>
           </div>
           <div className="grid gap-3 text-xs text-stone-400">

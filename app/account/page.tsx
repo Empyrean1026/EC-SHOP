@@ -5,8 +5,8 @@ import { requireUser } from "@/lib/auth/dal";
 import { getAccountDashboard, getAccountProfile } from "@/services/account-service";
 
 export const metadata: Metadata = {
-  title: "用户中心",
-  description: "管理个人资料、订单、地址与收藏夹。",
+  title: "マイページ",
+  description: "プロフィール、注文履歴、お届け先、お気に入りを管理します。",
 };
 
 export const dynamic = "force-dynamic";
@@ -15,18 +15,18 @@ const dashboardCards = [
   {
     href: "/account/orders",
     eyebrow: "Order history",
-    title: "我的订单",
-    description: "查看付款状态、商品明细和配送进度。",
+    title: "注文履歴",
+    description: "お支払い状況、商品明細、配送状況を確認します。",
     metric: "orderCount" as const,
-    unit: "张订单",
+    unit: "件の注文",
   },
   {
     href: "/account/wishlist",
     eyebrow: "Wishlist",
-    title: "我的收藏",
-    description: "保存感兴趣的商品，随时返回购买。",
+    title: "お気に入り",
+    description: "気になる商品を保存し、いつでも購入できます。",
     metric: "wishlistCount" as const,
-    unit: "件商品",
+    unit: "点の商品",
   },
 ];
 
@@ -48,7 +48,7 @@ export default async function AccountPage() {
               Phase 10 / User dashboard
             </p>
             <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
-              你好，{profile.name}
+              こんにちは、{profile.name}
             </h1>
             <p className="mt-3 text-sm text-stone-400">{profile.email}</p>
           </div>
@@ -85,7 +85,7 @@ export default async function AccountPage() {
               </div>
               <p className="mt-6 text-sm leading-6 text-stone-500">{card.description}</p>
               <p className="mt-5 text-xs font-semibold text-stone-950 group-hover:text-orange-600">
-                打开 →
+                開く →
               </p>
             </Link>
           ))}
@@ -99,9 +99,9 @@ export default async function AccountPage() {
             <p className="text-xs font-semibold tracking-[0.15em] text-stone-400 uppercase">
               Profile
             </p>
-            <h2 className="mt-3 text-xl font-semibold text-stone-950">个人资料</h2>
+            <h2 className="mt-3 text-xl font-semibold text-stone-950">プロフィール</h2>
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              更新姓名与头像，查看账户身份信息。
+              氏名とプロフィール画像を更新し、アカウント情報を確認します。
             </p>
           </Link>
           <Link
@@ -113,7 +113,7 @@ export default async function AccountPage() {
                 <p className="text-xs font-semibold tracking-[0.15em] text-stone-400 uppercase">
                   Address
                 </p>
-                <h2 className="mt-3 text-xl font-semibold text-stone-950">默认收货地址</h2>
+                <h2 className="mt-3 text-xl font-semibold text-stone-950">既定のお届け先</h2>
               </div>
               <span
                 className={`rounded-full px-3 py-1 text-[10px] font-semibold ${
@@ -122,11 +122,11 @@ export default async function AccountPage() {
                     : "bg-amber-100 text-amber-800"
                 }`}
               >
-                {dashboard.hasAddress ? "已设置" : "待完善"}
+                {dashboard.hasAddress ? "登録済み" : "未登録"}
               </span>
             </div>
             <p className="mt-3 text-sm leading-6 text-stone-500">
-              结算时可自动填入，也可以随时修改。
+              購入手続きで自動入力され、いつでも変更できます。
             </p>
           </Link>
         </div>
@@ -137,8 +137,10 @@ export default async function AccountPage() {
             href="/admin"
           >
             <p className="text-xs font-semibold tracking-[0.15em] uppercase">Administrator</p>
-            <h2 className="mt-3 text-xl font-semibold">进入管理员后台</h2>
-            <p className="mt-2 text-sm text-stone-600">管理商品、订单、库存和用户数据。</p>
+            <h2 className="mt-3 text-xl font-semibold">管理画面を開く</h2>
+            <p className="mt-2 text-sm text-stone-600">
+              商品、注文、在庫、ユーザー情報を管理します。
+            </p>
           </Link>
         ) : null}
       </div>

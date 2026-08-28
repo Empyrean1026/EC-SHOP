@@ -10,8 +10,8 @@ import { searchProducts } from "@/services/search-service";
 import type { SearchMode } from "@/types/search";
 
 export const metadata: Metadata = {
-  title: "商品搜索",
-  description: "搜索 EC Site 的商品名称与描述。",
+  title: "商品検索",
+  description: "EC Siteの商品名や説明文から検索できます。",
 };
 
 export const dynamic = "force-dynamic";
@@ -21,10 +21,10 @@ type SearchPageProps = {
 };
 
 const modeLabels: Record<SearchMode, string> = {
-  full_text: "全文索引",
-  substring: "精确片段",
-  fuzzy: "相似匹配",
-  none: "无匹配",
+  full_text: "全文検索",
+  substring: "部分一致",
+  fuzzy: "あいまい検索",
+  none: "該当なし",
 };
 
 function firstSearchParamValues(
@@ -54,7 +54,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               Phase 05 / Product search
             </p>
             <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
-              找到刚好的那一件
+              お探しの商品を見つける
             </h1>
           </div>
           <SearchBox key={query.q ?? "empty"} initialValue={query.q} prominent />
@@ -62,7 +62,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         {!parsed.success ? (
           <p className="mt-6 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-            搜索参数无效；关键词需为 2–100 个字符，已恢复默认状态。
+            検索条件が正しくありません。キーワードは2〜100文字で入力してください。既定の状態に戻しました。
           </p>
         ) : null}
 
@@ -70,13 +70,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <>
             <div className="mt-8 flex flex-col gap-5 rounded-3xl border border-stone-200 bg-white p-5 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-xs text-stone-500">“{query.q}” 的搜索结果</p>
+                <p className="text-xs text-stone-500">「{query.q}」の検索結果</p>
                 <p className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-stone-950">
-                  {result.pagination.total} 件商品
+                  {result.pagination.total}点の商品
                 </p>
                 <p className="mt-1 text-[11px] text-stone-400">
-                  检索方式：{modeLabels[result.mode]}
-                  {result.mode === "fuzzy" ? "（已自动容错）" : ""}
+                  検索方法：{modeLabels[result.mode]}
+                  {result.mode === "fuzzy" ? "（表記ゆれを補正）" : ""}
                 </p>
               </div>
 
@@ -84,13 +84,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <input name="q" type="hidden" value={query.q} />
                 {query.fuzzy ? null : <input name="fuzzy" type="hidden" value="false" />}
                 <label className="text-xs font-semibold text-stone-600">
-                  分类
+                  カテゴリー
                   <select
                     className="mt-2 h-10 w-full rounded-xl border border-stone-300 bg-white px-3 text-sm outline-none focus:border-stone-950"
                     defaultValue={query.category ?? ""}
                     name="category"
                   >
-                    <option value="">全部分类</option>
+                    <option value="">すべてのカテゴリー</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.slug}>
                         {category.name}
@@ -99,17 +99,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   </select>
                 </label>
                 <label className="text-xs font-semibold text-stone-600">
-                  排序
+                  並び順
                   <select
                     className="mt-2 h-10 w-full rounded-xl border border-stone-300 bg-white px-3 text-sm outline-none focus:border-stone-950"
                     defaultValue={query.sort}
                     name="sort"
                   >
-                    <option value="relevance">相关度</option>
-                    <option value="newest">最新上架</option>
-                    <option value="price_asc">价格从低到高</option>
-                    <option value="price_desc">价格从高到低</option>
-                    <option value="sales_desc">销量优先</option>
+                    <option value="relevance">関連度順</option>
+                    <option value="newest">新着順</option>
+                    <option value="price_asc">価格の安い順</option>
+                    <option value="price_desc">価格の高い順</option>
+                    <option value="sales_desc">売れ筋順</option>
                   </select>
                 </label>
                 <div className="flex items-end">
@@ -117,7 +117,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     className="h-10 w-full rounded-full bg-stone-950 px-5 text-xs font-semibold text-white transition hover:bg-orange-600"
                     type="submit"
                   >
-                    更新结果
+                    検索条件を更新
                   </button>
                 </div>
                 <label className="col-span-full flex items-center gap-2 text-xs text-stone-500">
@@ -128,7 +128,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     type="checkbox"
                     value="true"
                   />
-                  仅显示有库存商品
+                  在庫あり商品のみ表示
                 </label>
               </form>
             </div>
@@ -146,23 +146,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     No results
                   </p>
                   <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-                    没有找到“{query.q}”
+                    「{query.q}」に一致する商品はありません
                   </h2>
                   <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-500">
-                    试试更短的关键词、不同写法或清除分类与库存筛选。
+                    短いキーワードや別の表記を試すか、カテゴリーと在庫の絞り込みを解除してください。
                   </p>
                   <div className="mt-6 flex justify-center gap-3">
                     <Link
                       className="rounded-full bg-stone-950 px-5 py-2.5 text-xs font-semibold text-white hover:bg-orange-600"
                       href={buildSearchUrl(query, { category: null, inStock: null, page: 1 })}
                     >
-                      清除筛选
+                      絞り込みを解除
                     </Link>
                     <Link
                       className="rounded-full border border-stone-300 bg-white px-5 py-2.5 text-xs font-semibold text-stone-700 hover:border-stone-950"
                       href="/products"
                     >
-                      浏览全部商品
+                      すべての商品を見る
                     </Link>
                   </div>
                 </div>
@@ -178,10 +178,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 Search tips
               </p>
               <h2 className="mt-16 max-w-xl text-3xl font-semibold tracking-[-0.04em]">
-                输入至少两个字符，即可获得实时建议与拼写容错。
+                2文字以上入力すると、候補と表記ゆれを考慮した検索結果を表示します。
               </h2>
               <p className="mt-4 max-w-lg text-sm leading-7 text-stone-400">
-                你搜索过的关键词只保存在当前浏览器中，不会上传到服务器。
+                検索履歴はこのブラウザ内にのみ保存され、サーバーには送信されません。
               </p>
             </div>
             <div className="rounded-3xl bg-[#dfe5ce] p-7 dark:bg-[#20271d]">
@@ -189,7 +189,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 Try these
               </p>
               <div className="mt-10 flex flex-wrap gap-2">
-                {["台灯", "耳机", "键盘", "笔记本"].map((term) => (
+                {["デスクライト", "ヘッドホン", "キーボード", "ノート"].map((term) => (
                   <Link
                     className="rounded-full border border-stone-500/30 bg-white/60 px-4 py-2 text-xs font-semibold text-stone-800 transition hover:bg-white"
                     href={`/search?q=${encodeURIComponent(term)}`}

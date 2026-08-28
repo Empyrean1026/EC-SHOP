@@ -17,11 +17,14 @@ export function ProductDeleteButton({ productId }: { productId: string }) {
     const result = await deactivateAdminProduct(productId);
     setPending(false);
     if (!result.success) {
-      toast.error("商品下架失败", result.error.message);
+      toast.error("商品を販売停止にできません", result.error.message);
       return;
     }
     setOpen(false);
-    toast.success("商品已下架", "库存已设为 0，历史订单保持不变。");
+    toast.success(
+      "商品を販売停止にしました",
+      "在庫を0に変更しました。過去の注文内容は変更されません。",
+    );
     router.refresh();
   }
 
@@ -33,13 +36,13 @@ export function ProductDeleteButton({ productId }: { productId: string }) {
         onClick={() => setOpen(true)}
         type="button"
       >
-        下架
+        販売停止
       </button>
       <Modal
-        description="下架后库存会设为 0，商品不会出现在公开目录中；历史订单快照不会改变。"
+        description="販売停止後は在庫が0になり、商品一覧には表示されません。過去の注文内容は変更されません。"
         onClose={() => !pending && setOpen(false)}
         open={open}
-        title="确定下架该商品？"
+        title="この商品の販売を停止しますか？"
       >
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button
@@ -48,7 +51,7 @@ export function ProductDeleteButton({ productId }: { productId: string }) {
             onClick={() => setOpen(false)}
             type="button"
           >
-            取消
+            キャンセル
           </button>
           <button
             className="h-11 rounded-full bg-red-700 px-5 text-sm font-semibold text-white disabled:opacity-60"
@@ -56,7 +59,7 @@ export function ProductDeleteButton({ productId }: { productId: string }) {
             onClick={deactivate}
             type="button"
           >
-            {pending ? "正在下架…" : "确认下架"}
+            {pending ? "販売停止にしています…" : "販売を停止"}
           </button>
         </div>
       </Modal>

@@ -9,5 +9,5 @@ export default function AccountError({
   error: Error & { digest?: string };
   retry: () => void;
 }) {
-  return <RouteError error={error} retry={retry} scope="账户数据" />;
+  return <RouteError error={error} retry={retry} scope="アカウント情報" />;
 }

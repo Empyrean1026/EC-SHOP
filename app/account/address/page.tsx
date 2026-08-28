@@ -3,7 +3,10 @@ import { AddressForm } from "@/components/account/address-form";
 import { requireUser } from "@/lib/auth/dal";
 import { getAccountProfile } from "@/services/account-service";
 
-export const metadata: Metadata = { title: "地址管理", description: "管理结算默认收货地址。" };
+export const metadata: Metadata = {
+  title: "お届け先管理",
+  description: "購入手続きで使用する既定のお届け先を管理します。",
+};
 export const dynamic = "force-dynamic";
 
 export default async function AddressPage() {
@@ -18,10 +21,10 @@ export default async function AddressPage() {
           Account / Address
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950 sm:text-5xl">
-          地址管理
+          お届け先管理
         </h1>
         <p className="mt-3 text-sm leading-6 text-stone-500">
-          保存一条默认地址供结算预填；历史订单保留创建时的地址快照。
+          購入手続きで自動入力する既定のお届け先を保存できます。過去の注文には注文時の住所が保持されます。
         </p>
         <div className="mt-8 rounded-3xl border border-stone-200 bg-white p-6 sm:p-9">
           <AddressForm key={profile.updatedAt} address={profile.address} />

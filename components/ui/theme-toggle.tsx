@@ -13,10 +13,10 @@ export function ThemeToggle() {
 
   return (
     <button
-      aria-label="切换深浅色主题"
+      aria-label="カラーテーマを切り替え"
       className="grid size-10 place-items-center rounded-full border border-stone-300 bg-white text-stone-700 transition hover:border-stone-950 hover:text-stone-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200"
       onClick={toggleTheme}
-      title="切换深浅色主题"
+      title="カラーテーマを切り替え"
       type="button"
     >
       <svg

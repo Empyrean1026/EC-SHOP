@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查购物车商品信息。",
+      "カートの商品情報をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );

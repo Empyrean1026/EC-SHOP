@@ -12,13 +12,18 @@ export async function GET(request: NextRequest) {
   );
 
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "搜索参数无效。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "検索条件が正しくありません。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {
     const result = await searchProducts(parsed.data);
     return apiSuccess({ ...result, filters: parsed.data });
   } catch (error) {
-    return apiInternalError(error, "api.search.results", "暂时无法搜索商品。");
+    return apiInternalError(error, "api.search.results", "商品を検索できません。");
   }
 }

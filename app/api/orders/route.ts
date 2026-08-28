@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     if (!parsed.success) {
       return apiError(
         "VALIDATION_ERROR",
-        "订单查询参数无效。",
+        "注文の検索条件が正しくありません。",
         422,
         getValidationErrors(parsed.error),
       );
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     return apiSuccess(await listUserOrders(authentication.user.id, parsed.data));
   } catch (error) {
-    return apiInternalError(error, "api.orders.list", "暂时无法读取订单。");
+    return apiInternalError(error, "api.orders.list", "注文を取得できません。");
   }
 }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查收货地址和支付方式。",
+      "お届け先とお支払い方法をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );

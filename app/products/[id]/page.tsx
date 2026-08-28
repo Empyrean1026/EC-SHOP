@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
         title: product.name,
         description: product.description.slice(0, 160),
       }
-    : { title: "商品不存在" };
+    : { title: "商品が見つかりません" };
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
@@ -42,9 +42,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   return (
     <article className="bg-stone-100 px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
       <div className="mx-auto max-w-7xl">
-        <nav className="flex items-center gap-2 text-xs text-stone-500" aria-label="面包屑导航">
+        <nav className="flex items-center gap-2 text-xs text-stone-500" aria-label="パンくずリスト">
           <Link className="hover:text-stone-950" href="/products">
-            商品目录
+            商品一覧
           </Link>
           <span aria-hidden="true">/</span>
           {product.category ? (
@@ -55,7 +55,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               {product.category.name}
             </Link>
           ) : (
-            <span>未分类</span>
+            <span>カテゴリーなし</span>
           )}
           <span aria-hidden="true">/</span>
           <span className="truncate text-stone-950">{product.name}</span>
@@ -100,17 +100,17 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
             <dl className="mt-10 grid grid-cols-3 gap-3 border-t border-stone-200 pt-7">
               <div>
-                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">库存</dt>
+                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">在庫</dt>
                 <dd className="mt-2 text-sm font-semibold text-stone-950">{product.stock}</dd>
               </div>
               <div>
-                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">评分</dt>
+                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">評価</dt>
                 <dd className="mt-2 text-sm font-semibold text-stone-950">
                   {product.rating > 0 ? product.rating.toFixed(1) : "—"}
                 </dd>
               </div>
               <div>
-                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">销量</dt>
+                <dt className="text-[10px] tracking-wider text-stone-400 uppercase">販売数</dt>
                 <dd className="mt-2 text-sm font-semibold text-stone-950">{product.salesCount}</dd>
               </div>
             </dl>
@@ -122,7 +122,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 initialWishlisted={wishlistIds.includes(product.id)}
               />
               <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700 dark:bg-[#20271d]">
-                加入时会检查当前库存；登录账户后购物车将安全同步到 MongoDB。
+                カート追加時に在庫を確認します。ログイン後はカートが MongoDB に安全に同期されます。
               </p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         {product.images.length > 1 ? (
           <section className="mt-8" aria-labelledby="product-gallery-heading">
             <h2 id="product-gallery-heading" className="sr-only">
-              更多商品图片
+              その他の商品画像
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {product.images.slice(1, 5).map((image, index) => (
@@ -139,7 +139,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   className="aspect-square rounded-2xl"
                   image={image}
                   key={image}
-                  name={`${product.name} 图片 ${index + 2}`}
+                  name={`${product.name} 画像 ${index + 2}`}
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
               ))}

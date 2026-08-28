@@ -42,7 +42,7 @@ export function apiError(
 export function apiInternalError(
   error: unknown,
   context: string,
-  message = "服务暂时不可用，请稍后重试。",
+  message = "サービスを一時的に利用できません。しばらくしてからお試しください。",
   code = "INTERNAL_ERROR",
   status = 500,
 ) {

@@ -75,7 +75,7 @@ function CheckoutSummary({ cart }: { cart: ShoppingCart }) {
           Order summary
         </p>
         <Link className="text-xs text-stone-400 underline hover:text-white" href="/cart">
-          返回修改
+          内容を修正
         </Link>
       </div>
 
@@ -100,17 +100,17 @@ function CheckoutSummary({ cart }: { cart: ShoppingCart }) {
 
       <dl className="mt-5 space-y-3 border-t border-white/15 pt-5 text-sm">
         <div className="flex justify-between gap-4 text-stone-400">
-          <dt>商品数量</dt>
-          <dd className="font-semibold text-white">{cart.totalQuantity} 件</dd>
+          <dt>商品数</dt>
+          <dd className="font-semibold text-white">{cart.totalQuantity} 点</dd>
         </div>
         <div className="flex justify-between gap-4 text-stone-400">
-          <dt>配送费</dt>
-          <dd className="font-semibold text-white">本阶段免运费</dd>
+          <dt>送料</dt>
+          <dd className="font-semibold text-white">送料無料</dd>
         </div>
       </dl>
 
       <div className="mt-6 border-t border-white/15 pt-5">
-        <p className="text-xs text-stone-400">订单总额</p>
+        <p className="text-xs text-stone-400">注文合計</p>
         {cart.totals.map((total) => (
           <p className="mt-2 text-3xl font-semibold tracking-[-0.04em]" key={total.currency}>
             {formatProductPrice(total.amount, total.currency)}
@@ -157,17 +157,21 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
     form.clearErrors("root");
 
     if (!usingLiveCart || source !== "account") {
-      form.setError("root.server", { message: "账户购物车尚未同步，请稍候后重试。" });
+      form.setError("root.server", {
+        message: "アカウントのカートがまだ同期されていません。しばらくしてからお試しください。",
+      });
       return;
     }
 
     if (cart.items.length === 0) {
-      form.setError("root.server", { message: "购物车为空，无法创建订单。" });
+      form.setError("root.server", { message: "カートが空のため、注文を作成できません。" });
       return;
     }
 
     if (cart.totals.length !== 1) {
-      form.setError("root.server", { message: "一次结算只能包含同一种币种。" });
+      form.setError("root.server", {
+        message: "1回の購入手続きでは同じ通貨の商品だけを注文できます。",
+      });
       return;
     }
 
@@ -217,7 +221,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
     return (
       <div className="grid min-h-80 place-items-center rounded-3xl border border-stone-200 bg-white">
         <p className="text-sm text-stone-500" role="status">
-          正在同步账户购物车…
+          カートを同期しています…
         </p>
       </div>
     );
@@ -231,14 +235,16 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
             Nothing to checkout
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-            购物车还是空的
+            カートに商品がありません
           </h2>
-          <p className="mt-3 text-sm text-stone-500">请先加入商品，再返回结算。</p>
+          <p className="mt-3 text-sm text-stone-500">
+            商品をカートに追加してから、購入手続きへお進みください。
+          </p>
           <Link
             className="mt-7 inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white hover:bg-orange-600"
             href="/products"
           >
-            浏览商品
+            商品を見る
           </Link>
         </div>
       </div>
@@ -259,8 +265,10 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               1
             </span>
             <div>
-              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">收货地址</h2>
-              <p className="mt-1 text-sm text-stone-500">请填写可正常签收商品的地址。</p>
+              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">お届け先</h2>
+              <p className="mt-1 text-sm text-stone-500">
+                商品を確実に受け取れるお届け先を入力してください。
+              </p>
             </div>
           </div>
 
@@ -269,14 +277,14 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               autoComplete="name"
               error={form.formState.errors.shippingAddress?.fullName?.message}
               id="shipping-full-name"
-              label="收件人姓名"
+              label="お名前"
               registration={form.register("shippingAddress.fullName")}
             />
             <CheckoutField
               autoComplete="tel"
               error={form.formState.errors.shippingAddress?.phone?.message}
               id="shipping-phone"
-              label="联系电话"
+              label="電話番号"
               registration={form.register("shippingAddress.phone")}
             />
             <div className="sm:col-span-2">
@@ -284,8 +292,8 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                 autoComplete="address-line1"
                 error={form.formState.errors.shippingAddress?.line1?.message}
                 id="shipping-line1"
-                label="详细地址"
-                placeholder="街道、门牌号"
+                label="住所"
+                placeholder="市区町村・番地"
                 registration={form.register("shippingAddress.line1")}
               />
             </div>
@@ -294,7 +302,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                 autoComplete="address-line2"
                 error={form.formState.errors.shippingAddress?.line2?.message}
                 id="shipping-line2"
-                label="公寓、楼层等（选填）"
+                label="建物名・部屋番号（任意）"
                 registration={form.register("shippingAddress.line2")}
               />
             </div>
@@ -302,28 +310,28 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               autoComplete="address-level2"
               error={form.formState.errors.shippingAddress?.city?.message}
               id="shipping-city"
-              label="城市 / 区"
+              label="市区町村"
               registration={form.register("shippingAddress.city")}
             />
             <CheckoutField
               autoComplete="address-level1"
               error={form.formState.errors.shippingAddress?.state?.message}
               id="shipping-state"
-              label="都道府县 / 省（选填）"
+              label="都道府県"
               registration={form.register("shippingAddress.state")}
             />
             <CheckoutField
               autoComplete="postal-code"
               error={form.formState.errors.shippingAddress?.postalCode?.message}
               id="shipping-postal-code"
-              label="邮政编码"
+              label="郵便番号"
               registration={form.register("shippingAddress.postalCode")}
             />
             <CheckoutField
               autoComplete="country"
               error={form.formState.errors.shippingAddress?.country?.message}
               id="shipping-country"
-              label="国家 / 地区代码"
+              label="国・地域コード"
               placeholder="JP"
               registration={form.register("shippingAddress.country")}
             />
@@ -335,7 +343,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               type="checkbox"
               {...form.register("saveAddress")}
             />
-            保存为账户默认收货地址
+            既定のお届け先として保存する
           </label>
         </section>
 
@@ -345,9 +353,11 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               2
             </span>
             <div>
-              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">支付方式</h2>
+              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">
+                お支払い方法
+              </h2>
               <p className="mt-1 text-sm text-stone-500">
-                Stripe 使用安全支付组件，最终结果由服务端 Webhook 确认。
+                Stripe の安全な決済画面を使用し、最終結果はサーバー側の Webhook で確認します。
               </p>
             </div>
           </div>
@@ -369,10 +379,10 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                 />
                 <span>
                   <span className="block text-sm font-semibold text-stone-950">
-                    Stripe 在线支付
+                    クレジットカード（Stripe）
                   </span>
                   <span className="mt-1 block text-xs leading-5 text-stone-500">
-                    创建订单后进入 Stripe Payment Element 完成支付。
+                    注文作成後、Stripe Payment Element でお支払いを完了します。
                   </span>
                 </span>
               </div>
@@ -392,9 +402,9 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                   {...form.register("paymentMethod")}
                 />
                 <span>
-                  <span className="block text-sm font-semibold text-stone-950">货到付款</span>
+                  <span className="block text-sm font-semibold text-stone-950">代金引換</span>
                   <span className="mt-1 block text-xs leading-5 text-stone-500">
-                    订单创建后等待商家确认配送。
+                    注文後、ショップがお届け内容を確認します。
                   </span>
                 </span>
               </div>
@@ -408,8 +418,10 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               3
             </span>
             <div>
-              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">最终确认</h2>
-              <p className="mt-1 text-sm text-stone-500">提交时服务器会再次核对价格和库存。</p>
+              <h2 className="text-xl font-semibold tracking-[-0.025em] text-stone-950">最終確認</h2>
+              <p className="mt-1 text-sm text-stone-500">
+                注文確定時にサーバーで価格と在庫を再確認します。
+              </p>
             </div>
           </div>
 
@@ -419,7 +431,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               type="checkbox"
               {...form.register("confirmOrder")}
             />
-            我已确认商品、数量、配送地址和右侧订单总额。
+            商品、数量、お届け先、注文合計を確認しました。
           </label>
           {form.formState.errors.confirmOrder?.message ? (
             <p className="mt-2 text-xs text-red-700">
@@ -432,7 +444,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               className="mt-5 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900"
               role="alert"
             >
-              当前购物车包含多个币种，请返回购物车拆分后再结算。
+              カートに複数の通貨が含まれています。通貨ごとに分けてから購入手続きへお進みください。
             </p>
           ) : null}
 
@@ -441,7 +453,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
               className="mt-5 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900"
               role="alert"
             >
-              账户购物车尚未完成同步，请刷新页面后重试；本地商品不会丢失。
+              カートの同期が完了していません。ページを再読み込みしてお試しください。端末内の商品情報は失われません。
             </p>
           ) : null}
 
@@ -462,13 +474,14 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
             type="submit"
           >
             {form.formState.isSubmitting
-              ? "正在安全创建订单…"
+              ? "注文を安全に確定しています…"
               : selectedPaymentMethod === "stripe"
-                ? "创建订单并前往支付"
-                : "创建货到付款订单"}
+                ? "注文を確定して支払いへ"
+                : "代金引換で注文を確定"}
           </button>
           <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-            重复提交不会重复创建订单；支付成功状态仅由 Stripe Webhook 写入。
+            複数回送信しても注文は重複作成されません。支払い完了は Stripe Webhook
+            によってのみ確定します。
           </p>
         </section>
       </div>

@@ -47,14 +47,14 @@ function CartLineItem({ item }: { item: CartLine }) {
           {item.product.name}
         </Link>
         <p className="mt-1 text-sm text-stone-500">
-          单价 {formatProductPrice(item.product.price, item.product.currency)}
+          単価 {formatProductPrice(item.product.price, item.product.currency)}
         </p>
-        <p className="mt-1 text-xs text-stone-400">当前库存 {item.product.stock} 件</p>
+        <p className="mt-1 text-xs text-stone-400">現在の在庫 {item.product.stock} 点</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <div className="inline-flex h-10 items-center rounded-full border border-stone-300 bg-white">
             <button
-              aria-label={`减少 ${item.product.name} 数量`}
+              aria-label={`${item.product.name}の数量`}
               className="grid size-10 place-items-center text-lg text-stone-600 transition hover:text-orange-600 disabled:opacity-30"
               disabled={disabled || item.quantity <= 1}
               onClick={() => changeQuantity(item.quantity - 1)}
@@ -66,7 +66,7 @@ function CartLineItem({ item }: { item: CartLine }) {
               {item.quantity}
             </span>
             <button
-              aria-label={`增加 ${item.product.name} 数量`}
+              aria-label={`${item.product.name}の数量`}
               className="grid size-10 place-items-center text-lg text-stone-600 transition hover:text-orange-600 disabled:opacity-30"
               disabled={disabled || item.quantity >= item.product.stock || item.quantity >= 99}
               onClick={() => changeQuantity(item.quantity + 1)}
@@ -81,7 +81,7 @@ function CartLineItem({ item }: { item: CartLine }) {
             onClick={remove}
             type="button"
           >
-            删除
+            削除
           </button>
         </div>
         {message ? (
@@ -126,7 +126,7 @@ export function CartPageClient() {
     return (
       <div className="grid min-h-80 place-items-center rounded-3xl border border-stone-200 bg-white">
         <p className="text-sm text-stone-500" role="status">
-          正在加载购物车…
+          カートを読み込んでいます…
         </p>
       </div>
     );
@@ -140,7 +140,7 @@ export function CartPageClient() {
             className="mb-5 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-900"
             role="status"
           >
-            购物车内的商品已因下架或缺货自动移除。
+            販売終了または在庫切れの商品をカートから削除しました。
           </p>
         ) : null}
         {error ? (
@@ -154,7 +154,7 @@ export function CartPageClient() {
               onClick={() => store.getState().setError(null)}
               type="button"
             >
-              关闭
+              閉じる
             </button>
           </div>
         ) : null}
@@ -170,16 +170,16 @@ export function CartPageClient() {
               Your cart is empty
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-              还没有加入商品
+              カートに商品がありません
             </h2>
             <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-stone-500">
-              从商品目录选择喜欢的物件，库存和金额会在加入时自动校验。
+              商品一覧から商品を選んでください。カート追加時に在庫と価格を確認します。
             </p>
             <Link
               className="mt-7 inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white transition hover:bg-orange-600"
               href="/products"
             >
-              浏览商品
+              商品を見る
             </Link>
           </div>
         </div>
@@ -195,7 +195,7 @@ export function CartPageClient() {
             className="mb-5 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-900"
             role="status"
           >
-            部分商品已因下架、缺货或库存变化自动调整，请确认后再结算。
+            販売終了・在庫切れ・在庫数の変更により、一部の商品を調整しました。内容をご確認のうえ、購入手続きへお進みください。
           </p>
         ) : null}
         {error ? (
@@ -209,7 +209,7 @@ export function CartPageClient() {
               onClick={() => store.getState().setError(null)}
               type="button"
             >
-              关闭
+              閉じる
             </button>
           </div>
         ) : null}
@@ -222,7 +222,7 @@ export function CartPageClient() {
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-stone-500">
-            {source === "account" ? "已同步至你的账户" : "游客购物车 · 保存在当前浏览器"}
+            {source === "account" ? "アカウントに同期済み" : "ゲストカート · このブラウザに保存"}
           </p>
           <div className="flex items-center gap-3">
             {confirmClear ? (
@@ -231,7 +231,7 @@ export function CartPageClient() {
                 onClick={() => setConfirmClear(false)}
                 type="button"
               >
-                取消
+                キャンセル
               </button>
             ) : null}
             <button
@@ -244,7 +244,7 @@ export function CartPageClient() {
               onClick={clear}
               type="button"
             >
-              {confirmClear ? "确认清空" : "清空购物车"}
+              {confirmClear ? "カートを空にする" : "カートを空にする"}
             </button>
           </div>
         </div>
@@ -261,16 +261,16 @@ export function CartPageClient() {
         </p>
         <dl className="mt-8 space-y-4 border-b border-white/15 pb-6 text-sm">
           <div className="flex justify-between gap-4 text-stone-400">
-            <dt>商品数量</dt>
-            <dd className="font-semibold text-white">{totalQuantity} 件</dd>
+            <dt>商品数</dt>
+            <dd className="font-semibold text-white">{totalQuantity} 点</dd>
           </div>
           <div className="flex justify-between gap-4 text-stone-400">
-            <dt>商品种类</dt>
-            <dd className="font-semibold text-white">{items.length} 种</dd>
+            <dt>商品の種類</dt>
+            <dd className="font-semibold text-white">{items.length} 種類</dd>
           </div>
         </dl>
         <div className="space-y-3 pt-6">
-          <p className="text-xs text-stone-400">总金额</p>
+          <p className="text-xs text-stone-400">合計金額</p>
           {totals.map((total) => (
             <p className="text-2xl font-semibold tracking-[-0.03em]" key={total.currency}>
               {formatProductPrice(total.amount, total.currency)}
@@ -283,11 +283,11 @@ export function CartPageClient() {
             className="mt-8 flex h-12 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-stone-950 transition hover:bg-orange-500 hover:text-white"
             href="/checkout"
           >
-            前往结算
+            購入手続きへ
           </Link>
         ) : (
           <span className="mt-8 flex h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-stone-400">
-            {source === "guest" ? "登录后结算" : "请先拆分不同币种"}
+            {source === "guest" ? "ログインして購入手続きへ" : "通貨ごとにカートを分けてください"}
           </span>
         )}
 
@@ -297,9 +297,9 @@ export function CartPageClient() {
               className="font-semibold text-white underline underline-offset-4"
               href="/login?next=/cart"
             >
-              登录账户
+              ログイン
             </Link>
-            后会把当前购物车与云端购物车合并。
+            すると、現在のカートをアカウントのカートに統合します。
           </p>
         ) : null}
       </aside>

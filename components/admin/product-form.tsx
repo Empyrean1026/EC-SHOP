@@ -55,11 +55,11 @@ export function ProductForm({
 
     if (!result.success) {
       setError(result.error);
-      toast.error("商品保存失败", result.error.message);
+      toast.error("商品を保存できません", result.error.message);
       setPending(false);
       return;
     }
-    toast.success(product ? "商品已更新" : "商品已创建", "正在返回商品管理列表。");
+    toast.success(product ? "商品を更新しました" : "商品を登録しました", "商品一覧に戻ります。");
     router.push("/admin/products");
     router.refresh();
   }
@@ -70,7 +70,7 @@ export function ProductForm({
     <form className="space-y-6" method="post" onSubmit={handleSubmit} noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
         <label className={labelClass}>
-          商品名称
+          商品名
           <input className={inputClass} name="name" defaultValue={product?.name} required />
           {fieldError("name") ? (
             <span className="mt-1 block text-red-700">{fieldError("name")}</span>
@@ -91,7 +91,7 @@ export function ProductForm({
         </label>
       </div>
       <label className={labelClass}>
-        商品描述
+        商品説明
         <textarea
           className="mt-2 min-h-36 w-full rounded-xl border border-stone-300 bg-white p-3 text-sm text-stone-950 outline-none focus:border-stone-950"
           name="description"
@@ -104,7 +104,7 @@ export function ProductForm({
       </label>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <label className={labelClass}>
-          价格（最小货币单位）
+          価格（最小通貨単位）
           <input
             className={inputClass}
             name="price"
@@ -116,7 +116,7 @@ export function ProductForm({
           />
         </label>
         <label className={labelClass}>
-          币种
+          通貨
           <select className={inputClass} name="currency" defaultValue={product?.currency ?? "jpy"}>
             <option value="jpy">JPY</option>
             <option value="usd">USD</option>
@@ -124,14 +124,14 @@ export function ProductForm({
           </select>
         </label>
         <label className={labelClass}>
-          分类
+          カテゴリー
           <select
             className={inputClass}
             name="categoryId"
             defaultValue={product?.category?.id ?? ""}
             required
           >
-            <option value="">选择分类</option>
+            <option value="">カテゴリーを選択</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -143,7 +143,7 @@ export function ProductForm({
           ) : null}
         </label>
         <label className={labelClass}>
-          库存
+          在庫
           <input
             className={inputClass}
             name="stock"
@@ -156,7 +156,7 @@ export function ProductForm({
         </label>
       </div>
       <label className={labelClass}>
-        图片地址（支持 HTTP(S) 或 /public 站内路径，每行或逗号分隔）
+        画像URL（HTTP(S) または /public 配下のパス、改行またはカンマ区切り）
         <textarea
           className="mt-2 min-h-24 w-full rounded-xl border border-stone-300 bg-white p-3 text-sm text-stone-950"
           name="images"
@@ -167,8 +167,7 @@ export function ProductForm({
         ) : null}
       </label>
       <label className="flex items-center gap-3 text-sm font-semibold text-stone-800">
-        <input type="checkbox" name="isActive" defaultChecked={product?.isActive ?? true} />{" "}
-        上架销售
+        <input type="checkbox" name="isActive" defaultChecked={product?.isActive ?? true} /> 販売中
       </label>
       {error ? (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
@@ -180,7 +179,7 @@ export function ProductForm({
         disabled={pending}
         type="submit"
       >
-        {pending ? "正在保存…" : product ? "保存商品" : "创建商品"}
+        {pending ? "保存しています…" : product ? "商品を保存" : "商品を登録"}
       </button>
     </form>
   );

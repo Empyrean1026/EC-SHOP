@@ -27,14 +27,14 @@ test("internal API errors are logged, correlated, and hide exception details", a
     const response = apiInternalError(
       new Error("mongodb://user:password@private-host"),
       "api.products.list",
-      "暂时无法加载商品。",
+      "商品を読み込めません。",
     );
     const body = (await response.json()) as Record<string, unknown>;
     const requestId = String(body.requestId);
 
     assert.equal(response.status, 500);
     assert.equal(body.success, false);
-    assert.equal(body.message, "暂时无法加载商品。");
+    assert.equal(body.message, "商品を読み込めません。");
     assert.equal(body.code, "INTERNAL_ERROR");
     assert.match(requestId, /^[0-9a-f-]{36}$/);
     assert.equal(response.headers.get("x-request-id"), requestId);
@@ -62,7 +62,10 @@ test("the global API wrapper converts uncaught exceptions to safe JSON", async (
 
     assert.equal(response.status, 500);
     assert.equal(body.success, false);
-    assert.equal(body.message, "服务暂时不可用，请稍后重试。");
+    assert.equal(
+      body.message,
+      "サービスを一時的に利用できません。しばらくしてからお試しください。",
+    );
     assert.doesNotMatch(JSON.stringify(body), /private implementation detail/);
   } finally {
     console.error = originalConsoleError;

@@ -61,14 +61,14 @@ test("search URLs preserve filters while resetting or advancing pagination", () 
 
 test("search text normalization handles case, accents, punctuation, and CJK", () => {
   assert.equal(normalizeSearchText("  Café-LAMP! "), "cafelamp");
-  assert.equal(containsCjk("录音室耳机"), true);
+  assert.equal(containsCjk("スタジオヘッドホン"), true);
   assert.equal(containsCjk("studio headphones"), false);
 });
 
 test("Levenshtein distance and fuzzy score tolerate bounded product-name typos", () => {
   assert.equal(levenshteinDistance("headphones", "headphnes"), 1);
   assert.notEqual(fuzzySearchScore("Studio Headphones", "headphnes"), null);
-  assert.notEqual(fuzzySearchScore("录音室耳机", "录音市耳机"), null);
+  assert.notEqual(fuzzySearchScore("スタジオヘッドホン", "スタジオヘットホン"), null);
   assert.equal(fuzzySearchScore("Stone Table Lamp", "keyboard"), null);
 });
 

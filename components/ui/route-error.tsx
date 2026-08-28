@@ -6,7 +6,7 @@ import Link from "next/link";
 export function RouteError({
   error,
   retry,
-  scope = "页面",
+  scope = "ページ",
 }: {
   error: Error & { digest?: string };
   retry: () => void;
@@ -29,13 +29,13 @@ export function RouteError({
           Something went wrong
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950">
-          暂时无法加载{scope}
+          {scope}を読み込めません
         </h1>
         <p className="mt-3 text-sm leading-6 text-stone-500">
-          可能是网络或服务暂时不可用。你可以重新尝试，错误详情不会显示在页面中。
+          ネットワークまたはサービスが一時的に利用できない可能性があります。再度お試しください。エラーの詳細は画面には表示されません。
         </p>
         {error.digest ? (
-          <p className="mt-3 text-xs text-stone-400">错误编号：{error.digest}</p>
+          <p className="mt-3 text-xs text-stone-400">エラーID：{error.digest}</p>
         ) : null}
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <button
@@ -43,13 +43,13 @@ export function RouteError({
             onClick={retry}
             type="button"
           >
-            重新加载
+            再読み込み
           </button>
           <Link
             className="grid h-11 place-items-center rounded-full border border-stone-300 px-6 text-sm font-semibold text-stone-700"
             href="/"
           >
-            返回首页
+            トップページへ戻る
           </Link>
         </div>
       </div>

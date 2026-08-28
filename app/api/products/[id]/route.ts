@@ -28,7 +28,7 @@ export async function GET(_request: NextRequest, { params }: ProductRouteContext
   const identifier = productIdentifierSchema.safeParse((await params).id);
 
   if (!identifier.success) {
-    return apiError("INVALID_PRODUCT_IDENTIFIER", "商品标识格式无效。", 400);
+    return apiError("INVALID_PRODUCT_IDENTIFIER", "商品識別子の形式が正しくありません。", 400);
   }
 
   try {
@@ -36,9 +36,9 @@ export async function GET(_request: NextRequest, { params }: ProductRouteContext
 
     return product
       ? apiSuccess({ product })
-      : apiError("PRODUCT_NOT_FOUND", "商品不存在或已下架。", 404);
+      : apiError("PRODUCT_NOT_FOUND", "商品が見つからないか、販売を終了しています。", 404);
   } catch (error) {
-    return apiInternalError(error, "api.products.detail", "暂时无法加载商品。");
+    return apiInternalError(error, "api.products.detail", "商品を読み込めません。");
   }
 }
 
@@ -52,7 +52,7 @@ export async function PUT(request: NextRequest, { params }: ProductRouteContext)
   const productId = productIdSchema.safeParse((await params).id);
 
   if (!productId.success) {
-    return apiError("INVALID_PRODUCT_ID", "商品 ID 格式无效。", 400);
+    return apiError("INVALID_PRODUCT_ID", "商品IDの形式が正しくありません。", 400);
   }
 
   const body = await readJsonBody(request, PRODUCT_BODY_LIMIT_BYTES);
@@ -66,7 +66,7 @@ export async function PUT(request: NextRequest, { params }: ProductRouteContext)
   if (!parsed.success) {
     return apiError(
       "VALIDATION_ERROR",
-      "请检查提交的商品字段。",
+      "商品の入力内容をご確認ください。",
       422,
       getValidationErrors(parsed.error),
     );
@@ -77,17 +77,23 @@ export async function PUT(request: NextRequest, { params }: ProductRouteContext)
 
     if (product) invalidateCatalogCache();
 
-    return product ? apiSuccess({ product }) : apiError("PRODUCT_NOT_FOUND", "商品不存在。", 404);
+    return product
+      ? apiSuccess({ product })
+      : apiError("PRODUCT_NOT_FOUND", "商品が見つかりません。", 404);
   } catch (error) {
     if (error instanceof ProductCategoryNotFoundError) {
-      return apiError("CATEGORY_NOT_FOUND", "指定的商品分类不存在或已停用。", 422);
+      return apiError(
+        "CATEGORY_NOT_FOUND",
+        "指定したカテゴリーが見つからないか、利用停止中です。",
+        422,
+      );
     }
 
     if (isDuplicateKeyError(error)) {
-      return apiError("SLUG_ALREADY_EXISTS", "该商品 Slug 已被使用。", 409);
+      return apiError("SLUG_ALREADY_EXISTS", "この商品の Slug はすでに使用されています。", 409);
     }
 
-    return apiInternalError(error, "api.products.update", "暂时无法更新商品。");
+    return apiInternalError(error, "api.products.update", "商品を更新できません。");
   }
 }
 
@@ -101,7 +107,7 @@ export async function DELETE(request: NextRequest, { params }: ProductRouteConte
   const productId = productIdSchema.safeParse((await params).id);
 
   if (!productId.success) {
-    return apiError("INVALID_PRODUCT_ID", "商品 ID 格式无效。", 400);
+    return apiError("INVALID_PRODUCT_ID", "商品IDの形式が正しくありません。", 400);
   }
 
   try {
@@ -111,8 +117,8 @@ export async function DELETE(request: NextRequest, { params }: ProductRouteConte
 
     return product
       ? apiSuccess({ deleted: true, product })
-      : apiError("PRODUCT_NOT_FOUND", "商品不存在或已下架。", 404);
+      : apiError("PRODUCT_NOT_FOUND", "商品が見つからないか、販売を終了しています。", 404);
   } catch (error) {
-    return apiInternalError(error, "api.products.deactivate", "暂时无法下架商品。");
+    return apiInternalError(error, "api.products.deactivate", "商品を販売停止にできません。");
   }
 }

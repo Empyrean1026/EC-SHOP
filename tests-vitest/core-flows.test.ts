@@ -10,7 +10,7 @@ import { stripePaymentTransition } from "@/lib/stripe/payment-intent";
 describe("authentication inputs", () => {
   it("accepts a strong registration and normalizes login email", () => {
     const registration = registerSchema.parse({
-      name: "测试用户",
+      name: "テストユーザー",
       email: " TEST@EXAMPLE.COM ",
       password: "TestPass123",
       confirmPassword: "TestPass123",
@@ -24,7 +24,7 @@ describe("authentication inputs", () => {
   it("rejects password confirmation mismatches", () => {
     expect(
       registerSchema.safeParse({
-        name: "测试用户",
+        name: "テストユーザー",
         email: "test@example.com",
         password: "TestPass123",
         confirmPassword: "Different123",
@@ -36,7 +36,7 @@ describe("authentication inputs", () => {
 describe("product, cart, and checkout", () => {
   const product = {
     id: "507f1f77bcf86cd799439011",
-    name: "测试商品",
+    name: "テスト商品",
     slug: "test-product",
     price: 6800,
     currency: "jpy" as const,
@@ -62,7 +62,7 @@ describe("product, cart, and checkout", () => {
   it("requires a confirmed, strict checkout snapshot", () => {
     const result = createCheckoutOrderSchema.safeParse({
       shippingAddress: {
-        fullName: "测试用户",
+        fullName: "テストユーザー",
         phone: "+81 90 1234 5678",
         line1: "1-2-3 Test",
         line2: "",

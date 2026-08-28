@@ -9,8 +9,8 @@ import { listCategories, listProducts } from "@/services/product-service";
 import { getWishlistProductIds } from "@/services/wishlist-service";
 
 export const metadata: Metadata = {
-  title: "商品目录",
-  description: "浏览、搜索和筛选 EC Site 商品。",
+  title: "商品一覧",
+  description: "EC Siteの商品を閲覧・検索・絞り込みできます。",
 };
 
 export const dynamic = "force-dynamic";
@@ -49,15 +49,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               Phase 04 / Product system
             </p>
             <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
-              商品目录
+              商品一覧
             </h1>
           </div>
           <div className="max-w-xl">
             <p className="text-sm leading-7 text-stone-600">
-              通过关键词、分类、价格与库存组合查找商品；所有排序都使用稳定次序，分页结果可复现。
+              キーワード、カテゴリー、価格、在庫状況を組み合わせて商品を検索できます。並び順は常に安定し、ページ送りでも結果が変わりません。
             </p>
             <p className="mt-3 text-xs font-semibold text-stone-950">
-              共 {result.pagination.total} 件在售商品
+              全 {result.pagination.total} 点の商品
             </p>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         {!parsed.success ? (
           <p className="mt-6 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-            部分查询参数无效，已恢复默认筛选条件。
+            一部の検索条件が正しくないため、既定の絞り込みに戻しました。
           </p>
         ) : null}
 
@@ -88,10 +88,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               </div>
             ) : (
               <EmptyState
-                description="请尝试更换关键词或清除筛选；新项目也可以运行目录种子脚本生成演示商品。"
+                description="キーワードを変更するか、絞り込みを解除してください。開発環境ではシードスクリプトでサンプル商品を登録できます。"
                 eyebrow="No results"
                 icon="⌕"
-                title="没有找到符合条件的商品"
+                title="条件に一致する商品はありません"
               />
             )}
 

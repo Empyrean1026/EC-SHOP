@@ -57,16 +57,17 @@ export function PaymentStatusWatcher({
           Payment failed
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
-          支付未完成
+          お支払いを完了できませんでした
         </h1>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          Stripe Webhook 已报告支付失败。你可以返回支付页检查支付方式后再次尝试。
+          Stripe Webhook
+          から支払い失敗が通知されました。決済画面でお支払い方法を確認し、もう一度お試しください。
         </p>
         <Link
           className="mt-7 inline-flex h-11 items-center rounded-full bg-orange-600 px-6 text-sm font-semibold text-white hover:bg-orange-700"
           href={`/checkout/payment/${orderId}`}
         >
-          重新支付
+          もう一度支払う
         </Link>
       </div>
     );
@@ -86,12 +87,12 @@ export function PaymentStatusWatcher({
         Webhook verification
       </p>
       <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
-        {timedOut ? "支付确认仍在处理中" : "正在确认支付结果"}
+        {timedOut ? "お支払いの確認に時間がかかっています" : "お支払い結果を確認しています"}
       </h1>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600">
         {timedOut
-          ? "暂时没有收到最终 Webhook。订单不会因为浏览器返回而被标记为已支付，请稍后在订单页面查看。"
-          : "我们正在等待 Stripe 的签名 Webhook。请保持页面打开，确认完成后会自动进入订单页面。"}
+          ? "最終的な Webhook をまだ受信していません。ブラウザの戻り値だけで支払い済みにはなりません。しばらくしてから注文詳細をご確認ください。"
+          : "Stripe の署名付き Webhook を待っています。この画面を開いたままお待ちください。確認後、自動的に注文詳細へ移動します。"}
       </p>
       {message ? <p className="mt-4 text-sm text-red-700">{message}</p> : null}
       <div className="mt-7 flex flex-wrap gap-3">
@@ -99,7 +100,7 @@ export function PaymentStatusWatcher({
           className="inline-flex h-11 items-center rounded-full bg-stone-950 px-6 text-sm font-semibold text-white hover:bg-orange-600"
           href={`/checkout/success/${orderId}`}
         >
-          查看订单
+          注文を確認
         </Link>
         {timedOut ? (
           <button
@@ -107,7 +108,7 @@ export function PaymentStatusWatcher({
             onClick={() => setAttempts(0)}
             type="button"
           >
-            重新检查
+            もう一度確認
           </button>
         ) : null}
       </div>

@@ -27,18 +27,18 @@ export async function resetE2eDatabase(seed: boolean): Promise<void> {
     const productId = new Types.ObjectId("507f1f77bcf86cd799439011");
     await connection.collection("categories").insertOne({
       _id: categoryId,
-      name: "测试分类",
+      name: "テストカテゴリー",
       slug: "e2e-products",
-      description: "Playwright 隔离测试分类。",
+      description: "Playwrightの分離テスト用カテゴリーです。",
       isActive: true,
       createdAt: now,
       updatedAt: now,
     });
     await connection.collection("products").insertOne({
       _id: productId,
-      name: "E2E 测试商品",
+      name: "E2Eテスト商品",
       slug: "e2e-test-product",
-      description: "用于购物车、结算和订单 API 集成测试的隔离商品。",
+      description: "カート、購入手続き、注文APIの結合テストに使用する分離商品です。",
       price: 6800,
       currency: "jpy",
       category: categoryId,

@@ -5,7 +5,7 @@ import { validateCsrfRequest } from "@/lib/auth/csrf";
 
 export const POST = withApiErrorHandling(async function logout(request: NextRequest) {
   if (!(await validateCsrfRequest(request))) {
-    return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
+    return apiError("INVALID_CSRF_TOKEN", "セキュリティトークンが無効または期限切れです。", 403);
   }
 
   const response = apiSuccess({ loggedOut: true });

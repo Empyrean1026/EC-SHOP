@@ -5,7 +5,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { requireUser } from "@/lib/auth/dal";
 import { getUserWishlist } from "@/services/wishlist-service";
 
-export const metadata: Metadata = { title: "我的收藏", description: "查看和管理收藏商品。" };
+export const metadata: Metadata = {
+  title: "お気に入り",
+  description: "お気に入りの商品を確認・管理します。",
+};
 export const dynamic = "force-dynamic";
 
 export default async function WishlistPage() {
@@ -21,14 +24,14 @@ export default async function WishlistPage() {
         <div className="mt-3 flex flex-col justify-between gap-5 border-b border-stone-300 pb-8 sm:flex-row sm:items-end">
           <div>
             <h1 className="text-4xl font-semibold tracking-[-0.045em] text-stone-950 sm:text-5xl">
-              我的收藏
+              お気に入り
             </h1>
             <p className="mt-3 text-sm text-stone-500">
-              已收藏 {wishlist.count} 件仍在销售的商品。
+              お気に入りに {wishlist.count} 点の商品を登録しています。
             </p>
           </div>
           <Link className="text-sm font-semibold text-stone-700 underline" href="/products">
-            继续浏览商品
+            買い物を続ける
           </Link>
         </div>
 
@@ -42,11 +45,11 @@ export default async function WishlistPage() {
           <div className="mt-8">
             <EmptyState
               actionHref="/products"
-              actionLabel="浏览商品"
-              description="在商品卡片或详情页点击“加入收藏”即可保存。"
+              actionLabel="商品を見る"
+              description="商品カードまたは商品詳細で「お気に入りに追加」を押すと保存できます。"
               eyebrow="Empty wishlist"
               icon="♡"
-              title="还没有收藏商品"
+              title="お気に入りの商品はありません"
             />
           </div>
         )}

@@ -9,10 +9,10 @@ export function PageSkeleton({ variant = "grid" }: { variant?: "grid" | "dashboa
     <div
       className="mx-auto w-full max-w-7xl"
       aria-busy="true"
-      aria-label="页面正在加载"
+      aria-label="ページを読み込んでいます"
       role="status"
     >
-      <span className="sr-only">页面正在加载…</span>
+      <span className="sr-only">ページを読み込んでいます…</span>
       <Skeleton className="h-3 w-32" />
       <Skeleton className="mt-5 h-12 w-64 max-w-[80%]" />
       <Skeleton className="mt-4 h-4 w-96 max-w-full" />

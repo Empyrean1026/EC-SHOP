@@ -23,7 +23,11 @@ export async function authorizeUserMutation(
     if (!(await validateCsrfRequest(request))) {
       return {
         authorized: false,
-        response: apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403),
+        response: apiError(
+          "INVALID_CSRF_TOKEN",
+          "セキュリティトークンが無効または期限切れです。",
+          403,
+        ),
       };
     }
 
@@ -31,7 +35,7 @@ export async function authorizeUserMutation(
   } catch (error) {
     return {
       authorized: false,
-      response: apiInternalError(error, "api.user.authorize", "暂时无法验证用户身份。"),
+      response: apiInternalError(error, "api.user.authorize", "ログイン状態を確認できません。"),
     };
   }
 }

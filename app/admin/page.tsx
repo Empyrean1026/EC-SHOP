@@ -5,8 +5,8 @@ import { requireUser } from "@/lib/auth/dal";
 import { getAdminDashboardSummary } from "@/services/admin-service";
 
 export const metadata: Metadata = {
-  title: "管理员后台",
-  description: "查看销售数据，管理商品、库存、订单和用户。",
+  title: "管理画面",
+  description: "売上データを確認し、商品、在庫、注文、ユーザーを管理します。",
 };
 export const dynamic = "force-dynamic";
 
@@ -15,24 +15,29 @@ export default async function AdminPage() {
   const summary = await getAdminDashboardSummary();
   const cards = [
     {
-      label: "全部商品",
+      label: "すべての商品",
       value: summary.products,
-      detail: `${summary.activeProducts} 件上架`,
+      detail: `${summary.activeProducts} 点販売中`,
       href: "/admin/products",
     },
     {
-      label: "低库存",
+      label: "残りわずか",
       value: summary.lowStockProducts,
-      detail: "库存 5 件及以下",
+      detail: "在庫5点以下",
       href: "/admin/products?stock=low",
     },
     {
-      label: "全部订单",
+      label: "すべての注文",
       value: summary.orders,
-      detail: `${summary.openOrders} 张履约中`,
+      detail: `${summary.openOrders} 件を処理中`,
       href: "/admin/orders",
     },
-    { label: "注册用户", value: summary.users, detail: "查看账户列表", href: "/admin/users" },
+    {
+      label: "登録ユーザー",
+      value: summary.users,
+      detail: "ユーザー一覧を見る",
+      href: "/admin/users",
+    },
   ];
 
   return (
@@ -44,9 +49,11 @@ export default async function AdminPage() {
               Phase 11 / Admin dashboard
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
-              运营控制台
+              運用ダッシュボード
             </h1>
-            <p className="mt-3 text-sm text-stone-400">{user.name} · 商品、履约与用户数据总览</p>
+            <p className="mt-3 text-sm text-stone-400">
+              {user.name} · 商品、注文処理、ユーザー情報の概要
+            </p>
           </div>
           <div className="[&_button]:border-white/20 [&_button]:text-white">
             <LogoutButton />
@@ -76,23 +83,29 @@ export default async function AdminPage() {
             <p className="text-xs font-semibold tracking-wider text-orange-400 uppercase">
               Sales analytics
             </p>
-            <h2 className="mt-4 text-2xl font-semibold">查看销售数据</h2>
-            <p className="mt-3 text-sm text-stone-400">销售额、趋势、订单规模与热销商品。</p>
+            <h2 className="mt-4 text-2xl font-semibold">売上データを見る</h2>
+            <p className="mt-3 text-sm text-stone-400">
+              売上、推移、注文数、人気商品を確認します。
+            </p>
           </Link>
           <Link className="rounded-3xl bg-orange-600 p-7 text-white" href="/admin/products/new">
             <p className="text-xs font-semibold tracking-wider text-orange-100 uppercase">
               Product management
             </p>
-            <h2 className="mt-4 text-2xl font-semibold">添加新商品</h2>
-            <p className="mt-3 text-sm text-orange-100">创建商品、设置分类、价格和初始库存。</p>
+            <h2 className="mt-4 text-2xl font-semibold">商品を登録</h2>
+            <p className="mt-3 text-sm text-orange-100">
+              商品を登録し、カテゴリー、価格、初期在庫を設定します。
+            </p>
           </Link>
           <Link
             className="rounded-3xl bg-[#dfe5ce] p-7 text-stone-950 dark:bg-[#20271d]"
             href="/admin/orders"
           >
             <p className="text-xs font-semibold tracking-wider uppercase">Order management</p>
-            <h2 className="mt-4 text-2xl font-semibold">处理待履约订单</h2>
-            <p className="mt-3 text-sm text-stone-600">按合法状态机推进处理、发货和完成。</p>
+            <h2 className="mt-4 text-2xl font-semibold">未処理の注文を確認</h2>
+            <p className="mt-3 text-sm text-stone-600">
+              許可された順序で受付、発送、完了へ更新します。
+            </p>
           </Link>
           <Link
             className="rounded-3xl border border-stone-200 bg-white p-7 text-stone-950"
@@ -101,8 +114,10 @@ export default async function AdminPage() {
             <p className="text-xs font-semibold tracking-wider text-stone-500 uppercase">
               User management
             </p>
-            <h2 className="mt-4 text-2xl font-semibold">查看注册用户</h2>
-            <p className="mt-3 text-sm text-stone-500">检索用户、角色、地址配置和订单数量。</p>
+            <h2 className="mt-4 text-2xl font-semibold">登録ユーザーを見る</h2>
+            <p className="mt-3 text-sm text-stone-500">
+              ユーザー、権限、お届け先の登録状況、注文数を確認します。
+            </p>
           </Link>
         </div>
       </div>

@@ -13,7 +13,8 @@ export async function DELETE(
   if (!authorization.authorized) return authorization.response;
 
   const parsed = wishlistProductSchema.safeParse({ productId: (await context.params).productId });
-  if (!parsed.success) return apiError("INVALID_PRODUCT_ID", "商品 ID 格式无效。", 400);
+  if (!parsed.success)
+    return apiError("INVALID_PRODUCT_ID", "商品IDの形式が正しくありません。", 400);
 
   try {
     await removeWishlistProduct(authorization.user.id, parsed.data.productId);

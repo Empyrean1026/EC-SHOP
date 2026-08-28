@@ -3,8 +3,8 @@ import { AuthPageShell } from "@/components/auth/auth-page-shell";
 import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = {
-  title: "登录",
-  description: "登录 EC Site 账户。",
+  title: "ログイン",
+  description: "EC Siteのアカウントにログインします。",
 };
 
 type LoginPageProps = {
@@ -22,11 +22,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <AuthPageShell
       eyebrow="Welcome back"
-      title="登录账户"
-      description="登录状态保存在由服务端签发的 HttpOnly Cookie 中，浏览器脚本无法读取 JWT。"
-      alternateText="还没有账户？"
+      title="ログイン"
+      description="ログイン状態はサーバー発行の HttpOnly Cookie に保存され、ブラウザ上のスクリプトから JWT を読み取ることはできません。"
+      alternateText="アカウントをお持ちでない方"
       alternateHref="/register"
-      alternateLabel="立即注册"
+      alternateLabel="新規登録"
     >
       <LoginForm redirectTo={getSafeRedirectPath(params.next)} />
     </AuthPageShell>

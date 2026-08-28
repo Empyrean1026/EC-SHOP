@@ -24,11 +24,14 @@ export async function submitCheckoutOrder(
       },
       body: JSON.stringify(input),
     });
-    return parseApiResponse<CreateCheckoutOrderResult>(response, "订单创建失败，请稍后重试。");
+    return parseApiResponse<CreateCheckoutOrderResult>(
+      response,
+      "注文の作成に失敗しました。しばらくしてからお試しください。",
+    );
   } catch {
     return {
       success: false,
-      error: networkError("网络异常，订单尚未确认，请重试。"),
+      error: networkError("通信エラーが発生し、注文は確定されていません。もう一度お試しください。"),
     };
   }
 }

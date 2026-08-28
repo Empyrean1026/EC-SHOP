@@ -14,7 +14,7 @@ export function OrderStatusForm({ orderId, allowed }: { orderId: string; allowed
   const [error, setError] = useState<string | null>(null);
 
   if (allowed.length === 0)
-    return <p className="text-sm text-stone-500">当前订单没有可执行的下一状态。</p>;
+    return <p className="text-sm text-stone-500">この注文はこれ以上ステータスを更新できません。</p>;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,12 +24,15 @@ export function OrderStatusForm({ orderId, allowed }: { orderId: string; allowed
     const result = await updateOrderStatus(orderId, status);
     if (!result.success) {
       setError(result.error.message);
-      toast.error("订单状态更新失败", result.error.message);
+      toast.error("注文状況を更新できません", result.error.message);
       setPending(false);
       return;
     }
     setPending(false);
-    toast.success("订单状态已更新", `订单已进入“${ORDER_STATUS_LABELS[status]}”。`);
+    toast.success(
+      "注文状況を更新しました",
+      `注文状況を「${ORDER_STATUS_LABELS[status]}」に変更しました。`,
+    );
     router.refresh();
   }
 
@@ -50,7 +53,7 @@ export function OrderStatusForm({ orderId, allowed }: { orderId: string; allowed
         disabled={pending}
         type="submit"
       >
-        {pending ? "正在更新…" : "更新订单状态"}
+        {pending ? "更新しています…" : "注文状況を更新"}
       </button>
       {error ? (
         <p className="text-sm text-red-700" role="alert">

@@ -8,8 +8,8 @@ import { getStripePublishableKey, StripeConfigurationError } from "@/lib/stripe/
 import { getCheckoutOrder } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
-  title: "Stripe 安全支付",
-  description: "使用 Stripe Payment Element 完成订单支付。",
+  title: "Stripe セキュア決済",
+  description: "Stripe Payment Elementで注文のお支払いを完了します。",
 };
 
 type PaymentPageProps = {
@@ -40,10 +40,11 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
             Secure payment
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-stone-950 sm:text-4xl">
-            使用 Stripe 完成支付
+            Stripe でお支払い
           </h1>
           <p className="mt-3 text-sm leading-6 text-stone-500">
-            页面返回成功只表示支付步骤已提交；订单将在 Stripe Webhook 验签通过后标记为已支付。
+            画面上の完了表示は決済処理の送信を示すものです。注文は Stripe Webhook
+            の署名検証後に支払い済みとなります。
           </p>
           <div className="mt-8">
             <StripePaymentPanel order={order} publishableKey={publishableKey} />
@@ -54,19 +55,19 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
           <p className="text-xs font-semibold tracking-[0.16em] text-orange-400 uppercase">
             Payment summary
           </p>
-          <p className="mt-5 text-xs break-all text-stone-400">订单号 {order.id}</p>
+          <p className="mt-5 text-xs break-all text-stone-400">注文番号 {order.id}</p>
           <dl className="mt-6 space-y-3 border-t border-white/15 pt-5 text-sm">
             <div className="flex justify-between gap-4">
-              <dt className="text-stone-400">商品种类</dt>
+              <dt className="text-stone-400">商品の種類</dt>
               <dd>{order.items.length}</dd>
             </div>
             <div className="flex justify-between gap-4">
-              <dt className="text-stone-400">支付状态</dt>
+              <dt className="text-stone-400">お支払い状況</dt>
               <dd>{order.paymentStatus}</dd>
             </div>
           </dl>
           <div className="mt-6 border-t border-white/15 pt-5">
-            <p className="text-xs text-stone-400">应付金额</p>
+            <p className="text-xs text-stone-400">お支払い金額</p>
             <p className="mt-2 text-3xl font-semibold tracking-[-0.04em]">
               {formatProductPrice(order.totalAmount, order.currency)}
             </p>
@@ -75,7 +76,7 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
             className="mt-6 inline-block text-xs text-stone-400 underline"
             href={`/checkout/success/${order.id}`}
           >
-            暂不支付，查看订单
+            後で支払う・注文を確認
           </Link>
         </aside>
       </div>

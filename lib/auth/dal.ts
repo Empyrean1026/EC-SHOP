@@ -64,7 +64,7 @@ export async function authenticateRequest(
       authenticated: false,
       status: 401,
       code: "UNAUTHENTICATED",
-      message: "请先登录。",
+      message: "ログインしてください。",
     };
   }
 
@@ -75,7 +75,7 @@ export async function authenticateRequest(
       authenticated: false,
       status: 401,
       code: "UNAUTHENTICATED",
-      message: "请先登录。",
+      message: "ログインしてください。",
     };
   }
 
@@ -84,7 +84,7 @@ export async function authenticateRequest(
       authenticated: false,
       status: 403,
       code: "FORBIDDEN",
-      message: "你没有权限访问该资源。",
+      message: "このページを表示する権限がありません。",
     };
   }
 

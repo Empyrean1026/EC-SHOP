@@ -28,13 +28,13 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
 
     if (!result.success) {
       setError(result.error);
-      toast.error("个人资料保存失败", result.error.message);
+      toast.error("プロフィールを保存できません", result.error.message);
       setPending(false);
       return;
     }
 
     setSaved(true);
-    toast.success("个人资料已保存");
+    toast.success("プロフィールを保存しました");
     setPending(false);
     router.refresh();
   }
@@ -46,7 +46,7 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
           <Image
             className="size-16 rounded-full object-cover"
             src={profile.avatar}
-            alt="当前头像"
+            alt="現在のプロフィール画像"
             width={64}
             height={64}
             loading="lazy"
@@ -59,15 +59,17 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
           </div>
         )}
         <div>
-          <p className="text-sm font-semibold text-stone-950">公开头像</p>
-          <p className="mt-1 text-xs leading-5 text-stone-500">未填写网址时显示姓名首字母。</p>
+          <p className="text-sm font-semibold text-stone-950">プロフィール画像</p>
+          <p className="mt-1 text-xs leading-5 text-stone-500">
+            URLを入力しない場合は、氏名の頭文字を表示します。
+          </p>
         </div>
       </div>
 
       <FormField
         id="name"
         name="name"
-        label="姓名"
+        label="氏名"
         type="text"
         autoComplete="name"
         defaultValue={profile.name}
@@ -77,7 +79,7 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
       <FormField
         id="avatar"
         name="avatar"
-        label="头像网址（可选）"
+        label="プロフィール画像URL（任意）"
         type="url"
         autoCapitalize="none"
         spellCheck={false}
@@ -87,7 +89,7 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
       />
 
       <div className="rounded-xl border border-stone-200 px-4 py-3">
-        <p className="text-xs text-stone-500">登录邮箱（当前不可修改）</p>
+        <p className="text-xs text-stone-500">メールアドレス（変更不可）</p>
         <p className="mt-1 text-sm font-semibold break-all text-stone-900">{profile.email}</p>
       </div>
 
@@ -98,7 +100,7 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
       ) : null}
       {saved ? (
         <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">
-          个人资料已保存。
+          プロフィールを保存しました。
         </p>
       ) : null}
 
@@ -107,7 +109,7 @@ export function ProfileForm({ profile }: { profile: AccountProfile }) {
         type="submit"
         disabled={pending}
       >
-        {pending ? "正在保存…" : "保存个人资料"}
+        {pending ? "保存しています…" : "プロフィールを保存"}
       </button>
     </form>
   );

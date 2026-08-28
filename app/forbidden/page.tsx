@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "无权访问",
+  title: "アクセス権限がありません",
 };
 
 export default function ForbiddenPage() {
@@ -13,16 +13,16 @@ export default function ForbiddenPage() {
           403 / Forbidden
         </p>
         <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em] text-stone-950">
-          当前账户没有访问权限
+          このアカウントにはアクセス権限がありません
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-600">
-          此区域仅允许管理员访问。你的登录状态仍然有效，可以返回用户中心。
+          このページは管理者のみアクセスできます。ログイン状態は維持されていますので、マイページへお戻りください。
         </p>
         <Link
           className="mt-8 inline-flex rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white"
           href="/account"
         >
-          返回用户中心
+          マイページに戻る
         </Link>
       </div>
     </section>

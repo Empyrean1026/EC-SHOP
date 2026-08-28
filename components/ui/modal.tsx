@@ -73,7 +73,7 @@ export function Modal({ open, onClose, title, description, children, size = "sm"
             ) : null}
           </div>
           <button
-            aria-label="关闭弹窗"
+            aria-label="ダイアログを閉じる"
             className="grid size-9 shrink-0 place-items-center rounded-full border border-stone-200 text-lg text-stone-500 transition hover:border-stone-400 hover:text-stone-950 dark:border-stone-700 dark:hover:text-white"
             onClick={onClose}
             type="button"

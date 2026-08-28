@@ -20,35 +20,35 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
         method="get"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-stone-950">筛选商品</h2>
+          <h2 className="text-sm font-semibold text-stone-950">商品を絞り込む</h2>
           <Link
             className="text-xs text-stone-500 underline-offset-4 hover:underline"
             href="/products"
           >
-            清除
+            クリア
           </Link>
         </div>
 
         <div className="mt-5 space-y-4">
           <label className="block text-xs font-semibold text-stone-700">
-            关键词
+            キーワード
             <input
               className={`${inputClassName} mt-2`}
               defaultValue={query.q}
               name="q"
-              placeholder="搜索名称或描述"
+              placeholder="商品名・説明を検索"
               type="search"
             />
           </label>
 
           <label className="block text-xs font-semibold text-stone-700">
-            商品分类
+            カテゴリー
             <select
               className={`${inputClassName} mt-2`}
               defaultValue={query.category ?? ""}
               name="category"
             >
-              <option value="">全部分类</option>
+              <option value="">すべてのカテゴリー</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.slug}>
                   {category.name} ({category.productCount})
@@ -59,7 +59,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
 
           <div className="grid grid-cols-2 gap-3">
             <label className="block text-xs font-semibold text-stone-700">
-              最低价格
+              最低価格
               <input
                 className={`${inputClassName} mt-2`}
                 defaultValue={query.minPrice}
@@ -70,26 +70,26 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
               />
             </label>
             <label className="block text-xs font-semibold text-stone-700">
-              最高价格
+              最高価格
               <input
                 className={`${inputClassName} mt-2`}
                 defaultValue={query.maxPrice}
                 min="0"
                 name="maxPrice"
-                placeholder="不限"
+                placeholder="指定なし"
                 type="number"
               />
             </label>
           </div>
 
           <label className="block text-xs font-semibold text-stone-700">
-            排序
+            並び順
             <select className={`${inputClassName} mt-2`} defaultValue={query.sort} name="sort">
-              <option value="newest">最新上架</option>
-              <option value="price_asc">价格从低到高</option>
-              <option value="price_desc">价格从高到低</option>
-              <option value="sales_desc">销量优先</option>
-              <option value="rating_desc">评分优先</option>
+              <option value="newest">新着順</option>
+              <option value="price_asc">価格の安い順</option>
+              <option value="price_desc">価格の高い順</option>
+              <option value="sales_desc">売れ筋順</option>
+              <option value="rating_desc">評価の高い順</option>
             </select>
           </label>
 
@@ -101,7 +101,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
               type="checkbox"
               value="true"
             />
-            仅显示有库存商品
+            在庫あり商品のみ表示
           </label>
         </div>
 
@@ -109,7 +109,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
           className="mt-5 h-11 w-full rounded-full bg-stone-950 px-5 text-sm font-semibold text-white transition hover:bg-orange-600"
           type="submit"
         >
-          应用筛选
+          絞り込む
         </button>
       </form>
 
@@ -118,7 +118,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
           Catalog API
         </p>
         <p className="mt-8 text-sm leading-6 text-stone-800">
-          当前列表由服务端直接查询 MongoDB，与公开 REST API 共用相同查询规则。
+          一覧はサーバーからMongoDBを直接参照し、公開REST APIと同じ検索条件を使用しています。
         </p>
       </div>
     </aside>
@@ -127,7 +127,7 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
 
 export function CategoryNavigation({ categories, query }: ProductFiltersProps) {
   return (
-    <nav className="flex gap-2 overflow-x-auto pb-2" aria-label="商品分类">
+    <nav className="flex gap-2 overflow-x-auto pb-2" aria-label="カテゴリー">
       <Link
         className={`shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition ${
           !query.category
@@ -136,7 +136,7 @@ export function CategoryNavigation({ categories, query }: ProductFiltersProps) {
         }`}
         href={buildProductsUrl(query, { category: null, page: 1 })}
       >
-        全部商品
+        すべての商品
       </Link>
       {categories.map((category) => {
         const selected = query.category === category.slug;

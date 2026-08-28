@@ -28,8 +28,8 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
     setFailed(!result.success);
     setMessage(result.success ? null : result.message);
     if (result.success)
-      toast.success("已加入购物车", `${product.name} × ${compact ? 1 : quantity}`);
-    else toast.error("无法加入购物车", result.message);
+      toast.success("カートに追加しました", `${product.name} × ${compact ? 1 : quantity}`);
+    else toast.error("カートに追加できません", result.message);
   }
 
   if (compact) {
@@ -41,7 +41,11 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
           onClick={add}
           type="button"
         >
-          {product.stock <= 0 ? "暂时缺货" : status === "syncing" ? "正在同步…" : "加入购物车"}
+          {product.stock <= 0
+            ? "在庫切れ"
+            : status === "syncing"
+              ? "同期しています…"
+              : "カートに追加"}
         </button>
         {message ? (
           <p
@@ -61,7 +65,7 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
         <label className="flex h-12 items-center justify-between rounded-full border border-stone-300 bg-white px-4 sm:w-36">
           <span className="text-xs font-semibold text-stone-500">数量</span>
           <select
-            aria-label="加入购物车数量"
+            aria-label="カートに追加する数量"
             className="bg-transparent text-sm font-semibold text-stone-950 outline-none"
             disabled={disabled}
             onChange={(event) => setQuantity(Number(event.target.value))}
@@ -81,12 +85,12 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
           type="button"
         >
           {product.stock <= 0
-            ? "暂时缺货"
+            ? "在庫切れ"
             : status === "initializing"
-              ? "正在加载购物车…"
+              ? "カートを読み込んでいます…"
               : status === "syncing"
-                ? "正在同步…"
-                : "加入购物车"}
+                ? "同期しています…"
+                : "カートに追加"}
         </button>
       </div>
       {message ? (

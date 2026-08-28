@@ -16,7 +16,12 @@ export async function POST(request: NextRequest) {
 
   const parsed = wishlistProductSchema.safeParse(body.data);
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "商品信息无效。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "商品情報が正しくありません。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {

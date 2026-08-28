@@ -14,7 +14,10 @@ export type AccountCartResult =
   | { authenticated: null; error: CartClientError };
 
 async function parseCartResponse(response: Response): Promise<CartClientResult> {
-  const result = await parseApiResponse<{ cart: ShoppingCart }>(response, "购物车请求失败。");
+  const result = await parseApiResponse<{ cart: ShoppingCart }>(
+    response,
+    "カートのリクエストに失敗しました。",
+  );
 
   if (result.success) {
     return { success: true, cart: result.data.cart };
@@ -44,7 +47,7 @@ async function mutateCart(
   } catch {
     return {
       success: false,
-      error: networkError("网络异常，购物车尚未更新。"),
+      error: networkError("通信エラーが発生し、カートは更新されませんでした。"),
     };
   }
 }
@@ -66,7 +69,7 @@ export async function fetchAccountCart(): Promise<AccountCartResult> {
   } catch {
     return {
       authenticated: null,
-      error: networkError("暂时无法同步购物车。"),
+      error: networkError("カートを同期できません。"),
     };
   }
 }
@@ -89,7 +92,7 @@ export async function validateGuestCart(items: ShoppingCart["items"]): Promise<C
   } catch {
     return {
       success: false,
-      error: networkError("暂时无法刷新商品库存。"),
+      error: networkError("商品の在庫情報を更新できません。"),
     };
   }
 }

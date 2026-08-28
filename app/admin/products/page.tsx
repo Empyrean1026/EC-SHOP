@@ -8,7 +8,7 @@ import { formatProductPrice } from "@/lib/products/format";
 import { adminProductListQuerySchema } from "@/lib/validations/admin";
 import { listAdminProducts } from "@/services/admin-service";
 
-export const metadata: Metadata = { title: "商品与库存管理" };
+export const metadata: Metadata = { title: "商品・在庫管理" };
 export const dynamic = "force-dynamic";
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -32,17 +32,17 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
               Admin / Products
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
-              商品与库存
+              商品・在庫
             </h1>
             <p className="mt-3 text-sm text-stone-500">
-              共 {result.pagination.total} 件符合条件的商品。
+              全 {result.pagination.total} 点の商品が見つかりました。
             </p>
           </div>
           <Link
             className="inline-flex h-11 items-center justify-center rounded-full bg-orange-600 px-6 text-sm font-semibold text-white"
             href="/admin/products/new"
           >
-            ＋ 添加商品
+            ＋ 商品を登録
           </Link>
         </div>
 
@@ -54,47 +54,47 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
             className="h-11 rounded-xl border border-stone-300 px-3 text-sm"
             name="q"
             defaultValue={query.q}
-            placeholder="名称或 Slug"
+            placeholder="商品名またはSlug"
           />
           <select
             className="h-11 rounded-xl border border-stone-300 bg-white px-3 text-sm"
             name="status"
             defaultValue={query.status}
           >
-            <option value="all">全部状态</option>
-            <option value="active">已上架</option>
-            <option value="inactive">已下架</option>
+            <option value="all">すべてのステータス</option>
+            <option value="active">販売中</option>
+            <option value="inactive">販売停止</option>
           </select>
           <select
             className="h-11 rounded-xl border border-stone-300 bg-white px-3 text-sm"
             name="stock"
             defaultValue={query.stock}
           >
-            <option value="all">全部库存</option>
-            <option value="in_stock">库存充足</option>
-            <option value="low">低库存</option>
-            <option value="out_of_stock">缺货</option>
+            <option value="all">すべての在庫状況</option>
+            <option value="in_stock">在庫あり</option>
+            <option value="low">残りわずか</option>
+            <option value="out_of_stock">在庫切れ</option>
           </select>
           <select
             className="h-11 rounded-xl border border-stone-300 bg-white px-3 text-sm"
             name="sort"
             defaultValue={query.sort}
           >
-            <option value="newest">最新创建</option>
-            <option value="name">名称</option>
-            <option value="stock_asc">库存升序</option>
-            <option value="stock_desc">库存降序</option>
+            <option value="newest">登録日の新しい順</option>
+            <option value="name">商品名</option>
+            <option value="stock_asc">在庫の少ない順</option>
+            <option value="stock_desc">在庫の多い順</option>
           </select>
           <button
             className="h-11 rounded-full bg-stone-950 px-5 text-xs font-semibold text-white"
             type="submit"
           >
-            应用筛选
+            絞り込む
           </button>
         </form>
         {!parsed.success ? (
           <p className="mt-4 rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
-            查询参数无效，已恢复默认条件。
+            検索条件が正しくないため、既定の条件に戻しました。
           </p>
         ) : null}
 
@@ -113,11 +113,11 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
                     <span
                       className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${product.isActive ? "bg-emerald-100 text-emerald-800" : "bg-stone-200 text-stone-700"}`}
                     >
-                      {product.isActive ? "上架" : "下架"}
+                      {product.isActive ? "販売中" : "販売停止"}
                     </span>
                   </div>
                   <p className="mt-1 truncate text-xs text-stone-500">
-                    {product.slug} · {product.category?.name ?? "未分类"}
+                    {product.slug} · {product.category?.name ?? "カテゴリーなし"}
                   </p>
                   <p className="mt-3 text-sm font-semibold text-stone-950">
                     {formatProductPrice(product.price, product.currency)}
@@ -129,7 +129,7 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
                     className="text-xs font-semibold text-stone-800 underline"
                     href={`/admin/products/${product.id}/edit`}
                   >
-                    编辑
+                    編集
                   </Link>
                   {product.isActive ? <ProductDeleteButton productId={product.id} /> : null}
                 </div>
@@ -138,8 +138,12 @@ export default async function AdminProductsPage({ searchParams }: PageProps) {
           ) : (
             <div className="grid min-h-64 place-items-center p-8 text-center">
               <div>
-                <h2 className="text-2xl font-semibold text-stone-950">没有符合条件的商品</h2>
-                <p className="mt-2 text-sm text-stone-500">尝试清除筛选或添加新商品。</p>
+                <h2 className="text-2xl font-semibold text-stone-950">
+                  条件に一致する商品はありません
+                </h2>
+                <p className="mt-2 text-sm text-stone-500">
+                  絞り込みを解除するか、商品を登録してください。
+                </p>
               </div>
             </div>
           )}

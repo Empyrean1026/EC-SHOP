@@ -3,7 +3,7 @@ import { ProductForm } from "@/components/admin/product-form";
 import { requireUser } from "@/lib/auth/dal";
 import { listCategories } from "@/services/product-service";
 
-export const metadata: Metadata = { title: "添加商品" };
+export const metadata: Metadata = { title: "商品を登録" };
 export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
@@ -15,7 +15,9 @@ export default async function NewProductPage() {
         <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
           Admin / New product
         </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">添加商品</h1>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
+          商品を登録
+        </h1>
         <div className="mt-8 rounded-3xl border border-stone-200 bg-white p-6 sm:p-9">
           <ProductForm categories={categories} />
         </div>

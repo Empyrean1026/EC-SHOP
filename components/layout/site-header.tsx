@@ -4,12 +4,12 @@ import { MobileNavigation } from "@/components/layout/mobile-navigation";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigation = [
-  { href: "/products", label: "商品" },
-  { href: "/search", label: "搜索" },
-  { href: "/cart", label: "购物车" },
-  { href: "/account/orders", label: "订单" },
-  { href: "/account/wishlist", label: "收藏" },
-  { href: "/#foundation", label: "工程基线" },
+  { href: "/products", label: "商品一覧" },
+  { href: "/search", label: "検索" },
+  { href: "/cart", label: "カート" },
+  { href: "/account/orders", label: "注文履歴" },
+  { href: "/account/wishlist", label: "お気に入り" },
+  { href: "/#foundation", label: "技術構成" },
 ];
 
 export function SiteHeader() {
@@ -19,7 +19,7 @@ export function SiteHeader() {
         <Link
           className="flex items-center gap-3 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-950"
           href="/"
-          aria-label="EC Site 首页"
+          aria-label="EC Site トップページ"
         >
           <span className="grid size-8 place-items-center rounded-full bg-stone-950 text-[10px] font-bold tracking-wider text-white">
             EC
@@ -27,7 +27,7 @@ export function SiteHeader() {
           <span className="text-sm font-bold tracking-[0.2em] text-stone-950">SITE</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="主导航">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="メインナビゲーション">
           {navigation.map((item) => (
             <Link
               className="text-xs font-medium text-stone-600 transition hover:text-stone-950 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-950"
@@ -44,7 +44,7 @@ export function SiteHeader() {
             className="hidden rounded-full px-3 py-2 text-xs font-semibold text-stone-600 transition hover:text-stone-950 md:block"
             href="/login"
           >
-            登录
+            ログイン
           </Link>
           <ThemeToggle />
           <CartBadge />

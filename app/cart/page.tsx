@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { CartPageClient } from "@/components/cart/cart-page-client";
 
 export const metadata: Metadata = {
-  title: "购物车",
-  description: "查看并管理 EC Site 购物车。",
+  title: "カート",
+  description: "EC Siteのカート内容を確認・管理します。",
 };
 
 export default function CartPage() {
@@ -15,10 +15,10 @@ export default function CartPage() {
             Phase 06 / Shopping cart
           </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
-            购物车
+            カート
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600">
-            实时核对商品价格与库存；游客数据保存在本地，登录后自动合并到 MongoDB。
+            商品価格と在庫をリアルタイムで確認します。ゲストのカートは端末に保存され、ログイン後にアカウントへ統合されます。
           </p>
         </div>
 

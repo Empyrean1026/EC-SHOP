@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const profile = await getAccountProfile(authentication.user.id);
     return profile
       ? apiSuccess({ address: profile.address })
-      : apiError("USER_NOT_FOUND", "账户不存在。", 404);
+      : apiError("USER_NOT_FOUND", "アカウントが見つかりません。", 404);
   } catch (error) {
     return accountServiceErrorResponse(error, "Unable to load address");
   }
@@ -39,14 +39,19 @@ export async function PUT(request: NextRequest) {
 
   const parsed = updateAddressSchema.safeParse(body.data);
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "请检查收货地址。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "お届け先の入力内容をご確認ください。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {
     const profile = await updateAccountAddress(authorization.user.id, parsed.data);
     return profile
       ? apiSuccess({ address: profile.address })
-      : apiError("USER_NOT_FOUND", "账户不存在。", 404);
+      : apiError("USER_NOT_FOUND", "アカウントが見つかりません。", 404);
   } catch (error) {
     return accountServiceErrorResponse(error, "Unable to update address");
   }
@@ -60,7 +65,7 @@ export async function DELETE(request: NextRequest) {
     const profile = await removeAccountAddress(authorization.user.id);
     return profile
       ? apiSuccess({ address: profile.address })
-      : apiError("USER_NOT_FOUND", "账户不存在。", 404);
+      : apiError("USER_NOT_FOUND", "アカウントが見つかりません。", 404);
   } catch (error) {
     return accountServiceErrorResponse(error, "Unable to remove address");
   }

@@ -27,7 +27,7 @@ export function ProductVisual({
   return (
     <div
       className={`relative overflow-hidden bg-gradient-to-br ${background} ${className}`}
-      aria-label={image ? undefined : `${name} 暂无商品图片`}
+      aria-label={image ? undefined : `${name} 商品画像はありません`}
       role={image ? undefined : "img"}
     >
       {image ? (

@@ -18,7 +18,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const profile = await getAccountProfile(authentication.user.id);
-    return profile ? apiSuccess({ profile }) : apiError("USER_NOT_FOUND", "账户不存在。", 404);
+    return profile
+      ? apiSuccess({ profile })
+      : apiError("USER_NOT_FOUND", "アカウントが見つかりません。", 404);
   } catch (error) {
     return accountServiceErrorResponse(error, "Unable to load profile");
   }
@@ -33,12 +35,19 @@ export async function PATCH(request: NextRequest) {
 
   const parsed = updateProfileSchema.safeParse(body.data);
   if (!parsed.success) {
-    return apiError("VALIDATION_ERROR", "请检查个人资料。", 422, getValidationErrors(parsed.error));
+    return apiError(
+      "VALIDATION_ERROR",
+      "プロフィールの入力内容をご確認ください。",
+      422,
+      getValidationErrors(parsed.error),
+    );
   }
 
   try {
     const profile = await updateAccountProfile(authorization.user.id, parsed.data);
-    return profile ? apiSuccess({ profile }) : apiError("USER_NOT_FOUND", "账户不存在。", 404);
+    return profile
+      ? apiSuccess({ profile })
+      : apiError("USER_NOT_FOUND", "アカウントが見つかりません。", 404);
   } catch (error) {
     return accountServiceErrorResponse(error, "Unable to update profile");
   }

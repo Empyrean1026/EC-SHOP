@@ -9,5 +9,5 @@ export default function AdminError({
   error: Error & { digest?: string };
   retry: () => void;
 }) {
-  return <RouteError error={error} retry={retry} scope="管理员数据" />;
+  return <RouteError error={error} retry={retry} scope="管理画面" />;
 }
