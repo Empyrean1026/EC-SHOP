@@ -1,46 +1,70 @@
+name: ec-site
+
 services:
   mongodb:
     image: mongo:8.0
     restart: unless-stopped
     environment:
       MONGO_INITDB_DATABASE: ec_site
-    ports:
-      - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - database
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 }).ok || quit(1)"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 10s
 
-  app:
+  db-init:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
+      target: tools
     env_file:
       - .env.local
     environment:
       NODE_ENV: production
       MONGODB_URI: mongodb://mongodb:27017/ec_site
-      APP_URL: http://localhost:3000
-    ports:
-      - "3000:3000"
+    command: ["npm", "run", "db:indexes"]
+    restart: "no"
     depends_on:
       mongodb:
         condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://localhost:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
-        ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+    networks:
+      - database
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env.local
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      NEXT_TELEMETRY_DISABLED: 1
+      MONGODB_URI: mongodb://mongodb:27017/ec_site
+      APP_URL: ${DOCKER_APP_URL:-http://localhost:3000}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    networks:
+      - edge
+      - database
+    stop_grace_period: 20s
 
 volumes:
   mongodb_data:
+
+networks:
+  edge:
+  database:
+    internal: true

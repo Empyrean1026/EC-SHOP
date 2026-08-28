@@ -1,9 +1,14 @@
 .git
 .gitignore
 .next
+.DS_Store
 Dockerfile
 README.md
 node_modules
 npm-debug.log*
+.env.local
 .env*
 !.env.example
+coverage
+docs
+tests

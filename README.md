@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十六阶段“性能优化”已完成，当前包含：
+第十七阶段“Docker”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -78,13 +78,16 @@
 - 公共目录、商品详情、分类、搜索和联想的限时数据缓存及写后精确失效
 - Recharts 客户端动态分包、图表加载骨架和稳定派生数据 memoization
 - 商品、订单和用户常用筛选路径的 MongoDB 组合索引与受限稳定 API 分页
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全及性能单元测试
+- Next.js standalone 多阶段非 root 应用镜像与容器原生健康检查
+- MongoDB 8 独立容器、命名数据卷、内部网络与零宿主机端口暴露
+- 一次性数据库索引初始化容器和基于健康/成功状态的启动依赖
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全、性能及 Docker 单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md)、[`docs/error-handling.md`](docs/error-handling.md)、[`docs/security.md`](docs/security.md) 和 [`docs/performance.md`](docs/performance.md)。
+退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md)、[`docs/error-handling.md`](docs/error-handling.md)、[`docs/security.md`](docs/security.md)、[`docs/performance.md`](docs/performance.md) 和 [`docs/docker.md`](docs/docker.md)。
 
 ## 技术要求
 
@@ -129,7 +132,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全与性能测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全、性能与 Docker 测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
@@ -141,17 +144,23 @@ npm run check         # 执行环境、格式、Lint、类型和测试检查
 
 ## Docker
 
-同时启动应用与 MongoDB：
+首次启动会构建应用镜像、启动 MongoDB、创建索引并在依赖健康后启动网站：
 
 ```bash
-docker compose up --build
+docker compose up -d
 ```
 
 服务地址：
 
 - 网站：[http://localhost:3000](http://localhost:3000)
-- MongoDB：`mongodb://localhost:27017/ec_site`
+- MongoDB：仅供容器内部通过 `mongodb://mongodb:27017/ec_site` 访问
 - 健康检查：[http://localhost:3000/api/health](http://localhost:3000/api/health)
+
+查看完整状态（`db-init` 显示 `Exited (0)` 表示索引初始化成功）：
+
+```bash
+docker compose ps --all
+```
 
 停止服务：
 
@@ -160,6 +169,7 @@ docker compose down
 ```
 
 如需连同本地 MongoDB 数据卷一起清除，可显式运行 `docker compose down --volumes`。
+完整结构、日志、端口覆盖和生产安全边界见 [`docs/docker.md`](docs/docker.md)。
 
 ## 目录结构
 
