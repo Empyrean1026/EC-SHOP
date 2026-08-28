@@ -10,6 +10,17 @@ export function isHttpUrl(value: string): boolean {
   }
 }
 
+export function isHttpOrPublicAssetUrl(value: string): boolean {
+  if (isHttpUrl(value)) return true;
+  if (!/^\/[A-Za-z0-9._~/-]+$/.test(value) || value.startsWith("//")) return false;
+
+  return value
+    .split("/")
+    .every(
+      (segment, index) => index === 0 || (segment !== "" && segment !== "." && segment !== ".."),
+    );
+}
+
 export function isNonNegativeSafeInteger(value: number): boolean {
   return Number.isSafeInteger(value) && value >= 0;
 }

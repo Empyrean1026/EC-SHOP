@@ -1,5 +1,9 @@
 import { type InferSchemaType, Schema } from "mongoose";
-import { isHttpUrl, isNonNegativeSafeInteger, isPositiveSafeInteger } from "@/models/validators";
+import {
+  isHttpOrPublicAssetUrl,
+  isNonNegativeSafeInteger,
+  isPositiveSafeInteger,
+} from "@/models/validators";
 
 export const orderItemSchema = new Schema(
   {
@@ -19,8 +23,8 @@ export const orderItemSchema = new Schema(
       trim: true,
       maxlength: [2048, "Order item image URL cannot exceed 2048 characters"],
       validate: {
-        validator: isHttpUrl,
-        message: "Order item image must be a valid HTTP URL",
+        validator: isHttpOrPublicAssetUrl,
+        message: "Order item image must be a valid HTTP URL or public asset path",
       },
     },
     unitPrice: {

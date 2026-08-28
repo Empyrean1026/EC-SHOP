@@ -156,7 +156,7 @@ export function ProductForm({
         </label>
       </div>
       <label className={labelClass}>
-        图片网址（每行或逗号分隔）
+        图片地址（支持 HTTP(S) 或 /public 站内路径，每行或逗号分隔）
         <textarea
           className="mt-2 min-h-24 w-full rounded-xl border border-stone-300 bg-white p-3 text-sm text-stone-950"
           name="images"

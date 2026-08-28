@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CURRENCY_CODES } from "@/models";
+import { isHttpOrPublicAssetUrl } from "@/models/validators";
 import {
   PRODUCT_MAX_PAGE_SIZE,
   PRODUCT_PAGE_SIZE,
@@ -13,14 +14,11 @@ const optionalText = (maximum: number) =>
   z.preprocess(emptyToUndefined, z.string().trim().min(1).max(maximum).optional());
 const optionalInteger = (minimum: number, maximum: number) =>
   z.preprocess(emptyToUndefined, z.coerce.number().int().min(minimum).max(maximum).optional());
-const httpUrlSchema = z
+const imageUrlSchema = z
   .string()
   .trim()
   .max(2048)
-  .url("图片地址格式无效")
-  .refine((value) => ["http:", "https:"].includes(new URL(value).protocol), {
-    message: "图片地址必须使用 HTTP 或 HTTPS",
-  });
+  .refine(isHttpOrPublicAssetUrl, "图片地址必须使用 HTTP、HTTPS 或安全的站内资源路径");
 
 export const productListQuerySchema = z
   .object({
@@ -68,7 +66,7 @@ const productFields = {
   price: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
   currency: z.enum(CURRENCY_CODES).default("jpy"),
   categoryId: objectIdSchema,
-  images: z.array(httpUrlSchema).max(12).default([]),
+  images: z.array(imageUrlSchema).max(12).default([]),
   stock: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).default(0),
   isActive: z.boolean().default(true),
 };
@@ -83,7 +81,7 @@ export const updateProductSchema = z
     price: productFields.price.optional(),
     currency: z.enum(CURRENCY_CODES).optional(),
     categoryId: productFields.categoryId.optional(),
-    images: z.array(httpUrlSchema).max(12).optional(),
+    images: z.array(imageUrlSchema).max(12).optional(),
     stock: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).optional(),
     isActive: z.boolean().optional(),
   })

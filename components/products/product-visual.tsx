@@ -41,7 +41,7 @@ export function ProductVisual({
           loading={priority ? undefined : "lazy"}
           decoding="async"
           referrerPolicy="no-referrer"
-          unoptimized={/^https?:\/\//i.test(image)}
+          unoptimized={/^https?:\/\//i.test(image) || /\.svg$/i.test(image)}
         />
       ) : (
         <div className="absolute inset-0 grid place-items-center">

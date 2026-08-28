@@ -56,6 +56,8 @@ GET /api/products?q=台灯&category=home-living&inStock=true&sort=price_asc&page
 
 创建商品需要 `name`、`slug`、`description`、`price` 和 `categoryId`；`currency`、`images`、`stock` 与 `isActive` 有安全默认值或可显式设置。`PUT` 接受这些字段中的一个或多个。
 
+商品图片支持 HTTP(S) URL 和以 `/` 开始的安全站内 `public` 资源路径。站内路径会拒绝 `..`、空路径段、反斜杠、查询参数和协议形式，订单商品快照使用同一规则。原创 SVG 使用 `next/image` 的 `unoptimized` 模式直接提供，避免开启全局 `dangerouslyAllowSVG`。
+
 `rating`、`reviewCount` 和 `salesCount` 是系统聚合字段，不允许通过公开 CRUD 请求设置：评价阶段维护评分，订单支付完成后维护销量。价格始终使用最小货币单位，JPY 不缩放，USD/CNY 例如 `1299` 表示 12.99。
 
 公开列表和详情只返回 `isActive: true` 的商品。`DELETE` 不物理删除记录，以免未来订单快照、购物车和审计引用失效；管理员可使用 `PUT` 将 `isActive` 恢复为 `true`。
@@ -72,10 +74,34 @@ GET /api/products?q=台灯&category=home-living&inStock=true&sort=price_asc&page
 
 ## 本地演示数据
 
-以下命令会按 Slug 幂等写入 4 个分类和 8 个商品：
+以下命令会按 Slug 幂等写入 5 个分类和 18 个商品：
 
 ```bash
 npm run db:seed
 ```
 
 脚本会更新这些固定 Slug 的演示记录，不会删除其他商品。生产环境应使用受控的商品导入或管理员后台，不应运行演示种子。
+
+其中 10 件带原创本地 SVG 主图的展示商品为：
+
+| 商品             | 分类     |     价格 | 库存 |
+| ---------------- | -------- | -------: | ---: |
+| 真空不锈钢随行杯 | 户外出行 | JP¥3,480 |   36 |
+| 柔光阅读台灯     | 家居生活 | JP¥5,980 |   18 |
+| 六角包胶哑铃     | 运动健身 | JP¥4,500 |   20 |
+| 缓冲瑜伽垫       | 运动健身 | JP¥3,980 |   28 |
+| 双层保温饭盒     | 家居生活 | JP¥4,200 |   24 |
+| 铝合金电脑支架   | 文具办公 | JP¥5,200 |   22 |
+| 模块化桌面收纳盒 | 文具办公 | JP¥2,900 |   40 |
+| 静音无线鼠标     | 数码设备 | JP¥3,600 |   32 |
+| 折叠便携风扇     | 数码设备 | JP¥2,980 |   45 |
+| 五级阻力带套装   | 运动健身 | JP¥2,600 |   50 |
+
+主图保存在 `public/products/`。图像由项目内的几何路径和渐变构成，不包含品牌 Logo、商标、IP 角色、外部图片引用、脚本或 `foreignObject`。
+
+Docker 环境重新导入时使用构建后的 `db-init` 镜像：
+
+```bash
+docker compose up -d --build
+docker compose run --rm db-init npm run db:seed
+```

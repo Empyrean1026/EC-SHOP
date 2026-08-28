@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title">
+  <title id="title">Brand-free adjustable desk lamp illustration</title>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f8f4eb"/><stop offset="1" stop-color="#e7ded3"/></linearGradient><filter id="shadow"><feDropShadow dx="0" dy="22" stdDeviation="20" flood-opacity=".2"/></filter></defs>
+  <path fill="url(#bg)" d="M0 0h1200v900H0z"/><circle cx="610" cy="402" r="310" fill="#f2bf65" opacity=".48"/><ellipse cx="603" cy="750" rx="300" ry="36" fill="#293330" opacity=".14"/>
+  <g filter="url(#shadow)" stroke="#36423f" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"><path d="M478 677l74-262 168-130" fill="none"/><circle cx="550" cy="419" r="34" fill="#e17a47" stroke-width="14"/><path d="M702 234l186 145-243 102z" fill="#596763"/><path d="M393 704h330" fill="none"/><path d="M433 704l-28 50h311l-30-50" fill="#36423f" stroke-width="14"/></g><path d="M699 476l-82 170h300L846 390z" fill="#ffd98d" opacity=".25"/>
+</svg>

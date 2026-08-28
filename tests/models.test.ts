@@ -66,7 +66,7 @@ test("Category and Product models enforce slugs, money, inventory, and ratings",
     description: "A compact stone lamp for quiet interiors.",
     price: 21500,
     category: category._id,
-    images: ["https://example.com/lamp.jpg"],
+    images: ["/products/stone-table-lamp.svg"],
     stock: 8,
     rating: 4.8,
     reviewCount: 24,
@@ -78,6 +78,7 @@ test("Category and Product models enforce slugs, money, inventory, and ratings",
   assert.equal(product.currency, "jpy");
   assert.equal(product.isActive, true);
   assert.equal(product.salesCount, 158);
+  assert.equal(product.images[0], "/products/stone-table-lamp.svg");
 
   product.price = 21.5;
   await assert.rejects(product.validate(), /non-negative safe integer/);
@@ -98,7 +99,7 @@ test("Order model stores item and address snapshots and derives item subtotals",
       {
         productId,
         name: "Stone Table Lamp",
-        image: "https://example.com/lamp.jpg",
+        image: "/products/stone-table-lamp.svg",
         unitPrice: 21500,
         quantity: 2,
       },

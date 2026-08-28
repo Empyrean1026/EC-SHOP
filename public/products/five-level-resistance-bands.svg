@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title">
+  <title id="title">Brand-free resistance band set illustration</title>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f8f4eb"/><stop offset="1" stop-color="#e2e8dc"/></linearGradient><filter id="shadow"><feDropShadow dx="0" dy="22" stdDeviation="20" flood-opacity=".18"/></filter></defs>
+  <path fill="url(#bg)" d="M0 0h1200v900H0z"/><circle cx="600" cy="420" r="310" fill="#e7b466" opacity=".46"/><ellipse cx="600" cy="744" rx="355" ry="42" fill="#293330" opacity=".13"/>
+  <g fill="none" stroke-linecap="round" filter="url(#shadow)"><path d="M292 575c84-328 532-328 616 0 67 262-371 273-308-22 63 295-375 284-308 22z" stroke="#334b43" stroke-width="38"/><path d="M326 593c76-270 472-270 548 0 59 208-328 218-274-17 54 235-333 225-274 17z" stroke="#5d776d" stroke-width="34"/><path d="M364 610c66-211 406-211 472 0 48 158-283 166-236-13 47 179-284 171-236 13z" stroke="#d17b50" stroke-width="31"/><path d="M408 629c52-152 332-152 384 0 36 106-228 112-192-10 36 122-228 116-192 10z" stroke="#d5a050" stroke-width="28"/><path d="M460 648c36-88 244-88 280 0 23 57-163 61-140-7 23 68-163 64-140 7z" stroke="#9a8a70" stroke-width="25"/></g>
+</svg>

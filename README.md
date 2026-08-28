@@ -20,6 +20,7 @@
 - 价格、销量、评分排序与实时库存状态显示
 - 公开商品/分类 REST API 和受管理员 RBAC + CSRF 保护的商品 CRUD
 - 商品软删除、只读销量聚合字段与幂等目录种子脚本
+- 5 个演示分类、18 件幂等种子商品及 10 张无品牌原创本地 SVG 商品主图
 - 独立搜索页、加权 MongoDB 全文索引、中文安全子串回退与相关度排序
 - 250ms 防抖自动补全、过期请求取消、键盘操作与无结果状态
 - 有候选上限的中英文模糊匹配与浏览器本地搜索历史
@@ -143,7 +144,7 @@ npm run test:e2e      # 运行 API 与 Chromium 页面测试
 npm run test:all      # 运行全部快速测试和 E2E 测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
-npm run db:seed       # 幂等写入本地演示分类和商品
+npm run db:seed       # 幂等写入 5 个演示分类和 18 件商品
 npm run user:role -- --email=user@example.com --role=admin
 npm run format        # 自动格式化项目
 npm run format:check  # 检查格式

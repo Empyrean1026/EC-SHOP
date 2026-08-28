@@ -1,6 +1,6 @@
 import { type InferSchemaType, type Model, Schema, model, models } from "mongoose";
 import { configureJsonSerialization } from "@/models/schema-utils";
-import { isHttpUrl, SLUG_PATTERN } from "@/models/validators";
+import { isHttpOrPublicAssetUrl, SLUG_PATTERN } from "@/models/validators";
 
 const categorySchema = new Schema(
   {
@@ -30,8 +30,8 @@ const categorySchema = new Schema(
       trim: true,
       maxlength: [2048, "Category image URL cannot exceed 2048 characters"],
       validate: {
-        validator: isHttpUrl,
-        message: "Category image must be a valid HTTP URL",
+        validator: isHttpOrPublicAssetUrl,
+        message: "Category image must be a valid HTTP URL or public asset path",
       },
     },
     parentCategory: {

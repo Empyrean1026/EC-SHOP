@@ -66,6 +66,30 @@ test("product creation validates catalog fields and rejects aggregate injection"
   assert.equal(injected.success, false);
 });
 
+test("product images allow safe public assets without accepting unsafe paths", () => {
+  const input = {
+    name: "Local Product Image",
+    slug: "local-product-image",
+    description: "A product backed by an original local SVG illustration.",
+    price: 3600,
+    categoryId,
+    stock: 10,
+  };
+
+  assert.equal(
+    createProductSchema.safeParse({ ...input, images: ["/products/local-image.svg"] }).success,
+    true,
+  );
+  assert.equal(
+    createProductSchema.safeParse({ ...input, images: ["/products/../secret.svg"] }).success,
+    false,
+  );
+  assert.equal(
+    createProductSchema.safeParse({ ...input, images: ["javascript:alert(1)"] }).success,
+    false,
+  );
+});
+
 test("product updates are strict but allow focused inventory changes", () => {
   assert.equal(updateProductSchema.safeParse({}).success, false);
   assert.equal(updateProductSchema.safeParse({ stock: 3 }).success, true);

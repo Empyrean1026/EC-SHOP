@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title">
+  <title id="title">Brand-free yoga mat illustration</title>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f8f4eb"/><stop offset="1" stop-color="#e1e8db"/></linearGradient><linearGradient id="mat" x2="1" y2="1"><stop stop-color="#718b78"/><stop offset="1" stop-color="#3f5f51"/></linearGradient><filter id="shadow"><feDropShadow dx="0" dy="24" stdDeviation="22" flood-opacity=".18"/></filter></defs>
+  <path fill="url(#bg)" d="M0 0h1200v900H0z"/><circle cx="600" cy="420" r="310" fill="#e6b567" opacity=".42"/><ellipse cx="600" cy="735" rx="380" ry="45" fill="#26312f" opacity=".13"/>
+  <g filter="url(#shadow)"><path d="M226 615l497-353 276 211-503 301z" fill="url(#mat)" stroke="#31483e" stroke-width="16"/><path d="M723 262c75-47 174-25 221 50s24 174-51 221c-67 42-154 29-205-28-16-18-9-46 13-57 22-11 48-3 62 15 23 29 65 37 98 16 39-25 51-77 26-116s-77-51-116-26z" fill="#91aa92" stroke="#31483e" stroke-width="16"/><path d="M309 624l192 67" stroke="#a9c0aa" stroke-width="16" stroke-linecap="round"/></g>
+</svg>

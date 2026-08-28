@@ -1,7 +1,11 @@
 import { type InferSchemaType, type Model, Schema, model, models } from "mongoose";
 import { CURRENCY_CODES } from "@/models/constants";
 import { configureJsonSerialization } from "@/models/schema-utils";
-import { isHttpUrl, isNonNegativeSafeInteger, SLUG_PATTERN } from "@/models/validators";
+import {
+  isHttpOrPublicAssetUrl,
+  isNonNegativeSafeInteger,
+  SLUG_PATTERN,
+} from "@/models/validators";
 
 const productSchema = new Schema(
   {
@@ -58,8 +62,8 @@ const productSchema = new Schema(
           trim: true,
           maxlength: [2048, "Product image URL cannot exceed 2048 characters"],
           validate: {
-            validator: isHttpUrl,
-            message: "Product image must be a valid HTTP URL",
+            validator: isHttpOrPublicAssetUrl,
+            message: "Product image must be a valid HTTP URL or public asset path",
           },
         },
       ],
