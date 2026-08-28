@@ -10,5 +10,9 @@ npm-debug.log*
 .env*
 !.env.example
 coverage
+playwright-report
+test-results
 docs
 tests
+tests-vitest
+e2e

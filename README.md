@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十七阶段“Docker”已完成，当前包含：
+第十八阶段“测试”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -82,12 +82,16 @@
 - MongoDB 8 独立容器、命名数据卷、内部网络与零宿主机端口暴露
 - 一次性数据库索引初始化容器和基于健康/成功状态的启动依赖
 - 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全、性能及 Docker 单元测试
+- Vitest 业务集成测试与 V8 HTML 覆盖率报告
+- Playwright 真实 HTTP API 闭环、Chromium 注册/登录流程和失败追踪资料
+- 独立 `ec_site_e2e` 数据库的运行前重建、安全数据库名校验与运行后清理
+- 商品、认证、购物车、结算、Stripe 安全边界和订单历史的跨层自动化测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md)、[`docs/error-handling.md`](docs/error-handling.md)、[`docs/security.md`](docs/security.md)、[`docs/performance.md`](docs/performance.md) 和 [`docs/docker.md`](docs/docker.md)。
+退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md)、[`docs/error-handling.md`](docs/error-handling.md)、[`docs/security.md`](docs/security.md)、[`docs/performance.md`](docs/performance.md)、[`docs/docker.md`](docs/docker.md) 和 [`docs/testing.md`](docs/testing.md)。
 
 ## 技术要求
 
@@ -132,7 +136,11 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理、安全、性能与 Docker 测试
+npm test              # 运行 node:test 与 Vitest 快速测试
+npm run test:coverage # 运行 Vitest 并生成 V8 覆盖率报告
+npm run test:api      # 运行 Playwright 真实 HTTP API 闭环
+npm run test:e2e      # 运行 API 与 Chromium 页面测试
+npm run test:all      # 运行全部快速测试和 E2E 测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品
@@ -141,6 +149,8 @@ npm run format        # 自动格式化项目
 npm run format:check  # 检查格式
 npm run check         # 执行环境、格式、Lint、类型和测试检查
 ```
+
+Playwright 首次使用前运行 `npx playwright install chromium`，并确保测试 MongoDB 可从宿主机访问。E2E 只允许清理名为 `ec_site_e2e` 的隔离数据库，详细准备、覆盖范围和 CI 建议见 [`docs/testing.md`](docs/testing.md)。
 
 ## Docker
 
@@ -179,6 +189,7 @@ ec-site/
 │   └── api/health/      # MongoDB 健康检查 API
 ├── components/          # 可复用认证、商品、购物车、结算、支付、订单与账户组件
 ├── docs/                # 数据库及各阶段业务系统文档
+├── e2e/                 # Playwright API 与 Chromium 端到端测试
 ├── hooks/               # 购物车操作等客户端 React Hooks
 ├── lib/                 # 数据库、认证、购物车、结算、Stripe、订单、账户与 API 工具
 ├── middleware/          # 可复用请求中间件辅助代码
@@ -188,6 +199,7 @@ ec-site/
 ├── services/            # 浏览器传输与服务端领域服务
 ├── store/               # Zustand 全局客户端状态
 ├── tests/               # 自动化测试
+├── tests-vitest/        # Vitest 业务单元与集成测试
 ├── types/               # 跨层 TypeScript 类型
 ├── .env.example         # 可提交的环境变量模板
 ├── .env.local           # 本地环境变量，不提交

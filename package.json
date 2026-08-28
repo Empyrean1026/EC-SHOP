@@ -15,7 +15,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "env:check": "node scripts/check-env.mjs",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "npm run test:node && npm run test:vitest",
+    "test:node": "tsx --test tests/*.test.ts",
+    "test:vitest": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:api": "playwright test e2e/api-flow.spec.ts",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && npm run test:e2e",
     "db:indexes": "tsx scripts/create-indexes.ts",
     "db:migrate-order-statuses": "tsx scripts/migrate-order-statuses.ts",
     "db:seed": "tsx scripts/seed-catalog.ts",
@@ -41,11 +47,13 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
     "eslint-config-prettier": "^10.1.8",
@@ -53,6 +61,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.12",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.11"
   }
 }
