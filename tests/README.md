@@ -26,4 +26,6 @@
 
 `api-errors.test.ts` validates the flat API error contract, safe correlated 5xx responses, the global Route Handler wrapper, and resilient client parsing.
 
+`security.test.ts` validates nonce CSP, same-origin CORS, API rate limiting, MongoDB operator rejection, React text escaping, and unsafe URL blocking.
+
 Run the suite with `npm test`.

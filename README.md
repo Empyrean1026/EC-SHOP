@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-第十四阶段“错误处理”已完成，当前包含：
+第十五阶段“安全”已完成，当前包含：
 
 - Next.js 16、React 19、App Router 与严格模式 TypeScript
 - Tailwind CSS 4 响应式基础布局
@@ -67,13 +67,20 @@
 - 客户端成功、业务错误、无效 JSON、代理错误及网络中断统一解析
 - 应用、账户、管理员及根布局四级可恢复 Error Boundary
 - 不向客户端泄露异常消息、堆栈、数据库地址或服务端实现细节
-- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI 及错误处理单元测试
+- Next.js 原生 Helmet 等价安全头、每请求 nonce CSP 与 Stripe 安全域名白名单
+- 默认拒绝跨站浏览器 API 的同源 CORS 策略与现有签名 CSRF 双重保护
+- 全 API、搜索、Webhook 及认证分级限流和标准配额响应头
+- JSON 对象键递归过滤、严格 Zod Schema、ObjectId 与排序白名单防 MongoDB Injection
+- React 文本转义、HTTP(S) URL 限制和 CSP 组合防御 XSS
+- JWT 固定算法与声明校验、HttpOnly/SameSite/Secure Cookie 和数据库角色复核
+- bcrypt 10–14 cost、72 字节边界、dummy hash 时序防护和密码哈希默认隐藏
+- 无需数据库连接的模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理及安全单元测试
 - ESLint 9、Prettier 3 与 Tailwind 类名格式化
 - 本地环境变量校验与安全的环境变量示例
 - Next.js standalone Docker 镜像与 MongoDB Compose 服务
 - 基础安全响应头、Git 仓库与项目目录约定
 
-退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md) 和 [`docs/error-handling.md`](docs/error-handling.md)。
+退款金额核算、库存预留和角色审计等业务能力将在后续阶段实现。完整设计见 [`docs/database-design.md`](docs/database-design.md)、[`docs/authentication.md`](docs/authentication.md)、[`docs/product-system.md`](docs/product-system.md)、[`docs/search-system.md`](docs/search-system.md)、[`docs/cart-system.md`](docs/cart-system.md)、[`docs/checkout-system.md`](docs/checkout-system.md)、[`docs/payment-system.md`](docs/payment-system.md)、[`docs/order-system.md`](docs/order-system.md)、[`docs/user-center.md`](docs/user-center.md)、[`docs/admin-panel.md`](docs/admin-panel.md)、[`docs/analytics.md`](docs/analytics.md)、[`docs/ui-ux.md`](docs/ui-ux.md)、[`docs/error-handling.md`](docs/error-handling.md) 和 [`docs/security.md`](docs/security.md)。
 
 ## 技术要求
 
@@ -102,6 +109,7 @@ npm run dev
 | `AUTH_SECRET`                        | JWT HMAC 密钥，至少 32 字节         | 使用随机值                          |
 | `CSRF_SECRET`                        | 独立 CSRF HMAC 密钥，至少 32 字节   | 使用另一份随机值                    |
 | `BCRYPT_SALT_ROUNDS`                 | bcrypt cost，允许 10–14             | `12`                                |
+| `TRUST_PROXY`                        | 是否信任代理写入的客户端 IP Header  | `false`                             |
 | `STRIPE_SECRET_KEY`                  | Stripe 服务端密钥，不得暴露给浏览器 | `sk_test_...`                       |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe Elements 公开密钥            | `pk_test_...`                       |
 | `STRIPE_WEBHOOK_SECRET`              | Webhook endpoint 签名密钥           | `whsec_...`                         |
@@ -117,7 +125,7 @@ npm run start         # 启动生产服务器
 npm run env:check     # 检查本地环境变量是否齐全
 npm run lint          # 运行 ESLint
 npm run typecheck     # 运行 TypeScript 类型检查
-npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI 与错误处理测试
+npm test              # 运行模型、认证、商品、搜索、购物车、结算、支付、订单、账户、管理员、统计、UI、错误处理与安全测试
 npm run db:indexes    # 在目标 MongoDB 中创建声明的索引
 npm run db:migrate-order-statuses # 幂等迁移旧订单生命周期名称
 npm run db:seed       # 幂等写入本地演示分类和商品

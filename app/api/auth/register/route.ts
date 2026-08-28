@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
   }
 
-  const rateLimit = consumeAuthAttempt(request, "register");
+  const rateLimit = await consumeAuthAttempt(request, "register");
 
   if (!rateLimit.allowed) {
     const response = apiError("RATE_LIMITED", "认证请求过于频繁，请稍后重试。", 429);

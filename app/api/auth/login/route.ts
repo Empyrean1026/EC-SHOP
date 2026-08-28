@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     return apiError("INVALID_CSRF_TOKEN", "安全令牌无效或已过期。", 403);
   }
 
-  const rateLimit = consumeAuthAttempt(request, "login");
+  const rateLimit = await consumeAuthAttempt(request, "login");
 
   if (!rateLimit.allowed) {
     const response = apiError("RATE_LIMITED", "认证请求过于频繁，请稍后重试。", 429);
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     const response = apiSuccess({ user: authUser });
 
     setSessionCookie(response, token);
-    clearAuthAttempts(request, "login");
+    await clearAuthAttempts(request, "login");
     return response;
   } catch (error) {
     return apiInternalError(error, "api.auth.login", "暂时无法登录，请稍后重试。");

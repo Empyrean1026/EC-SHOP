@@ -35,6 +35,11 @@ if (!Number.isInteger(bcryptSaltRounds) || bcryptSaltRounds < 10 || bcryptSaltRo
   process.exit(1);
 }
 
+if (process.env.TRUST_PROXY && !["true", "false"].includes(process.env.TRUST_PROXY)) {
+  console.error("Environment check failed: TRUST_PROXY must be true or false.");
+  process.exit(1);
+}
+
 const stripeVariables = {
   STRIPE_SECRET_KEY: "sk_",
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_",

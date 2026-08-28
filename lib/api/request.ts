@@ -4,10 +4,23 @@ export type JsonBodyResult =
   | { success: true; data: unknown }
   | {
       success: false;
-      code: "UNSUPPORTED_MEDIA_TYPE" | "PAYLOAD_TOO_LARGE" | "INVALID_JSON";
+      code: "UNSUPPORTED_MEDIA_TYPE" | "PAYLOAD_TOO_LARGE" | "INVALID_JSON" | "UNSAFE_INPUT";
       message: string;
       status: 400 | 413 | 415;
     };
+
+export function containsUnsafeMongoKey(value: unknown): boolean {
+  if (Array.isArray(value)) return value.some(containsUnsafeMongoKey);
+  if (!value || typeof value !== "object") return false;
+
+  return Object.entries(value).some(
+    ([key, nestedValue]) =>
+      key.startsWith("$") ||
+      key.includes(".") ||
+      ["__proto__", "prototype", "constructor"].includes(key) ||
+      containsUnsafeMongoKey(nestedValue),
+  );
+}
 
 export async function readJsonBody(
   request: Request,
@@ -47,9 +60,20 @@ export async function readJsonBody(
       };
     }
 
+    const data: unknown = JSON.parse(rawBody);
+
+    if (containsUnsafeMongoKey(data)) {
+      return {
+        success: false,
+        code: "UNSAFE_INPUT",
+        message: "Request body contains forbidden object keys.",
+        status: 400,
+      };
+    }
+
     return {
       success: true,
-      data: JSON.parse(rawBody) as unknown,
+      data,
     };
   } catch {
     return {
