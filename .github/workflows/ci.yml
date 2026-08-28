@@ -16,6 +16,11 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      MONGODB_URI: mongodb://127.0.0.1:27017/ec_site
+      APP_URL: http://127.0.0.1:3000
+      BCRYPT_SALT_ROUNDS: "10"
+      TRUST_PROXY: "false"
     services:
       mongodb:
         image: mongo:8.0
@@ -41,7 +46,10 @@ jobs:
         run: npm ci
 
       - name: Prepare test environment
-        run: cp .env.example .env.local
+        run: |
+          cp .env.example .env.local
+          printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          printf 'CSRF_SECRET=%s\n' "$(openssl rand -hex 32)" >> "$GITHUB_ENV"
 
       - name: Check source and unit tests
         run: npm run check

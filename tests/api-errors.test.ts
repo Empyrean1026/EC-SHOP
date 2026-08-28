@@ -25,7 +25,7 @@ test("internal API errors are logged, correlated, and hide exception details", a
 
   try {
     const response = apiInternalError(
-      new Error("mongodb://user:password@private-host"),
+      new Error("sensitive database connection details"),
       "api.products.list",
       "商品を読み込めません。",
     );
@@ -38,7 +38,7 @@ test("internal API errors are logged, correlated, and hide exception details", a
     assert.equal(body.code, "INTERNAL_ERROR");
     assert.match(requestId, /^[0-9a-f-]{36}$/);
     assert.equal(response.headers.get("x-request-id"), requestId);
-    assert.doesNotMatch(JSON.stringify(body), /password|private-host/);
+    assert.doesNotMatch(JSON.stringify(body), /sensitive database connection details/);
 
     const log = JSON.parse(messages[0] ?? "{}") as Record<string, unknown>;
     assert.equal(log.level, "error");

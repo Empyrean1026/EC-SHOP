@@ -68,15 +68,16 @@ npm run dev
 | ------------------------------------ | ------------------------------------------ |
 | `MONGODB_URI`                        | MongoDB接続URI                             |
 | `APP_URL`                            | アプリの公開URL                            |
-| `AUTH_SECRET`                        | JWT署名用シークレット（32バイト以上）      |
+| `JWT_SECRET`                         | JWT署名用シークレット（32バイト以上）      |
 | `CSRF_SECRET`                        | CSRFトークン用シークレット（32バイト以上） |
 | `BCRYPT_SALT_ROUNDS`                 | bcryptのコスト（10〜14）                   |
 | `TRUST_PROXY`                        | 信頼できるリバースプロキシ配下のみ`true`   |
 | `STRIPE_SECRET_KEY`                  | Stripeシークレットキー                     |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe公開可能キー                         |
 | `STRIPE_WEBHOOK_SECRET`              | Stripe Webhook署名シークレット             |
+| `OPENAI_API_KEY`                     | 将来の連携用（現在のアプリでは未使用）     |
 
-シークレットはリポジトリへコミットしないでください。Stripe関連の3変数は、すべて設定するか、すべて未設定にします。
+`.env.example`には変数名のみを記載しています。値はローカルの`.env.local`またはデプロイ先のSecret管理機能に設定し、リポジトリへコミットしないでください。Stripe関連の3変数は、すべて設定するか、すべて未設定にします。従来の`AUTH_SECRET`も読み取り可能ですが、新しい環境では`JWT_SECRET`を使用してください。
 
 ### Stripeテストモード
 
@@ -198,7 +199,7 @@ npm run db:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Run all `npm` commands from the `ec-site` directory containing `package.json`. Never commit secrets; configure all three Stripe variables together, or leave all three unset.
+Open [http://localhost:3000](http://localhost:3000). Run all `npm` commands from the `ec-site` directory containing `package.json`. `.env.example` intentionally contains variable names with empty values only. Store real values in `.env.local` or the deployment platform's secret manager and never commit them. Use `JWT_SECRET` for JWT signing; the legacy `AUTH_SECRET` name remains supported. Configure all three Stripe variables together, or leave all three unset. `OPENAI_API_KEY` is reserved for future integration and is not currently used by the application.
 
 ### Stripe test mode
 
@@ -264,4 +265,4 @@ For security reporting, see [SECURITY.md](SECURITY.md). For contribution workflo
 
 ## License
 
-No open-source license has been selected. All rights are reserved until the repository owner adds a license.
+This repository is publicly viewable but is not open source. See [LICENSE](LICENSE); all rights are reserved unless the copyright holder grants prior written permission.

@@ -6,7 +6,7 @@ import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { readJsonBody } from "@/lib/api/request";
 import { loginSchema, registerSchema } from "@/lib/validations/auth";
 
-process.env.AUTH_SECRET = "test-auth-secret-with-at-least-thirty-two-bytes";
+process.env.JWT_SECRET = "test-jwt-secret-with-at-least-thirty-two-bytes";
 process.env.CSRF_SECRET = "test-csrf-secret-with-at-least-thirty-two-bytes";
 process.env.BCRYPT_SALT_ROUNDS = "10";
 

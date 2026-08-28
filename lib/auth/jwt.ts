@@ -6,10 +6,10 @@ import { JWT_AUDIENCE, JWT_ISSUER, SESSION_DURATION_SECONDS } from "@/lib/auth/c
 const textEncoder = new TextEncoder();
 
 function getJwtKey(): Uint8Array {
-  const secret = process.env.AUTH_SECRET;
+  const secret = process.env.JWT_SECRET ?? process.env.AUTH_SECRET;
 
   if (!secret || textEncoder.encode(secret).byteLength < 32) {
-    throw new Error("AUTH_SECRET must contain at least 32 bytes");
+    throw new Error("JWT_SECRET must contain at least 32 bytes");
   }
 
   return textEncoder.encode(secret);

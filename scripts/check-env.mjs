@@ -7,25 +7,28 @@ if (result.error) {
   process.exit(1);
 }
 
-const requiredVariables = [
-  "MONGODB_URI",
-  "APP_URL",
-  "AUTH_SECRET",
-  "CSRF_SECRET",
-  "BCRYPT_SALT_ROUNDS",
-];
+const requiredVariables = ["MONGODB_URI", "APP_URL", "CSRF_SECRET", "BCRYPT_SALT_ROUNDS"];
 const missingVariables = requiredVariables.filter((name) => !process.env[name]);
+
+if (!process.env.JWT_SECRET && !process.env.AUTH_SECRET) {
+  missingVariables.push("JWT_SECRET");
+}
 
 if (missingVariables.length > 0) {
   console.error(`Environment check failed: missing ${missingVariables.join(", ")}.`);
   process.exit(1);
 }
 
-for (const secretName of ["AUTH_SECRET", "CSRF_SECRET"]) {
-  if (new TextEncoder().encode(process.env[secretName]).byteLength < 32) {
-    console.error(`Environment check failed: ${secretName} must contain at least 32 bytes.`);
-    process.exit(1);
-  }
+const jwtSecret = process.env.JWT_SECRET ?? process.env.AUTH_SECRET ?? "";
+
+if (new TextEncoder().encode(jwtSecret).byteLength < 32) {
+  console.error("Environment check failed: JWT_SECRET must contain at least 32 bytes.");
+  process.exit(1);
+}
+
+if (new TextEncoder().encode(process.env.CSRF_SECRET).byteLength < 32) {
+  console.error("Environment check failed: CSRF_SECRET must contain at least 32 bytes.");
+  process.exit(1);
 }
 
 const bcryptSaltRounds = Number(process.env.BCRYPT_SALT_ROUNDS);
