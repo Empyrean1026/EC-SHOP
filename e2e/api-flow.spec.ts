@@ -25,7 +25,11 @@ function mutationHeaders(csrfToken: string): Record<string, string> {
   };
 }
 
-test("主要APIで新規登録からカート、注文までの一連の処理が完了する", async ({ request }) => {
+test("主要APIで新規登録からカート、注文までの一連の処理が完了する", async ({
+  request,
+}, testInfo) => {
+  const email = `api.e2e.${testInfo.retry}@example.com`;
+
   await test.step("商品一覧と商品詳細を取得できる", async () => {
     const listResponse = await request.get("/api/products?category=e2e-products&limit=10");
     expect(listResponse.status()).toBe(200);
@@ -60,7 +64,7 @@ test("主要APIで新規登録からカート、注文までの一連の処理�
       headers: mutationHeaders(csrfToken),
       data: {
         name: "APIテストユーザー",
-        email: "api.e2e@example.com",
+        email,
         password: "TestPass123",
         confirmPassword: "TestPass123",
       },
@@ -68,13 +72,13 @@ test("主要APIで新規登録からカート、注文までの一連の処理�
     expect(registration.status()).toBe(201);
     await expect(registration.json()).resolves.toMatchObject({
       success: true,
-      data: { user: { email: "api.e2e@example.com", role: "customer" } },
+      data: { user: { email, role: "customer" } },
     });
 
     csrfToken = await getCsrfToken(request);
     const wrongPassword = await request.post("/api/auth/login", {
       headers: mutationHeaders(csrfToken),
-      data: { email: "api.e2e@example.com", password: "WrongPass123" },
+      data: { email, password: "WrongPass123" },
     });
     expect(wrongPassword.status()).toBe(401);
     await expect(wrongPassword.json()).resolves.toMatchObject({ success: false });
@@ -82,12 +86,12 @@ test("主要APIで新規登録からカート、注文までの一連の処理�
     csrfToken = await getCsrfToken(request);
     const login = await request.post("/api/auth/login", {
       headers: mutationHeaders(csrfToken),
-      data: { email: "api.e2e@example.com", password: "TestPass123" },
+      data: { email, password: "TestPass123" },
     });
     expect(login.status()).toBe(200);
     await expect(login.json()).resolves.toMatchObject({
       success: true,
-      data: { user: { email: "api.e2e@example.com" } },
+      data: { user: { email } },
     });
   });
 
