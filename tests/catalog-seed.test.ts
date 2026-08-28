@@ -9,7 +9,7 @@ const illustratedProducts = productSeeds.filter(
     "images" in product,
 );
 
-test("catalog seed contains ten complete illustrated demo products", () => {
+test("catalog seed contains ten complete gradient-image demo products", () => {
   assert.equal(illustratedProducts.length, 10);
   assert.equal(new Set(productSeeds.map((product) => product.slug)).size, productSeeds.length);
 
@@ -25,7 +25,7 @@ test("catalog seed contains ten complete illustrated demo products", () => {
   }
 });
 
-test("seed product SVGs are local, present, and free of active or external content", () => {
+test("seed product SVGs are local text-free gradients without active or external content", () => {
   for (const product of illustratedProducts) {
     const image = product.images[0];
     assert.match(image, /^\/products\/[a-z0-9-]+\.svg$/);
@@ -37,5 +37,7 @@ test("seed product SVGs are local, present, and free of active or external conte
     assert.doesNotMatch(svg, /<(?:script|foreignObject|image|use)\b/i);
     assert.doesNotMatch(svg, /(?:href|on\w+)\s*=/i);
     assert.doesNotMatch(svg.replace('xmlns="http://www.w3.org/2000/svg"', ""), /https?:\/\//i);
+    assert.doesNotMatch(svg, /<(?:text|title|desc)\b/i);
+    assert.match(svg, /<linearGradient\b/);
   }
 });
