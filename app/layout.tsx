@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { ShoppingAssistantErrorBoundary } from "@/components/ai/shopping-assistant-error-boundary";
+import { ShoppingAssistantLauncher } from "@/components/ai/shopping-assistant-launcher";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ToastProvider } from "@/components/ui/toast";
@@ -43,6 +45,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <SiteFooter />
+            <ShoppingAssistantErrorBoundary>
+              <ShoppingAssistantLauncher />
+            </ShoppingAssistantErrorBoundary>
           </CartProvider>
         </ToastProvider>
       </body>

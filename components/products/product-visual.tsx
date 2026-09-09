@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ProductImageWithFallback } from "@/components/products/product-image-with-fallback";
 
 type ProductVisualProps = {
   name: string;
@@ -31,18 +31,7 @@ export function ProductVisual({
       role={image ? undefined : "img"}
     >
       {image ? (
-        <Image
-          className="size-full object-cover transition duration-500 group-hover:scale-[1.02]"
-          src={image}
-          alt={name}
-          fill
-          sizes={sizes}
-          preload={priority}
-          loading={priority ? undefined : "lazy"}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          unoptimized={/^https?:\/\//i.test(image) || /\.svg$/i.test(image)}
-        />
+        <ProductImageWithFallback image={image} name={name} preload={priority} sizes={sizes} />
       ) : (
         <div className="absolute inset-0 grid place-items-center">
           <span className="text-5xl font-semibold tracking-[-0.08em] text-stone-900/20 uppercase">

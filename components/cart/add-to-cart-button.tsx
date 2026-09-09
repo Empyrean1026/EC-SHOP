@@ -10,9 +10,14 @@ import type { CartProductSnapshot } from "@/types/cart";
 type AddToCartButtonProps = {
   product: CartProductSnapshot;
   compact?: boolean;
+  showInlineSuccess?: boolean;
 };
 
-export function AddToCartButton({ product, compact = false }: AddToCartButtonProps) {
+export function AddToCartButton({
+  product,
+  compact = false,
+  showInlineSuccess = false,
+}: AddToCartButtonProps) {
   const { addItem } = useCartOperations();
   const toast = useToast();
   const status = useCartStore((state) => state.status);
@@ -26,7 +31,9 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
     setMessage(null);
     const result = await addItem(product, compact ? 1 : quantity);
     setFailed(!result.success);
-    setMessage(result.success ? null : result.message);
+    setMessage(
+      result.success ? (showInlineSuccess ? "カートに追加しました。" : null) : result.message,
+    );
     if (result.success)
       toast.success("カートに追加しました", `${product.name} × ${compact ? 1 : quantity}`);
     else toast.error("カートに追加できません", result.message);
@@ -36,6 +43,7 @@ export function AddToCartButton({ product, compact = false }: AddToCartButtonPro
     return (
       <div className="mt-4 border-t border-stone-100 pt-4">
         <button
+          aria-label={`${product.name}をカートに追加`}
           className="h-9 w-full rounded-full border border-stone-300 text-xs font-semibold text-stone-700 transition hover:border-stone-950 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={disabled}
           onClick={add}

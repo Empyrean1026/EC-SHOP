@@ -31,6 +31,7 @@ EC Siteは、Next.js App Routerで構築したレスポンシブ対応のフル�
 - **認証:** 新規登録、ログイン、ログアウト、HttpOnly Cookieに保存するJWT、ロールベースアクセス制御
 - **商品:** 商品一覧、商品詳細、カテゴリー、絞り込み、並び替え、ページネーション、在庫表示
 - **検索:** MongoDB全文検索、検索候補、あいまい検索のフォールバック、ブラウザ内の検索履歴
+- **AI商品提案:** 日本語の用途・予算から実在商品だけを提案するレスポンシブなショッピングアシスタント
 - **カート:** ゲスト用ローカルカート、数量変更、在庫制限、ログイン後のMongoDB同期
 - **お気に入り:** 商品の追加・削除とマイページでの一覧表示
 - **購入手続き:** お届け先入力、入力検証、注文内容確認、注文作成
@@ -265,6 +266,7 @@ A public deployment is not currently available. Use the [Setup](#setup) or [Dock
 - **Authentication:** Registration, login, logout, JWT in an HttpOnly cookie, and role-based access control
 - **Products:** Catalog, product details, categories, filters, sorting, pagination, and stock display
 - **Search:** MongoDB full-text search, suggestions, fuzzy fallback, and browser-local search history
+- **AI recommendations:** A responsive shopping assistant that grounds Japanese use-case and budget requests in real catalog products
 - **Cart:** Local guest cart, quantity updates, stock limits, and MongoDB synchronization after login
 - **Wishlist:** Add and remove products and view saved items in the account area
 - **Checkout:** Shipping address form, validation, order review, and order creation
