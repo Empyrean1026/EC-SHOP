@@ -43,6 +43,29 @@ if (process.env.TRUST_PROXY && !["true", "false"].includes(process.env.TRUST_PRO
   process.exit(1);
 }
 
+if (process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY) {
+  console.error("Environment check failed: DeepSeek API keys must never use a NEXT_PUBLIC_ name.");
+  process.exit(1);
+}
+
+if (process.env.DEEPSEEK_BASE_URL) {
+  try {
+    const deepSeekBaseUrl = new URL(process.env.DEEPSEEK_BASE_URL);
+
+    if (!["http:", "https:"].includes(deepSeekBaseUrl.protocol)) {
+      throw new Error("Unsupported DeepSeek URL protocol");
+    }
+  } catch {
+    console.error("Environment check failed: DEEPSEEK_BASE_URL must be a valid HTTP(S) URL.");
+    process.exit(1);
+  }
+}
+
+if (process.env.DEEPSEEK_MODEL !== undefined && !process.env.DEEPSEEK_MODEL.trim()) {
+  console.error("Environment check failed: DEEPSEEK_MODEL cannot be empty when configured.");
+  process.exit(1);
+}
+
 const stripeVariables = {
   STRIPE_SECRET_KEY: "sk_",
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_",

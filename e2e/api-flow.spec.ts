@@ -25,6 +25,126 @@ function mutationHeaders(csrfToken: string): Record<string, string> {
   };
 }
 
+test("AI商品検索APIが実データを安全なDTOで返す", async ({ request }) => {
+  const allProducts = await request.post("/api/ai/products/search", { data: {} });
+  expect(allProducts.status()).toBe(200);
+  const allProductsBody = await allProducts.json();
+  expect(allProductsBody).toMatchObject({
+    success: true,
+    data: {
+      products: [
+        {
+          id: PRODUCT_ID,
+          name: "E2Eテスト商品",
+          slug: "e2e-test-product",
+          category: { slug: "e2e-products" },
+          price: 6800,
+          currency: "jpy",
+          stock: 10,
+          image: null,
+          url: "/products/e2e-test-product",
+        },
+      ],
+    },
+  });
+
+  const supportedQueries = [
+    { query: "E2E" },
+    { category: "e2e-products" },
+    { maxPrice: 6800 },
+    { minPrice: 6000, maxPrice: 7000 },
+    { inStock: true },
+    { limit: 1 },
+    {
+      query: "テスト",
+      category: "e2e-products",
+      minPrice: 6000,
+      maxPrice: 7000,
+      inStock: true,
+      limit: 1,
+    },
+  ];
+
+  for (const criteria of supportedQueries) {
+    const response = await request.post("/api/ai/products/search", { data: criteria });
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.data.products).toHaveLength(1);
+    expect(body.data.products[0].id).toBe(PRODUCT_ID);
+  }
+
+  for (const criteria of [
+    { query: "該当なし" },
+    { category: "unknown-category" },
+    { maxPrice: 0 },
+  ]) {
+    const response = await request.post("/api/ai/products/search", { data: criteria });
+    expect(response.status()).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      success: true,
+      data: { products: [] },
+    });
+  }
+
+  for (const criteria of [
+    { minPrice: 7000, maxPrice: 6000 },
+    { category: "E2E Products" },
+    { limit: 11 },
+    { maxPrice: "6800" },
+  ]) {
+    const response = await request.post("/api/ai/products/search", { data: criteria });
+    expect(response.status()).toBe(422);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      code: "VALIDATION_ERROR",
+    });
+  }
+
+  const injection = await request.post("/api/ai/products/search", {
+    data: { maxPrice: { $gt: 0 } },
+  });
+  expect(injection.status()).toBe(400);
+  await expect(injection.json()).resolves.toMatchObject({
+    success: false,
+    code: "UNSAFE_INPUT",
+  });
+});
+
+test("AIショッピングAPIが入力とプロバイダー障害を安全に処理する", async ({ request }) => {
+  const unavailable = await request.post("/api/ai/shopping", {
+    data: { message: "5000円以内で在庫のある商品を探して" },
+  });
+  expect(unavailable.status()).toBe(503);
+  const unavailableBody = await unavailable.json();
+  expect(unavailableBody).toMatchObject({
+    success: false,
+    code: "AI_PROVIDER_UNAVAILABLE",
+    message: "AIアシスタントへの接続に失敗しました。しばらくしてからもう一度お試しください。",
+  });
+  expect(JSON.stringify(unavailableBody)).not.toMatch(
+    /test-api-key|Bearer|stack|DEEPSEEK_API_KEY/i,
+  );
+
+  for (const data of [{ message: "   " }, { message: "商品を探して", model: "deepseek-v4-pro" }]) {
+    const invalid = await request.post("/api/ai/shopping", { data });
+    expect(invalid.status()).toBe(422);
+    await expect(invalid.json()).resolves.toMatchObject({
+      success: false,
+      code: "VALIDATION_ERROR",
+    });
+  }
+
+  const malformed = await request.post("/api/ai/shopping", {
+    headers: { "Content-Type": "application/json" },
+    data: Buffer.from('{"message":'),
+  });
+  expect(malformed.status()).toBe(400);
+  await expect(malformed.json()).resolves.toMatchObject({
+    success: false,
+    code: "INVALID_JSON",
+  });
+});
+
 test("主要APIで新規登録からカート、注文までの一連の処理が完了する", async ({
   request,
 }, testInfo) => {

@@ -4,6 +4,10 @@ type QueryOverride = Partial<{
   [Key in keyof ProductListQuery]: ProductListQuery[Key] | null;
 }>;
 
+export function buildProductDetailUrl(slug: string): string {
+  return `/products/${encodeURIComponent(slug)}`;
+}
+
 export function buildProductsUrl(query: ProductListQuery, override: QueryOverride = {}): string {
   const value = { ...query, ...override };
   const page = value.page ?? query.page;

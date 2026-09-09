@@ -31,6 +31,7 @@ export type RateLimitResult = {
 export const API_RATE_LIMIT_POLICIES = {
   default: { scope: "api", limit: 120, windowMs: 60_000 },
   search: { scope: "api-search", limit: 60, windowMs: 60_000 },
+  ai: { scope: "api-ai", limit: 10, windowMs: 60_000 },
   webhook: { scope: "api-webhook", limit: 300, windowMs: 60_000 },
 } satisfies Record<string, RateLimitPolicy>;
 
@@ -116,7 +117,10 @@ export async function getRateLimitIdentifier(request: NextRequest): Promise<stri
 
 export function policyForApiPath(pathname: string): RateLimitPolicy {
   if (pathname.startsWith("/api/webhooks/stripe")) return API_RATE_LIMIT_POLICIES.webhook;
-  if (pathname.startsWith("/api/search")) return API_RATE_LIMIT_POLICIES.search;
+  if (pathname.startsWith("/api/ai/shopping")) return API_RATE_LIMIT_POLICIES.ai;
+  if (pathname.startsWith("/api/search") || pathname.startsWith("/api/ai/products/search")) {
+    return API_RATE_LIMIT_POLICIES.search;
+  }
   return API_RATE_LIMIT_POLICIES.default;
 }
 

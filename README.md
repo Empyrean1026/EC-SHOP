@@ -141,18 +141,20 @@ npm run user:role -- --email=user@example.com --role=admin
 
 `.env.example`をコピーし、実際の値は`.env.local`またはデプロイ先のSecret管理機能に設定してください。秘密情報をGitへコミットしないでください。
 
-| 変数                                 | 用途                                           |
-| ------------------------------------ | ---------------------------------------------- |
-| `MONGODB_URI`                        | MongoDB接続URI                                 |
-| `APP_URL`                            | アプリケーションのURL                          |
-| `JWT_SECRET`                         | JWT署名用シークレット（32バイト以上）          |
-| `CSRF_SECRET`                        | CSRFトークン用シークレット（32バイト以上）     |
-| `BCRYPT_SALT_ROUNDS`                 | bcryptのコスト（10〜14）                       |
-| `TRUST_PROXY`                        | 信頼できるリバースプロキシ配下でのみ`true`     |
-| `STRIPE_SECRET_KEY`                  | Stripeテストモードのシークレットキー           |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripeテストモードの公開可能キー               |
-| `STRIPE_WEBHOOK_SECRET`              | Stripe Webhook署名シークレット                 |
-| `OPENAI_API_KEY`                     | 将来の連携用。現在のアプリケーションでは未使用 |
+| 変数                                 | 用途                                                 |
+| ------------------------------------ | ---------------------------------------------------- |
+| `MONGODB_URI`                        | MongoDB接続URI                                       |
+| `APP_URL`                            | アプリケーションのURL                                |
+| `JWT_SECRET`                         | JWT署名用シークレット（32バイト以上）                |
+| `CSRF_SECRET`                        | CSRFトークン用シークレット（32バイト以上）           |
+| `BCRYPT_SALT_ROUNDS`                 | bcryptのコスト（10〜14）                             |
+| `TRUST_PROXY`                        | 信頼できるリバースプロキシ配下でのみ`true`           |
+| `STRIPE_SECRET_KEY`                  | Stripeテストモードのシークレットキー                 |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripeテストモードの公開可能キー                     |
+| `STRIPE_WEBHOOK_SECRET`              | Stripe Webhook署名シークレット                       |
+| `DEEPSEEK_API_KEY`                   | AI商品提案に使用するサーバー専用APIキー              |
+| `DEEPSEEK_BASE_URL`                  | DeepSeek API URL（既定: `https://api.deepseek.com`） |
+| `DEEPSEEK_MODEL`                     | DeepSeekモデル（既定: `deepseek-v4-flash`）          |
 
 Stripe関連の3変数は、すべて設定するか、すべて未設定にしてください。従来の`AUTH_SECRET`も読み取り可能ですが、新しい環境では`JWT_SECRET`を使用します。
 
@@ -373,18 +375,20 @@ npm run user:role -- --email=user@example.com --role=admin
 
 Copy `.env.example`, then store real values in `.env.local` or the deployment platform's secret manager. Never commit secrets to Git.
 
-| Variable                             | Purpose                                                            |
-| ------------------------------------ | ------------------------------------------------------------------ |
-| `MONGODB_URI`                        | MongoDB connection URI                                             |
-| `APP_URL`                            | Application URL                                                    |
-| `JWT_SECRET`                         | JWT signing secret (at least 32 bytes)                             |
-| `CSRF_SECRET`                        | CSRF token secret (at least 32 bytes)                              |
-| `BCRYPT_SALT_ROUNDS`                 | bcrypt cost factor (10–14)                                         |
-| `TRUST_PROXY`                        | Set to `true` only behind a trusted reverse proxy                  |
-| `STRIPE_SECRET_KEY`                  | Stripe test-mode secret key                                        |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe test-mode publishable key                                   |
-| `STRIPE_WEBHOOK_SECRET`              | Stripe webhook signing secret                                      |
-| `OPENAI_API_KEY`                     | Reserved for future integration; unused by the current application |
+| Variable                             | Purpose                                                     |
+| ------------------------------------ | ----------------------------------------------------------- |
+| `MONGODB_URI`                        | MongoDB connection URI                                      |
+| `APP_URL`                            | Application URL                                             |
+| `JWT_SECRET`                         | JWT signing secret (at least 32 bytes)                      |
+| `CSRF_SECRET`                        | CSRF token secret (at least 32 bytes)                       |
+| `BCRYPT_SALT_ROUNDS`                 | bcrypt cost factor (10–14)                                  |
+| `TRUST_PROXY`                        | Set to `true` only behind a trusted reverse proxy           |
+| `STRIPE_SECRET_KEY`                  | Stripe test-mode secret key                                 |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe test-mode publishable key                            |
+| `STRIPE_WEBHOOK_SECRET`              | Stripe webhook signing secret                               |
+| `DEEPSEEK_API_KEY`                   | Server-only API key for grounded AI product recommendations |
+| `DEEPSEEK_BASE_URL`                  | DeepSeek API URL (default: `https://api.deepseek.com`)      |
+| `DEEPSEEK_MODEL`                     | DeepSeek model (default: `deepseek-v4-flash`)               |
 
 Configure all three Stripe variables together, or leave all three unset. The legacy `AUTH_SECRET` name remains readable, but new environments should use `JWT_SECRET`.
 
