@@ -12,13 +12,13 @@ export default function CartPage() {
       <div className="mx-auto max-w-7xl">
         <div className="border-b border-stone-300 pb-10">
           <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
-            Phase 06 / Shopping cart
+            Your selection
           </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
             カート
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-stone-600">
-            商品価格と在庫をリアルタイムで確認します。ゲストのカートは端末に保存され、ログイン後にアカウントへ統合されます。
+            選んだ商品、数量、合計金額をご確認ください。ログイン前に追加した商品も、そのまま引き継げます。
           </p>
         </div>
 

@@ -115,10 +115,10 @@ export function ProductFilters({ categories, query }: ProductFiltersProps) {
 
       <div className="hidden rounded-3xl bg-[#dfe5ce] p-5 lg:block dark:bg-[#20271d]">
         <p className="text-xs font-semibold tracking-[0.15em] text-stone-600 uppercase">
-          Catalog API
+          Find your fit
         </p>
         <p className="mt-8 text-sm leading-6 text-stone-800">
-          一覧はサーバーからMongoDBを直接参照し、公開REST APIと同じ検索条件を使用しています。
+          カテゴリーや価格帯を組み合わせて、今の暮らしにちょうどよいアイテムを見つけてください。
         </p>
       </div>
     </aside>

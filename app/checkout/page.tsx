@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { isShopDemo } from "@/lib/demo";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
@@ -10,6 +12,19 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutPage() {
+  if (isShopDemo()) {
+    return (
+      <section className="mx-auto max-w-3xl px-6 py-20">
+        <h1 className="text-3xl font-semibold">決済は現在ご利用いただけません</h1>
+        <p className="my-6">
+          このサイトは作品集用デモです。注文の作成・お支払いは行いません。商品とカートをご覧いただけます。
+        </p>
+        <Link href="/cart" className="underline">
+          カートに戻る
+        </Link>
+      </section>
+    );
+  }
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/checkout");
 
@@ -20,7 +35,7 @@ export default async function CheckoutPage() {
       <div className="mx-auto max-w-7xl">
         <div className="border-b border-stone-300 pb-10">
           <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
-            Phase 07 / Checkout
+            Checkout
           </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
             ご注文内容の確認

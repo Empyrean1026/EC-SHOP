@@ -46,7 +46,7 @@ export default async function AdminPage() {
         <div className="flex flex-col justify-between gap-6 rounded-[2rem] bg-stone-950 p-7 text-white sm:flex-row sm:items-end sm:p-10">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] text-orange-400 uppercase">
-              Phase 11 / Admin dashboard
+              Store management
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
               運用ダッシュボード

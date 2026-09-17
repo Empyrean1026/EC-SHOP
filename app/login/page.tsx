@@ -23,7 +23,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     <AuthPageShell
       eyebrow="Welcome back"
       title="ログイン"
-      description="ログイン状態はサーバー発行の HttpOnly Cookie に保存され、ブラウザ上のスクリプトから JWT を読み取ることはできません。"
+      description="登録したメールアドレスとパスワードを入力して、マイページへお進みください。"
       alternateText="アカウントをお持ちでない方"
       alternateHref="/register"
       alternateLabel="新規登録"

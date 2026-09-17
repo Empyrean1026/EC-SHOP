@@ -6,7 +6,7 @@ import { getCheckoutOrder } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
   title: "お支払い状況を確認",
-  description: "Stripe Webhookによるお支払い結果の確認を待ちます。",
+  description: "決済サービスによるお支払い結果の確認を待ちます。",
 };
 
 type PaymentReturnPageProps = {

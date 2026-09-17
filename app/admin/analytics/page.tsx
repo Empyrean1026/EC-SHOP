@@ -43,7 +43,7 @@ export default async function AdminAnalyticsPage() {
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] text-orange-700 uppercase">
-              Phase 12 / Analytics
+              Store insights
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-stone-950 sm:text-5xl">
               売上分析
@@ -95,9 +95,8 @@ export default async function AdminAnalyticsPage() {
         <SalesAnalyticsChartsLazy analytics={analytics} />
 
         <aside className="mt-4 rounded-2xl border border-stone-200 bg-stone-50 px-5 py-4 text-xs leading-5 text-stone-500">
-          データソースはMongoDBの注文、ユーザー、商品コレクションです。売上には `paymentStatus =
-          paid` の注文のみを含め、日次・月次の推移は `paidAt` を基準に {analytics.timezone}
-          で集計します。部分返金額は現在保存していないため、部分返金の注文は売上に含めません。
+          売上は支払い確認済みの注文を対象に、{analytics.timezone}
+          の日付で集計しています。通貨換算は行わず、返金済みの注文は確定売上に含めません。
         </aside>
       </div>
     </section>

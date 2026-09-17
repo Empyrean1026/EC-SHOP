@@ -27,16 +27,16 @@ export function AuthPageShell({
           <div className="absolute -top-20 -right-20 size-64 rounded-full bg-orange-500/30 blur-3xl" />
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-orange-400 uppercase">
-              Secure commerce
+              Your everyday store
             </p>
             <p className="mt-8 max-w-sm text-4xl leading-tight font-semibold tracking-[-0.04em]">
-              本人確認はサーバー側で行い、認証情報は安全な領域で保護されます。
+              お気に入りや注文履歴を、ひとつのアカウントで見やすく管理できます。
             </p>
           </div>
           <div className="grid gap-3 text-xs text-stone-400">
-            <p>HttpOnly session cookie</p>
-            <p>Signed CSRF protection</p>
-            <p>Database-backed authorization</p>
+            <p>お気に入りをいつでも確認</p>
+            <p>お届け先をまとめて管理</p>
+            <p>注文状況をひと目で確認</p>
           </div>
         </div>
 

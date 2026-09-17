@@ -8,9 +8,9 @@ const navigation = [
   { href: "/products", label: "商品一覧", detail: "カテゴリーと在庫を見る" },
   { href: "/search", label: "検索", detail: "商品を検索" },
   { href: "/cart", label: "カート", detail: "商品と金額を確認" },
-  { href: "/account/orders", label: "注文履歴", detail: "支払いと配送状況" },
   { href: "/account/wishlist", label: "お気に入り", detail: "気になる商品を保存" },
   { href: "/account", label: "マイページ", detail: "プロフィールとお届け先" },
+  { href: "/about", label: "このデモについて", detail: "体験できる機能と利用上の注意" },
 ];
 
 export function MobileNavigation() {

@@ -6,10 +6,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 const navigation = [
   { href: "/products", label: "商品一覧" },
   { href: "/search", label: "検索" },
-  { href: "/cart", label: "カート" },
-  { href: "/account/orders", label: "注文履歴" },
   { href: "/account/wishlist", label: "お気に入り" },
-  { href: "/#foundation", label: "技術構成" },
+  { href: "/about", label: "このデモについて" },
 ];
 
 export function SiteHeader() {
@@ -49,10 +47,10 @@ export function SiteHeader() {
           <ThemeToggle />
           <CartBadge />
           <Link
-            className="hidden rounded-full border border-stone-300 px-3 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-stone-600 uppercase transition hover:border-stone-950 hover:text-stone-950 sm:block"
+            className="hidden rounded-full border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-700 transition hover:border-stone-950 hover:text-stone-950 sm:block"
             href="/account"
           >
-            Phase 13
+            マイページ
           </Link>
           <MobileNavigation />
         </div>

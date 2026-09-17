@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { isShopDemo, isDemoServiceBlocked } from "@/lib/demo";
 import { apiError } from "@/lib/api/response";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/constants";
 import { verifySessionToken } from "@/lib/auth/jwt";
@@ -18,6 +19,14 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/api/")) {
     if (!isRequestOriginAllowed(request)) {
       return apiError("CORS_ORIGIN_DENIED", "不允许跨站访问该 API。", 403);
+    }
+
+    if (isShopDemo() && isDemoServiceBlocked(pathname, request.method)) {
+      return apiError(
+        "DEMO_SERVICE_DISABLED",
+        "デモ環境では注文・決済・AI機能は利用できません。",
+        503,
+      );
     }
 
     const rateLimit = consumeRateLimit(
@@ -48,7 +57,7 @@ export async function proxy(request: NextRequest) {
     : null;
 
   if (protectedPath && !session) {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL("/login", process.env.APP_URL ?? request.url);
     loginUrl.searchParams.set("next", `${request.nextUrl.pathname}${request.nextUrl.search}`);
     const response = NextResponse.redirect(loginUrl);
     response.headers.set("Content-Security-Policy", csp);
@@ -56,7 +65,9 @@ export async function proxy(request: NextRequest) {
   }
 
   if (pathname.startsWith("/admin") && session?.role !== "admin") {
-    const response = NextResponse.redirect(new URL("/forbidden", request.url));
+    const response = NextResponse.redirect(
+      new URL("/forbidden", process.env.APP_URL ?? request.url),
+    );
     response.headers.set("Content-Security-Policy", csp);
     return response;
   }

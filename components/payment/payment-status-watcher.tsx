@@ -60,8 +60,7 @@ export function PaymentStatusWatcher({
           お支払いを完了できませんでした
         </h1>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          Stripe Webhook
-          から支払い失敗が通知されました。決済画面でお支払い方法を確認し、もう一度お試しください。
+          お支払いを確認できませんでした。決済画面でお支払い方法を確認し、もう一度お試しください。
         </p>
         <Link
           className="mt-7 inline-flex h-11 items-center rounded-full bg-orange-600 px-6 text-sm font-semibold text-white hover:bg-orange-700"
@@ -84,15 +83,15 @@ export function PaymentStatusWatcher({
         ···
       </span>
       <p className="mt-6 text-xs font-semibold tracking-[0.18em] text-blue-700 uppercase">
-        Webhook verification
+        Payment confirmation
       </p>
       <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950">
         {timedOut ? "お支払いの確認に時間がかかっています" : "お支払い結果を確認しています"}
       </h1>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600">
         {timedOut
-          ? "最終的な Webhook をまだ受信していません。ブラウザの戻り値だけで支払い済みにはなりません。しばらくしてから注文詳細をご確認ください。"
-          : "Stripe の署名付き Webhook を待っています。この画面を開いたままお待ちください。確認後、自動的に注文詳細へ移動します。"}
+          ? "決済サービスからの最終確認に時間がかかっています。しばらくしてから注文詳細をご確認ください。"
+          : "決済サービスでお支払い結果を確認しています。確認後、自動的に注文詳細へ移動します。"}
       </p>
       {message ? <p className="mt-4 text-sm text-red-700">{message}</p> : null}
       <div className="mt-7 flex flex-wrap gap-3">

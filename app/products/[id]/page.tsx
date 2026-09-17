@@ -122,7 +122,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 initialWishlisted={wishlistIds.includes(product.id)}
               />
               <p className="mt-4 rounded-2xl bg-[#dfe5ce] px-5 py-4 text-xs leading-6 text-stone-700 dark:bg-[#20271d]">
-                カート追加時に在庫を確認します。ログイン後はカートが MongoDB に安全に同期されます。
+                カートに追加する際に最新の在庫状況を確認します。ログインすると、別の端末からもカートを確認できます。
               </p>
             </div>
           </div>

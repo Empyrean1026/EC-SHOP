@@ -51,7 +51,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="grid gap-8 border-b border-stone-300 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,0.8fr)] lg:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
-              Phase 05 / Product search
+              Search the collection
             </p>
             <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
               お探しの商品を見つける

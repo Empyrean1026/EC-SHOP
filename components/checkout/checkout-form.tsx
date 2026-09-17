@@ -11,6 +11,7 @@ import {
   useCartStoreApi,
 } from "@/components/cart/cart-provider";
 import { ProductVisual } from "@/components/products/product-visual";
+import { createCheckoutIdempotencyKey } from "@/lib/checkout/idempotency";
 import { formatProductPrice } from "@/lib/products/format";
 import { checkoutFormSchema, type CheckoutFormInput } from "@/lib/validations/checkout";
 import { submitCheckoutOrder } from "@/services/checkout-client";
@@ -175,7 +176,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
       return;
     }
 
-    const checkoutKey = idempotencyKey ?? window.crypto.randomUUID();
+    const checkoutKey = idempotencyKey ?? createCheckoutIdempotencyKey(window.crypto);
     if (!idempotencyKey) setIdempotencyKey(checkoutKey);
     const result = await submitCheckoutOrder({
       ...values,
@@ -357,7 +358,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                 お支払い方法
               </h2>
               <p className="mt-1 text-sm text-stone-500">
-                Stripe の安全な決済画面を使用し、最終結果はサーバー側の Webhook で確認します。
+                Stripeの安全な決済画面を使用し、確認後にお支払い状況を更新します。
               </p>
             </div>
           </div>
@@ -382,7 +383,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                     クレジットカード（Stripe）
                   </span>
                   <span className="mt-1 block text-xs leading-5 text-stone-500">
-                    注文作成後、Stripe Payment Element でお支払いを完了します。
+                    注文内容を確認後、Stripeの決済画面でお支払いを完了します。
                   </span>
                 </span>
               </div>
@@ -480,8 +481,7 @@ export function CheckoutForm({ initialData }: { initialData: CheckoutPageData })
                 : "代金引換で注文を確定"}
           </button>
           <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-            複数回送信しても注文は重複作成されません。支払い完了は Stripe Webhook
-            によってのみ確定します。
+            複数回送信しても注文は重複作成されません。お支払い状況は決済サービスで確認後に確定します。
           </p>
         </section>
       </div>

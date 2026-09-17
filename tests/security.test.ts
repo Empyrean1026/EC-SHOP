@@ -12,7 +12,7 @@ import { loginSchema } from "@/lib/validations/auth";
 import { updateProfileSchema } from "@/lib/validations/account";
 
 test("production CSP binds scripts to a nonce and permits required Stripe surfaces", () => {
-  const policy = buildContentSecurityPolicy("random-nonce", false);
+  const policy = buildContentSecurityPolicy("random-nonce", false, true);
 
   assert.match(policy, /script-src 'self' 'nonce-random-nonce' 'strict-dynamic'/);
   assert.match(policy, /https:\/\/\*\.js\.stripe\.com/);
@@ -26,6 +26,9 @@ test("production CSP binds scripts to a nonce and permits required Stripe surfac
   const developmentPolicy = buildContentSecurityPolicy("dev-nonce", true);
   assert.match(developmentPolicy, /unsafe-eval/);
   assert.doesNotMatch(developmentPolicy, /upgrade-insecure-requests/);
+
+  const httpProductionPolicy = buildContentSecurityPolicy("http-nonce", false, false);
+  assert.doesNotMatch(httpProductionPolicy, /upgrade-insecure-requests/);
 });
 
 test("CORS policy allows the configured origin and denies foreign browser origins", () => {

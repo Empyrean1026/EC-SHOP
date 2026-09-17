@@ -40,7 +40,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         <div className="flex flex-col justify-between gap-5 border-b border-stone-300 pb-8 sm:flex-row sm:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
-              Phase 09 / Order history
+              Your orders
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em] text-stone-950 sm:text-5xl">
               注文履歴

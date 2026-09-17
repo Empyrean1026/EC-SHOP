@@ -6,14 +6,27 @@ import {
   SESSION_DURATION_SECONDS,
 } from "@/lib/auth/constants";
 
-const isProduction = process.env.NODE_ENV === "production";
+export function shouldUseSecureCookies(
+  applicationUrl = process.env.APP_URL,
+  nodeEnvironment = process.env.NODE_ENV,
+): boolean {
+  if (applicationUrl) {
+    try {
+      return new URL(applicationUrl).protocol === "https:";
+    } catch {
+      // Invalid production configuration should fail closed.
+    }
+  }
+
+  return nodeEnvironment === "production";
+}
 
 export function setSessionCookie(response: NextResponse, token: string): void {
   response.cookies.set({
     name: SESSION_COOKIE_NAME,
     value: token,
     httpOnly: true,
-    secure: isProduction,
+    secure: shouldUseSecureCookies(),
     sameSite: "lax",
     path: "/",
     maxAge: SESSION_DURATION_SECONDS,
@@ -26,7 +39,7 @@ export function clearSessionCookie(response: NextResponse): void {
     name: SESSION_COOKIE_NAME,
     value: "",
     httpOnly: true,
-    secure: isProduction,
+    secure: shouldUseSecureCookies(),
     sameSite: "lax",
     path: "/",
     maxAge: 0,
@@ -39,7 +52,7 @@ export function setCsrfCookie(response: NextResponse, value: string): void {
     name: CSRF_COOKIE_NAME,
     value,
     httpOnly: true,
-    secure: isProduction,
+    secure: shouldUseSecureCookies(),
     sameSite: "strict",
     path: "/",
     maxAge: CSRF_DURATION_SECONDS,
@@ -52,7 +65,7 @@ export function clearCsrfCookie(response: NextResponse): void {
     name: CSRF_COOKIE_NAME,
     value: "",
     httpOnly: true,
-    secure: isProduction,
+    secure: shouldUseSecureCookies(),
     sameSite: "strict",
     path: "/",
     maxAge: 0,

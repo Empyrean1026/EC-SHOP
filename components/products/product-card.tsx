@@ -9,9 +9,14 @@ import type { CatalogProduct } from "@/types/product";
 type ProductCardProps = {
   product: CatalogProduct;
   initialWishlisted?: boolean;
+  showSocialProof?: boolean;
 };
 
-export function ProductCard({ product, initialWishlisted = false }: ProductCardProps) {
+export function ProductCard({
+  product,
+  initialWishlisted = false,
+  showSocialProof = true,
+}: ProductCardProps) {
   return (
     <article className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-stone-900/8">
       <Link href={`/products/${product.slug}`} className="focus-visible:outline-orange-600">
@@ -43,10 +48,12 @@ export function ProductCard({ product, initialWishlisted = false }: ProductCardP
           <p className="text-lg font-semibold text-stone-950">
             {formatProductPrice(product.price, product.currency)}
           </p>
-          <p className="text-xs text-stone-400">
-            {product.rating > 0 ? `${product.rating.toFixed(1)} ★` : "レビューなし"} · 販売数{" "}
-            {product.salesCount}
-          </p>
+          {showSocialProof ? (
+            <p className="text-xs text-stone-400">
+              {product.rating > 0 ? `${product.rating.toFixed(1)} ★` : "レビューなし"} · 販売数{" "}
+              {product.salesCount}
+            </p>
+          ) : null}
         </div>
         <AddToCartButton compact product={toCartProductSnapshot(product)} />
         <WishlistButton compact productId={product.id} initialWishlisted={initialWishlisted} />

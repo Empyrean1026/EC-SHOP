@@ -44,10 +44,7 @@ export default async function AccountPage() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col justify-between gap-6 rounded-[2rem] bg-stone-950 p-7 text-white sm:flex-row sm:items-end sm:p-10">
           <div>
-            <p className="text-xs font-semibold tracking-[0.18em] text-orange-400 uppercase">
-              Phase 10 / User dashboard
-            </p>
-            <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
+            <h1 className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
               こんにちは、{profile.name}
             </h1>
             <p className="mt-3 text-sm text-stone-400">{profile.email}</p>

@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ToastProvider } from "@/components/ui/toast";
 import { THEME_STORAGE_KEY } from "@/lib/ui/theme";
+import { isShopDemo } from "@/lib/demo";
 import "./globals.css";
 
 const themeScript = `(() => {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     default: "EC Site",
     template: "%s | EC Site",
   },
-  description: "Next.js、TypeScript、MongoDB で構築したモダンなフルスタックECプラットフォーム。",
+  description: "デスク用品、生活雑貨、ホームフィットネス用品を紹介するポートフォリオ用ECデモです。",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -43,11 +44,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <ToastProvider>
           <CartProvider>
             <SiteHeader />
+            {isShopDemo() && (
+              <p className="bg-amber-50 px-5 py-3 text-center text-sm text-stone-900" role="note">
+                ポートフォリオ用のデモサイトです。公開環境では注文・決済・AI機能をご利用いただけません。登録には架空の情報をご使用ください。
+              </p>
+            )}
             <main className="flex-1">{children}</main>
             <SiteFooter />
-            <ShoppingAssistantErrorBoundary>
-              <ShoppingAssistantLauncher />
-            </ShoppingAssistantErrorBoundary>
+            {!isShopDemo() && (
+              <ShoppingAssistantErrorBoundary>
+                <ShoppingAssistantLauncher />
+              </ShoppingAssistantErrorBoundary>
+            )}
           </CartProvider>
         </ToastProvider>
       </body>

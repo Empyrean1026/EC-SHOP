@@ -11,7 +11,7 @@ export default function SearchError({ reset }: { error: Error; reset: () => void
           検索を実行できません
         </h1>
         <p className="mt-3 text-sm text-stone-500">
-          データベースが利用できることを確認し、もう一度お試しください。
+          一時的に検索を利用できません。時間をおいて、もう一度お試しください。
         </p>
         <button
           className="mt-6 rounded-full bg-stone-950 px-5 py-2.5 text-xs font-semibold text-white hover:bg-orange-600"

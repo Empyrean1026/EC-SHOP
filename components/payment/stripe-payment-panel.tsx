@@ -58,11 +58,10 @@ function StripeConfirmationForm({ orderId }: { orderId: string }) {
         disabled={!stripe || !elements || submitting}
         type="submit"
       >
-        {submitting ? "Stripe に送信しています…" : "安全なお支払い"}
+        {submitting ? "お支払いを処理しています…" : "お支払いを確定する"}
       </button>
       <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-        お支払い情報は Stripe Elements
-        が安全に収集します。当サイトがカード番号全体を取り扱うことはありません。
+        カード情報はStripeの安全な決済画面で入力され、当サイトには保存されません。
       </p>
     </form>
   );
@@ -111,8 +110,7 @@ export function StripePaymentPanel({
   if (!publishableKey) {
     return (
       <div className="rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-900" role="alert">
-        Stripe が設定されていません。シークレットキー、公開可能キー、Webhook
-        署名シークレットを設定してからお試しください。
+        現在、カード決済をご利用いただけません。時間をおいて、もう一度お試しください。
       </div>
     );
   }
@@ -145,7 +143,7 @@ export function StripePaymentPanel({
   if (!session?.clientSecret || !stripePromise) {
     return (
       <div className="rounded-2xl bg-blue-50 p-5 text-sm leading-6 text-blue-900">
-        <p>Stripe が決済を受け付けました。Webhook による最終確認を待っています。</p>
+        <p>お支払いを受け付けました。決済サービスからの最終確認を待っています。</p>
         <Link
           className="mt-3 inline-block font-semibold underline"
           href={`/checkout/payment/return?orderId=${order.id}`}
@@ -160,7 +158,7 @@ export function StripePaymentPanel({
     <Elements
       options={{
         clientSecret: session.clientSecret,
-        locale: "zh",
+        locale: "ja",
         appearance: {
           theme: "stripe",
           variables: {

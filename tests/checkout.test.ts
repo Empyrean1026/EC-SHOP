@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { cartMatchesCheckoutConfirmation } from "@/lib/checkout/cart";
 import { toCheckoutOrder } from "@/lib/checkout/dto";
+import { createCheckoutIdempotencyKey } from "@/lib/checkout/idempotency";
 import { createCheckoutOrderSchema } from "@/lib/validations/checkout";
 import type { CreateCheckoutOrderInput } from "@/lib/validations/checkout";
 import { getValidationErrors } from "@/lib/validations/errors";
@@ -131,4 +132,23 @@ test("checkout order DTO exposes snapshots without internal idempotency fields",
   assert.equal(order.shippingAddress.line2, null);
   assert.equal(order.paidAt, "2026-08-27T00:05:00.000Z");
   assert.equal("checkoutKey" in order, false);
+});
+
+test("checkout idempotency keys fall back to RFC 4122 UUIDs outside secure contexts", () => {
+  const direct = createCheckoutIdempotencyKey({
+    randomUUID: () => "83dd6fe4-6f5d-48a4-8e15-5d3ff0bccfd4",
+    getRandomValues: (array) => array,
+  });
+  const fallback = createCheckoutIdempotencyKey({
+    getRandomValues: (array) => {
+      array.forEach((_, index) => {
+        array[index] = index;
+      });
+      return array;
+    },
+  });
+
+  assert.equal(direct, "83dd6fe4-6f5d-48a4-8e15-5d3ff0bccfd4");
+  assert.equal(fallback, "00010203-0405-4607-8809-0a0b0c0d0e0f");
+  assert.match(fallback, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
 });

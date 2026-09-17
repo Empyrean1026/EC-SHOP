@@ -8,8 +8,8 @@ import { getStripePublishableKey, StripeConfigurationError } from "@/lib/stripe/
 import { getCheckoutOrder } from "@/services/checkout-service";
 
 export const metadata: Metadata = {
-  title: "Stripe セキュア決済",
-  description: "Stripe Payment Elementで注文のお支払いを完了します。",
+  title: "カードでお支払い",
+  description: "安全な決済画面で注文のお支払いを完了します。",
 };
 
 type PaymentPageProps = {
@@ -43,8 +43,7 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
             Stripe でお支払い
           </h1>
           <p className="mt-3 text-sm leading-6 text-stone-500">
-            画面上の完了表示は決済処理の送信を示すものです。注文は Stripe Webhook
-            の署名検証後に支払い済みとなります。
+            カード情報を入力してお支払いを完了してください。お支払い状況は決済サービスで確認後に更新されます。
           </p>
           <div className="mt-8">
             <StripePaymentPanel order={order} publishableKey={publishableKey} />

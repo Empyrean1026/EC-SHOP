@@ -1,0 +1,85 @@
+name: ec-shop
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "3"
+x-app-env: &app-env
+  NODE_ENV: production
+  APP_URL: https://shop.lixuanjian.com
+  SHOP_DEMO_MODE: "true"
+  TRUST_PROXY: "true"
+  BCRYPT_SALT_ROUNDS: "12"
+  NEXT_TELEMETRY_DISABLED: "1"
+services:
+  database:
+    image: mongo:8.0
+    restart: unless-stopped
+    env_file: /srv/apps/ec-shop/shared/db.env
+    volumes:
+      - catalog:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/10-shop.js:ro
+    networks: [database]
+    command: ["mongod", "--wiredTigerCacheSizeGB", "0.35"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging: *logging
+  tools:
+    image: ec-shop-tools:${RELEASE_ID:?release required}
+    build:
+      context: ../..
+      dockerfile: deploy/tokyo/Dockerfile
+      target: tools
+    user: node
+    profiles: [bootstrap]
+    env_file: /srv/apps/ec-shop/shared/app.env
+    environment: *app-env
+    networks: [database]
+    logging: *logging
+  shop:
+    image: ec-shop:${RELEASE_ID:?release required}
+    build:
+      context: ../..
+      dockerfile: deploy/tokyo/Dockerfile
+      target: runner
+    env_file: /srv/apps/ec-shop/shared/app.env
+    environment:
+      <<: *app-env
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    restart: unless-stopped
+    init: true
+    ports: ["127.0.0.1:3002:3000"]
+    networks:
+      database: {}
+      proxy:
+        aliases: [ec-shop-web]
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging: *logging
+volumes:
+  catalog:
+    name: ec-shop-tokyo-catalog
+networks:
+  database:
+    internal: true
+  proxy:
+    external: true
+    name: proxy

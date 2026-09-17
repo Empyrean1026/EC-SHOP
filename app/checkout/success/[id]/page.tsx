@@ -27,10 +27,10 @@ export default async function CheckoutSuccessPage({ params }: CheckoutSuccessPag
   const paymentMessage = !isStripe
     ? "代金引換を選択しました。ショップが注文内容を確認しています。"
     : isPaid
-      ? "Stripe の署名付き Webhook で支払いを確認しました。注文は支払い済みです。"
+      ? "お支払いを確認しました。注文は支払い済みです。"
       : order.paymentStatus === "failed"
-        ? "Stripe Webhook から支払い失敗が通知されました。決済画面からもう一度お試しください。"
-        : "Stripe Webhook による最終確認が完了していないため、まだ支払い済みとは表示されません。";
+        ? "お支払いを確認できませんでした。決済画面からもう一度お試しください。"
+        : "決済サービスによる最終確認が完了していないため、現在は確認中です。";
 
   return (
     <section className="min-h-[75vh] bg-stone-100 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">

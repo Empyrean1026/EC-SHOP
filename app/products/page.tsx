@@ -46,7 +46,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <div className="flex flex-col justify-between gap-7 border-b border-stone-300 pb-10 lg:flex-row lg:items-end">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] text-orange-600 uppercase">
-              Phase 04 / Product system
+              Everyday essentials
             </p>
             <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-stone-950 sm:text-6xl">
               商品一覧
@@ -54,7 +54,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
           <div className="max-w-xl">
             <p className="text-sm leading-7 text-stone-600">
-              キーワード、カテゴリー、価格、在庫状況を組み合わせて商品を検索できます。並び順は常に安定し、ページ送りでも結果が変わりません。
+              キーワード、カテゴリー、価格、在庫状況を組み合わせて、暮らしに合う商品を探せます。
             </p>
             <p className="mt-3 text-xs font-semibold text-stone-950">
               全 {result.pagination.total} 点の商品
@@ -88,7 +88,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               </div>
             ) : (
               <EmptyState
-                description="キーワードを変更するか、絞り込みを解除してください。開発環境ではシードスクリプトでサンプル商品を登録できます。"
+                description="キーワードを変更するか、絞り込み条件を解除してもう一度お試しください。"
                 eyebrow="No results"
                 icon="⌕"
                 title="条件に一致する商品はありません"

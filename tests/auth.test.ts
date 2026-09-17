@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createCsrfToken, verifyCsrfToken } from "@/lib/auth/csrf";
+import { shouldUseSecureCookies } from "@/lib/auth/cookies";
 import { signSessionToken, verifySessionToken } from "@/lib/auth/jwt";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { readJsonBody } from "@/lib/api/request";
@@ -71,6 +72,13 @@ test("signed CSRF tokens require both the matching request token and cookie", as
   assert.equal(await verifyCsrfToken(csrf.cookieValue, csrf.token), true);
   assert.equal(await verifyCsrfToken(csrf.cookieValue, "wrong-token"), false);
   assert.equal(await verifyCsrfToken(`${csrf.cookieValue}tampered`, csrf.token), false);
+});
+
+test("cookies use Secure only for HTTPS deployments", () => {
+  assert.equal(shouldUseSecureCookies("https://shop.example.com", "production"), true);
+  assert.equal(shouldUseSecureCookies("http://127.0.0.1:8080", "production"), false);
+  assert.equal(shouldUseSecureCookies(undefined, "production"), true);
+  assert.equal(shouldUseSecureCookies("not-a-url", "production"), true);
 });
 
 test("JSON request parser enforces content type and body size", async () => {

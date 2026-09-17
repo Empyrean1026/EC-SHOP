@@ -6,7 +6,21 @@ const STRIPE_FRAME_ORIGINS = [
   "https://*.link.com",
 ];
 
-export function buildContentSecurityPolicy(nonce: string, development = false): string {
+export function shouldUpgradeInsecureRequests(applicationUrl = process.env.APP_URL): boolean {
+  if (!applicationUrl) return false;
+
+  try {
+    return new URL(applicationUrl).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+export function buildContentSecurityPolicy(
+  nonce: string,
+  development = false,
+  upgradeInsecureRequests = shouldUpgradeInsecureRequests(),
+): string {
   const directives = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${development ? " 'unsafe-eval'" : ""} https://js.stripe.com https://*.js.stripe.com https://maps.googleapis.com`,
@@ -22,7 +36,7 @@ export function buildContentSecurityPolicy(nonce: string, development = false): 
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    ...(development ? [] : ["upgrade-insecure-requests"]),
+    ...(!development && upgradeInsecureRequests ? ["upgrade-insecure-requests"] : []),
   ];
 
   return directives.join("; ");

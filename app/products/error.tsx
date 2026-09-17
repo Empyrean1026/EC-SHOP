@@ -11,8 +11,7 @@ export default function ProductsError({ reset }: { reset: () => void }) {
           商品を読み込めません
         </h1>
         <p className="mt-4 text-sm leading-7 text-stone-600">
-          MongoDB
-          が起動していることを確認し、しばらくしてからお試しください。エラーの詳細は画面には表示されません。
+          一時的に商品情報を取得できません。時間をおいて、もう一度お試しください。
         </p>
         <button
           className="mt-7 rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"

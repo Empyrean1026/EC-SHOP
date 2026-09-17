@@ -12,7 +12,7 @@ export default function RegisterPage() {
     <AuthPageShell
       eyebrow="Create account"
       title="アカウントを作成"
-      description="パスワードは bcrypt でハッシュ化して保存します。登録完了後は安全にログインした状態になります。"
+      description="お気に入りや注文履歴を利用するためのアカウントを作成します。"
       alternateText="すでにアカウントをお持ちですか？"
       alternateHref="/login"
       alternateLabel="ログイン"

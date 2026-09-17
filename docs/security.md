@@ -16,7 +16,7 @@
 - `Origin-Agent-Cluster: ?1`；
 - HTTPS 生产源站启用两年 HSTS；HTTP 本地与 Docker 开发不会写入 HSTS。
 
-nonce CSP 会使页面采用动态渲染，以换取不依赖通用 `unsafe-inline` 脚本的 XSS 防护。开发环境仅为 React 调试加入 `unsafe-eval`；生产环境不包含该规则并启用 `upgrade-insecure-requests`。样式仍需 `unsafe-inline`，因为 Recharts 和现有响应式组件会生成 style 属性。
+nonce CSP 会使页面采用动态渲染，以换取不依赖通用 `unsafe-inline` 脚本的 XSS 防护。开发环境仅为 React 调试加入 `unsafe-eval`；生产环境不包含该规则，并且仅当 `APP_URL` 使用 HTTPS 时启用 `upgrade-insecure-requests`，避免 HTTP 部署错误升级静态资源请求。样式仍需 `unsafe-inline`，因为 Recharts 和现有响应式组件会生成 style 属性。
 
 Stripe Payment Element 所需的 `js.stripe.com`、Stripe iframe、API、3D Secure hooks 和 Link 域名按 [Stripe Integration security guide](https://docs.stripe.com/security/guide#content-security-policy) 放行。不要为了排查支付问题改成 `default-src *`。
 
@@ -68,7 +68,7 @@ Proxy 在 Route Handler 前执行通用限流：
 - JWT 固定 `HS256`，验证 issuer、audience、subject、role、expiry 和允许算法；
 - Token 包含随机 JTI，默认七天过期，使用至少 32 字节 `AUTH_SECRET`；
 - 会话仅保存在 `HttpOnly`、`SameSite=Lax` Cookie，生产环境启用 Secure；
-- CSRF Cookie 使用 `HttpOnly`、`SameSite=Strict` 和独立的 32 字节密钥；
+- CSRF Cookie 使用 `HttpOnly`、`SameSite=Strict` 和独立的 32 字节密钥；`Secure` 属性依据 `APP_URL` 的 HTTPS 协议启用，以兼容明确配置的 HTTP 演示环境；
 - bcrypt cost 只允许 10–14，默认 12；密码 UTF-8 长度不超过 bcrypt 的 72 字节边界；
 - 登录不存在的账户时仍执行固定 dummy bcrypt compare，降低用户枚举和时序差异；
 - 数据库默认不返回 `passwordHash`，只有登录校验显式选择该字段。
