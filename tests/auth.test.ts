@@ -77,7 +77,7 @@ test("signed CSRF tokens require both the matching request token and cookie", as
 test("cookies use Secure only for HTTPS deployments", () => {
   assert.equal(shouldUseSecureCookies("https://shop.example.com", "production"), true);
   assert.equal(shouldUseSecureCookies("http://127.0.0.1:8080", "production"), false);
-  assert.equal(shouldUseSecureCookies(undefined, "production"), true);
+  assert.equal(shouldUseSecureCookies("", "production"), true);
   assert.equal(shouldUseSecureCookies("not-a-url", "production"), true);
 });
 
