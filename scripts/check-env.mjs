@@ -61,7 +61,7 @@ if (process.env.DEEPSEEK_BASE_URL) {
   }
 }
 
-if (process.env.DEEPSEEK_MODEL !== undefined && !process.env.DEEPSEEK_MODEL.trim()) {
+if (process.env.DEEPSEEK_MODEL && !process.env.DEEPSEEK_MODEL.trim()) {
   console.error("Environment check failed: DEEPSEEK_MODEL cannot be empty when configured.");
   process.exit(1);
 }
