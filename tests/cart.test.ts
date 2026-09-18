@@ -12,7 +12,7 @@ const product: CartProductSnapshot = {
   slug: "studio-headphones",
   price: 32900,
   currency: "jpy",
-  image: null,
+  image: "/products/studio-headphones.svg",
   stock: 3,
 };
 
@@ -52,10 +52,20 @@ test("guest cart hydration rejects tampered rows and recomputes trusted subtotal
         },
         quantity: 1,
       },
+      {
+        product: {
+          ...product,
+          id: "507f1f77bcf86cd799439014",
+          slug: "unsafe-image-path",
+          image: "/products/../secret.svg",
+        },
+        quantity: 1,
+      },
     ],
   });
 
   assert.equal(items.length, 1);
+  assert.equal(items[0]?.product.image, "/products/studio-headphones.svg");
   assert.equal(items[0]?.quantity, 3);
   assert.equal(items[0]?.subtotal, 98700);
 });

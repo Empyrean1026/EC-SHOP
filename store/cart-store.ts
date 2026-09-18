@@ -7,6 +7,7 @@ import {
   CART_STORAGE_VERSION,
 } from "@/lib/cart/constants";
 import { calculateCartTotals, calculateTotalQuantity } from "@/lib/cart/totals";
+import { isHttpOrPublicAssetUrl } from "@/models/validators";
 import type { CartAdjustment, CartLine, CartProductSnapshot, ShoppingCart } from "@/types/cart";
 
 export type CartSource = "guest" | "account";
@@ -70,13 +71,7 @@ function isSafeInteger(value: unknown, minimum = 0): value is number {
 
 function isSafeImageUrl(value: unknown): value is string | null {
   if (value === null) return true;
-  if (typeof value !== "string" || value.length > 2048) return false;
-
-  try {
-    return ["http:", "https:"].includes(new URL(value).protocol);
-  } catch {
-    return false;
-  }
+  return typeof value === "string" && value.length <= 2048 && isHttpOrPublicAssetUrl(value);
 }
 
 function isProductSnapshot(value: unknown): value is CartProductSnapshot {
